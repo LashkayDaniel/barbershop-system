@@ -13,9 +13,24 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Figtree', 'Inter', ...defaultTheme.fontFamily.sans],
+                inter: ['Inter', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                body: '#1E1E1E',
+                gray: {
+                    text: '#F6EAEA',
+                    light: '#3C3C3C',
+                    primary: '#272727',
+                    secondary: '#A4A4A4',
+                },
+                gold: {
+                    primary: '#D69A5F',
+                    secondary: '#775D43'
+                }
+            }
         },
+
     },
 
     plugins: [forms],

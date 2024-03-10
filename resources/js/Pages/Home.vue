@@ -4,9 +4,14 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import {onMounted, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
+import ImageViewer from '@/Components/ImageViewer.vue'
 
 const showBtnToUp = ref(false);
+const imageView = reactive({
+    show: ref(false),
+    src: ref('')
+})
 
 const scrollToUp = () => {
     window.scrollTo({
@@ -14,6 +19,11 @@ const scrollToUp = () => {
         left: 0,
         behavior: 'smooth',
     });
+}
+
+const showImage = (src) => {
+    imageView.show = true
+    imageView.src = src
 }
 
 onMounted(() => {
@@ -29,6 +39,12 @@ onMounted(() => {
 <template>
     <Head title="Home"/>
 
+    <ImageViewer
+        :src="imageView.src"
+        :show="imageView.show"
+        @close="imageView.show = !imageView.show">
+    </ImageViewer>
+
     <transition name="fade">
         <button v-if="showBtnToUp"
                 @click="scrollToUp"
@@ -43,11 +59,11 @@ onMounted(() => {
     </transition>
 
     <header class="w-full h-screen relative">
-        <nav class="z-50 text-gray-400 w-full py-2 flex justify-between text-gray-text items-center">
-            <div class="pl-10 z-50">
-                <img src="/img/logo.svg" class="size-20" alt="logo">
+        <nav class="z-50 w-full py-2 flex justify-between items-start text-gray-text">
+            <div class="pl-10 z-50 w-23">
+                <img src="/img/logo.svg" alt="logo">
             </div>
-            <ul class="flex border-b border-gray-light pl-8 pr-10 mr-2">
+            <ul class="flex items-start border-b border-gray-light pl-8 pr-10 mr-2 mt-4">
                 <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
                     <a href="#">Головна</a>
                 </li>
@@ -777,8 +793,8 @@ onMounted(() => {
 
                 >
                     <swiper-slide v-for="i in 10" class="flex items-center">
-                        <div
-                            class="grow h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
+                        <div @click="showImage('/img/1.png')"
+                             class="grow h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
                             <img v-if="i%2===0"
                                  class="select-none mx-auto object-cover h-full"
                                  src="/img/1.png" alt=""

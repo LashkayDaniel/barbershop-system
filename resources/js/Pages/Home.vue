@@ -1,33 +1,63 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';</script>
+import {Head} from '@inertiajs/vue3';
+import {Swiper, SwiperSlide} from 'swiper/vue';
+import {Autoplay, Navigation} from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import {onMounted, ref} from "vue";
+
+const showBtnToUp = ref(false);
+
+const scrollToUp = () => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+    });
+}
+
+onMounted(() => {
+    window.addEventListener("scroll", () => {
+        let scroll = window.scrollY;
+        showBtnToUp.value = scroll > 350;
+    });
+});
+
+
+</script>
 
 <template>
     <Head title="Home"/>
 
-    <button
-        class="fixed bottom-5 right-10 z-50 bg-gold-secondary size-12 items-center hover:scale-125 transition-all duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-             class="w-8 h-8 m-auto text-gold-primary">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
-        </svg>
-
-    </button>
+    <transition name="fade">
+        <button v-if="showBtnToUp"
+                @click="scrollToUp"
+                class="fixed bottom-5 right-10 z-50 bg-gold-secondary size-12 items-center hover:scale-125 transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor"
+                 class="w-8 h-8 m-auto text-gold-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
+            </svg>
+        </button>
+    </transition>
 
     <header class="w-full h-screen relative">
-        <nav class="z-50 text-gray-400 w-full py-4 flex justify-between text-gray-text items-center">
-            <div class="text-2xl font-bold pl-10">logo</div>
-            <ul class="flex gap-x-8 border-b border-gray-light pl-8 pr-16 mr-2 p-2">
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer border-b-2 border-gold-secondary">
+        <nav class="z-50 text-gray-400 w-full py-2 flex justify-between text-gray-text items-center">
+            <div class="pl-10 z-50">
+                <img src="/img/logo.svg" class="size-20" alt="logo">
+            </div>
+            <ul class="flex border-b border-gray-light pl-8 pr-10 mr-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
                     <a href="#">Головна</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
                     <a href="#services">Послуги</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
                     <a href="#masters">Майстри</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
                     <a href="#gallery">Галерея</a>
                 </li>
             </ul>
@@ -43,7 +73,7 @@ import {Head} from '@inertiajs/vue3';</script>
             <div class="flex items-center absolute -top-14 ">
                 <span class="block w-24 border-b border-gold-primary"></span>
                 <button
-                    class="absolute left-[calc(100%-15px)] uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 ">
+                    class="absolute left-[calc(100%-15px)] hover:left-[calc(100%-5px)] hover:border-2 transition-all duration-200 uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 ">
                     <a href="#reservation">
                         Записатися
                     </a>
@@ -168,132 +198,533 @@ import {Head} from '@inertiajs/vue3';</script>
             </header>
 
             <section class="w-full h-80 my-8">
-                <div class="h-full grid grid-cols-2 grid-rows-1 gap-x-4">
-                    <div class="bg-gray-primary flex">
-                        <!--                        <img src="" alt="">-->
-                        <div class="h-full w-2/5 bg-gold-secondary  "></div>
-                        <div class="flex flex-1 flex-col">
-                            <div class="flex justify-end">
-                                <div
-                                    class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                    <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                    <div class="flex flex-row justify-center items-center">
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
+                <swiper class="h-full grid grid-cols-2 grid-rows-1 gap-x-4"
+                        :slides-per-view="2"
+                        :loop="true"
+                        :space-between="10"
+                        :navigation="{
+                                nextEl: '#masters-btn-next',
+                                prevEl: '#masters-btn-prev'
+                            }"
+                        :modules="[Navigation, Autoplay]"
+                        :autoplay="{delay:4000}"
+                >
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="flex-1 text-center text-gray-text">
-                                <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                    Smith</h3>
-                                <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                    consectetur
-                                    adipisicing elit. Debitis doloribus, laborum!
-                                    Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                    minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                    suscipit.</p>
-                            </div>
-                            <div class="flex justify-end">
-                                <button
-                                    class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                    Детальніше
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-primary flex">
-                        <!--                        <img src="" alt="">-->
-                        <div class="h-full w-2/5 bg-gold-secondary  "></div>
-                        <div class="flex flex-1 flex-col">
-                            <div class="flex justify-end">
-                                <div
-                                    class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                    <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                    <div class="flex flex-row justify-center items-center">
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                        <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                fill="#E5B454"/>
-                                        </svg>
-                                    </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
                                 </div>
                             </div>
-                            <div class="flex-1 text-center text-gray-text">
-                                <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                    Smith</h3>
-                                <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                    consectetur
-                                    adipisicing elit. Debitis doloribus, laborum!
-                                    Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                    minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                    suscipit.</p>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
                             </div>
-                            <div class="flex justify-end">
-                                <button
-                                    class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                    Детальніше
-                                </button>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                    <swiper-slide>
+                        <div class="bg-gray-primary flex">
+                            <div class="w-2/5 bg-gold-secondary">
+                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                            </div>
+                            <div class="flex flex-1 flex-col">
+                                <div class="flex justify-end">
+                                    <div
+                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
+                                                    fill="#E5B454"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 text-center text-gray-text mb-10">
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
+                                        Smith</h3>
+                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
+                                        consectetur
+                                        adipisicing elit. Debitis doloribus, laborum!
+                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
+                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
+                                        suscipit.</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                        Детальніше
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                </swiper>
                 <div class="flex justify-end items-center gap-x-2 mt-4 px-4">
-                    <div class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
+                    <div id="masters-btn-prev"
+                         class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
                         <svg
                             class="rotate-180 "
                             width="78" height="16" viewBox="0 0 78 16" fill="none"
@@ -303,7 +734,8 @@ import {Head} from '@inertiajs/vue3';</script>
                                 fill="#9C846E"/>
                         </svg>
                     </div>
-                    <div class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
+                    <div id="masters-btn-next"
+                         class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
                         <svg
                             width="78"
                             height="16"
@@ -330,24 +762,37 @@ import {Head} from '@inertiajs/vue3';</script>
                 </div>
             </header>
 
-            <section class="h-96 w-full my-8">
-                <div class="flex w-full h-full gap-x-2">
-                    <div
-                        class="flex-1 relative bg-[#363434] cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
-                        <img src="/img/1.png" alt="">
-                    </div>
-                    <div
-                        class="flex-1 relative bg-[#363434] cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
-                        <img src="/img/1.png" alt="">
-                    </div>
-                    <div
-                        class="flex-1 relative bg-[#363434] cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
-                        <img src="/img/1.png" alt="">
-                    </div>
-                </div>
+            <section class="w-full my-8 h-[500px]">
+                <swiper class="flex w-full h-full gap-x-2"
+                        :slides-per-view="3"
+                        :loop="true"
+                        :centeredSlides="true"
+                        :space-between="10"
+                        :navigation="{
+                                nextEl: '#gallery-btn-next',
+                                prevEl: '#gallery-btn-prev'
+                            }"
+                        :modules="[Navigation, Autoplay]"
+                        :autoplay="{delay:4000}"
+
+                >
+                    <swiper-slide v-for="i in 10" class="flex items-center">
+                        <div
+                            class="grow h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
+                            <img v-if="i%2===0"
+                                 class="select-none mx-auto object-cover h-full"
+                                 src="/img/1.png" alt=""
+                                 loading="lazy">
+                            <img v-else class="select-none mx-auto object-cover h-full"
+                                 src="/img/7.webp" alt=""
+                                 loading="lazy">
+                        </div>
+                    </swiper-slide>
+                </swiper>
 
                 <div class="flex justify-center items-center gap-x-2 mt-4 px-4">
-                    <div class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
+                    <div id="gallery-btn-prev"
+                         class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
                         <svg
                             class="rotate-180 "
                             width="78" height="16" viewBox="0 0 78 16" fill="none"
@@ -357,7 +802,8 @@ import {Head} from '@inertiajs/vue3';</script>
                                 fill="#9C846E"/>
                         </svg>
                     </div>
-                    <div class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
+                    <div id="gallery-btn-next"
+                         class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
                         <svg
                             width="78"
                             height="16"
@@ -376,10 +822,10 @@ import {Head} from '@inertiajs/vue3';</script>
 
         <article id="reservation" class="p-8 mt-20 relative">
             <div class="absolute right-0 top-0">
-                <img src="/img/dots.svg" alt="dots">
+                <img src="/img/dots.svg" alt="dots" class="select-none">
             </div>
             <div class="bg-gray-primary flex">
-                <img class="object-contain h-full w-1/2" src="/img/7.webp" alt="reservation">
+                <img class="select-none object-contain h-full w-1/2" src="/img/7.webp" alt="reservation">
                 <div class="flex flex-col">
                     <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
                         <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
@@ -422,21 +868,24 @@ import {Head} from '@inertiajs/vue3';</script>
         <article class="mt-10">
             <hr class="h-0.5 bg-gold-secondary border-0 rounded-full">
             <div class="w-full h-40 flex py-5 px-2 text-gray-secondary">
-                <div class="text-2xl font-bold basis-1/3 text-[#D09C65]">BARBER</div>
-                <div class="grow">
+                <div class="basis-1/3 text-[#D09C65]">
+                    <img src="/img/logo.svg" alt="logo">
+                </div>
+                <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Графік</h3>
                     <p class="tracking-wide">ПН-ПТ</p>
                     <p class="tracking-wide">9:00 - 19:00</p>
                 </div>
-                <div class="grow">
+                <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Адреса</h3>
                     <p class="tracking-wide">вул. Шевченка, 45, Ужгород</p>
                 </div>
-                <div class="grow">
+                <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text text-center">Соцмережі</h3>
                     <div class="flex gap-x-3 justify-center">
                         <a href="https://facebook.com/" target="_blank">
-                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all"
+                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M20.5 2H4.5C3.12 2 2 3.12 2 4.5V20.5C2 21.88 3.12 23 4.5 23H20.5C21.88 23 23 21.88 23 20.5V4.5C23 3.12 21.88 2 20.5 2ZM18.5 9.5H17.5C16.43 9.5 16 9.75 16 10.5V12H18.5L18 14.5H16V22H13.5V14.5H11.5V12H13.5V10.5C13.5 8.5 14.5 7 16.5 7C17.95 7 18.5 7.5 18.5 7.5V9.5Z"
@@ -445,7 +894,8 @@ import {Head} from '@inertiajs/vue3';</script>
                         </a>
 
                         <a href="https://www.instagram.com" target="_blank">
-                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all"
+                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M8 1.5C4.41624 1.5 1.5 4.41624 1.5 8V17C1.5 20.5838 4.41624 23.5 8 23.5H17C20.5838 23.5 23.5 20.5838 23.5 17V8C23.5 4.41624 20.5838 1.5 17 1.5H8ZM8 2.5H17C20.0432 2.5 22.5 4.95676 22.5 8V17C22.5 20.0432 20.0432 22.5 17 22.5H8C4.95676 22.5 2.5 20.0432 2.5 17V8C2.5 4.95676 4.95676 2.5 8 2.5ZM18.5 5.5C17.9477 5.5 17.5 5.94771 17.5 6.5C17.5 7.05229 17.9477 7.5 18.5 7.5C19.0523 7.5 19.5 7.05229 19.5 6.5C19.5 5.94771 19.0523 5.5 18.5 5.5ZM12.5 7C9.46836 7 7 9.46836 7 12.5C7 15.5316 9.46836 18 12.5 18C15.5316 18 18 15.5316 18 12.5C18 9.46836 15.5316 7 12.5 7ZM12.5 8C14.9912 8 17 10.0088 17 12.5C17 14.9912 14.9912 17 12.5 17C10.0088 17 8 14.9912 8 12.5C8 10.0088 10.0088 8 12.5 8Z"
@@ -454,7 +904,8 @@ import {Head} from '@inertiajs/vue3';</script>
                         </a>
 
                         <a href="https://twitter.com" target="_blank">
-                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all"
+                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_58_141)">
                                     <path
@@ -481,4 +932,16 @@ import {Head} from '@inertiajs/vue3';</script>
 
 </template>
 
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
 

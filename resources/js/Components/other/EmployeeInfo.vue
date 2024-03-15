@@ -105,7 +105,6 @@
                 <swiper class="flex w-full h-full gap-x-2"
                         :slides-per-view="3"
                         :loop="true"
-                        :centeredSlides="true"
                         :space-between="10"
                         :navigation="{
                                 nextEl: '#gallery-btn-next',

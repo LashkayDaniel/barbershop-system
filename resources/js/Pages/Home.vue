@@ -1,17 +1,41 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';
+import {Head, useForm} from '@inertiajs/vue3';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import {onMounted, reactive, ref} from "vue";
+import Modal from '@/Components/Modal.vue'
 import ImageViewer from '@/Components/ImageViewer.vue'
+import EmployeeInfo from '@/Components/other/EmployeeInfo.vue'
 
 const showBtnToUp = ref(false);
+
+const employeeDetails = reactive({
+    show: ref(false),
+    employeeInfo: reactive({})
+})
+
 const imageView = reactive({
     show: ref(false),
     src: ref('')
 })
+
+const reservationForm = useForm({
+    selectedMaster: ref(''),
+    selectedDate: ref(''),
+    selectedTime: ref(''),
+    name: ref(''),
+    phone: ref(''),
+    phoneError: ref(''),
+    step: ref(1),
+    successStep: ref(0)
+})
+
+const formatPhoneNumber = (event) => {
+    const digits = event.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    reservationForm.phone = !digits[2] ? digits[1] : '(' + digits[1] + ') ' + digits[2] + (digits[3] ? '-' + digits[3] : '');
+};
 
 const scrollToUp = () => {
     window.scrollTo({
@@ -26,6 +50,28 @@ const showImage = (src) => {
     imageView.src = src
 }
 
+const showEmployeeDetails = () => {
+    employeeDetails.show = true
+}
+
+const reservationBtnPrev = () => {
+    reservationForm.step--
+    reservationForm.successStep = reservationForm.step - 1
+}
+
+const reservationBtnNext = () => {
+    if (reservationForm.step < 2) {
+        reservationForm.successStep = reservationForm.step
+        reservationForm.step++
+    }
+}
+
+const reservationBtn = () => {
+    reservationForm.successStep = reservationForm.step
+
+}
+
+
 onMounted(() => {
     window.addEventListener("scroll", () => {
         let scroll = window.scrollY;
@@ -38,6 +84,14 @@ onMounted(() => {
 
 <template>
     <Head title="Home"/>
+
+
+    <Modal :show="employeeDetails.show"
+           :max-width="'4xl'"
+           @close="employeeDetails.show = false"
+    >
+        <EmployeeInfo :data="employeeDetails.employeeInfo"/>
+    </Modal>
 
     <ImageViewer
         :src="imageView.src"
@@ -59,7 +113,7 @@ onMounted(() => {
     </transition>
 
     <header class="w-full h-screen relative">
-        <nav class="z-50 w-full py-2 flex justify-between items-start text-gray-text">
+        <nav class="z-50 w-full py-2 flex justify-between items-start text-[#9F7A53]">
             <div class="pl-10 z-50 w-23">
                 <img src="/img/logo.svg" alt="logo">
             </div>
@@ -82,7 +136,7 @@ onMounted(() => {
         <div class="z-0 absolute top-0 left-0 w-2/5 h-3/4 bg-gray-primary"></div>
         <div class="z-0 absolute bottom-0 right-0 w-2/5 h-3/5 bg-gray-primary"></div>
         <div class="z-10 absolute left-0 right-0 bottom-0 pb-6 flex justify-center items-center">
-            <h1 class="uppercase select-none text-gray-text tracking-[.4rem] font-bold text-5xl max-w-[700px] absolute left-40 -top-5">
+            <h1 class="uppercase select-none text-gray-text z-40 tracking-[.4rem] font-bold text-5xl max-w-[700px] absolute left-40 -top-5">
                 Створіть свій стиль разом з нами!
             </h1>
 
@@ -96,10 +150,10 @@ onMounted(() => {
                 </button>
             </div>
 
-            <div class="bg-slate-200 bg-contain overflow-hidden">
+            <div class="bg-slate-200 bg-contain overflow-hidden z-10 shadow-2xl shadow-gray-primary">
                 <img class="w-full" src="/img/1.png" alt="main image">
             </div>
-            <img class="self-end mb-10 -translate-x-[45%]" src="/img/dots.svg" alt="dots">
+            <img class="self-end mb-10 -translate-x-[45%] z-20" src="/img/dots.svg" alt="dots">
         </div>
 
     </header>
@@ -225,7 +279,7 @@ onMounted(() => {
                         :modules="[Navigation, Autoplay]"
                         :autoplay="{delay:4000}"
                 >
-                    <swiper-slide>
+                    <swiper-slide v-for="s in 5">
                         <div class="bg-gray-primary flex">
                             <div class="w-2/5 bg-gold-secondary">
                                 <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
@@ -236,31 +290,7 @@ onMounted(() => {
                                         class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
                                         <b class="text-gray-text tracking-wide font-bold">5.0</b>
                                         <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                            <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
@@ -281,456 +311,8 @@ onMounted(() => {
                                         suscipit.</p>
                                 </div>
                                 <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
-                                        Детальніше
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
-                            </div>
-                            <div class="flex flex-1 flex-col">
-                                <div class="flex justify-end">
-                                    <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
-                                        <div class="flex flex-row justify-center items-center">
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                            <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button
-                                        class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                    <button @click="showEmployeeDetails"
+                                            class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
                                         Детальніше
                                     </button>
                                 </div>
@@ -830,7 +412,6 @@ onMounted(() => {
                                 fill="#9C846E"/>
                         </svg>
                     </div>
-
                 </div>
             </section>
         </article>
@@ -851,31 +432,122 @@ onMounted(() => {
                                 Саме час втілювати свої ідеї в реальність</p>
                         </div>
                     </header>
-                    <div class="m-10 px-12 w-full flex flex-col items-start gap-y-4">
-                        <label class="relative block cursor-pointer w-full">
-                            <span class="sr-only">Master</span>
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                               <img src="/img/master_icon.svg" alt="master icon" class="size-10">
+                    <div class="mx-10 pt-3 px-12 w-full flex flex-col items-start gap-y-4">
+                        <div class="flex border border-opacity-25 border-gold-primary p-1 w-full mb-2">
+                            <div class="flex flex-1 justify-center items-center gap-x-2">
+                                <div
+                                    class="block size-8 border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
+                                    <svg v-if="reservationForm.successStep===1 || reservationForm.successStep===2"
+                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gold-primary">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                                    </svg>
+                                    <span v-else>1</span>
+                                </div>
+                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-sm whitespace-nowrap"
+                                    :class="{'text-opacity-45':reservationForm.successStep===1 || reservationForm.successStep===2}">
+                                    Вибір майстра
+                                </h3>
+                            </div>
+                            <div class="flex justify-center">
+                                <svg width="19" height="40" viewBox="0 0 19 40" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.53125 7.5L12.4688 20L6.53125 32.5" stroke="#9F7A54" stroke-width="1.5"
+                                          stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="flex flex-1 justify-center items-center gap-x-2">
+                                <div
+                                    class="block size-8 border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
+                                    <svg v-if="reservationForm.successStep===2"
+                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gold-primary">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                                    </svg>
+                                    <span v-else>2</span>
+                                </div>
+                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-sm whitespace-nowrap">
+                                    Контактні дані</h3>
+                            </div>
+                        </div>
+
+                        <template v-if="reservationForm.step===1">
+                            <div class="w-full">
+                                <div :class="{'border-red-500 border-opacity-75':true}"
+                                     class="border-2 border-[#939393] p-2 flex items-center cursor-pointer w-full">
+                                    <img src="/img/master_icon.svg" alt="master icon" class="size-10">
+                                    <p class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть майстра</p>
+                                </div>
+                                <p v-if="true"
+                                   class="inline-block text-red-500 text-sm opacity-75">werwer</p>
+                            </div>
+
+                            <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
+                                <img src="/img/date_icon.svg" alt="date icon" class="size-8">
+                                <p class="ml-5 font-semibold text-[#757575] tracking-wider">Виберіть дату</p>
+                            </div>
+
+                            <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
+                                <img src="/img/time_icon.svg" alt="date icon" class="size-8">
+                                <p class="ml-5 font-semibold text-[#757575] tracking-wider">Виберіть час</p>
+                            </div>
+                        </template>
+
+                        <template v-if="reservationForm.step===2">
+                            <label class="relative block cursor-pointer w-full">
+                                <span class="sr-only">Name</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1" stroke="currentColor"
+                                    class="size-10 text-[#FCF2E7] text-opacity-80">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                </svg>
                             </span>
-                            <input
-                                class="placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-widest block bg-transparent w-full border border-[#939393] py-4 pl-16 pr-4 text-lg focus:outline-none focus:ring-offset-0 focus:ring-0"
-                                placeholder="Виберіть майстра" type="text" name="search"/>
-                        </label>
+                                <input v-model="reservationForm.name"
+                                       class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                       placeholder="Ваше ім'я" type="text" name="name" required/>
+                            </label>
 
-                        <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
-                            <img src="/img/date_icon.svg" alt="date icon" class="size-8">
-                            <p class="ml-5 font-semibold text-[#757575] tracking-widest text-lg">Виберіть дату</p>
+                            <label class="relative block cursor-pointer w-full">
+                                <span class="sr-only">Phone</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor"
+                                     class="size-8 text-[#FCF2E7] text-opacity-80">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
+                                </svg>
+                            </span>
+                                <input v-model="reservationForm.phone"
+                                       @input="formatPhoneNumber"
+                                       class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                       placeholder="(050) xxx-xxxx"
+                                       type="tel"
+                                       name="phone"
+                                       required/>
+                            </label>
+                        </template>
+
+                        <div class="w-full grid grid-cols-2">
+                            <button v-if="reservationForm.step!==1"
+                                    @click="reservationBtnPrev"
+                                    class="px-8 py-2 mt-2 justify-self-start col-start-1 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
+                                Назад
+                            </button>
+                            <button v-if="reservationForm.step!==2"
+                                    @click="reservationBtnNext"
+                                    class="px-8 py-2 mt-2 justify-self-end col-start-2 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
+                                Далі
+                            </button>
+
+                            <button v-if="reservationForm.step===2"
+                                    @click="reservationBtn"
+                                    title="Забронювати зараз"
+                                    class="px-1 py-2 mt-2 col-start-2 uppercase tracking-wider text-[#FAD6BC] font-bold bg-[#BE7B36] hover:text-gray-text hover:bg-[#A76D32] transition-all duration-100">
+                                Забронювати
+                            </button>
                         </div>
-
-                        <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
-                            <img src="/img/time_icon.svg" alt="date icon" class="size-8">
-                            <p class="ml-5 font-semibold text-[#757575] tracking-widest text-lg">Виберіть час</p>
-                        </div>
-
-                        <button
-                            class="px-10 py-2 mt-10 uppercase tracking-wider text-gray-text font-bold text-lg bg-[#B27536]">
-                            Далі
-                        </button>
                     </div>
                 </div>
             </div>
@@ -899,7 +571,7 @@ onMounted(() => {
                 <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text text-center">Соцмережі</h3>
                     <div class="flex gap-x-3 justify-center">
-                        <a href="https://facebook.com/" target="_blank">
+                        <a href="https://facebook.com/" target="_blank" title="Facebook">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -909,7 +581,7 @@ onMounted(() => {
                             </svg>
                         </a>
 
-                        <a href="https://www.instagram.com" target="_blank">
+                        <a href="https://www.instagram.com" target="_blank" title="Instagram">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -919,7 +591,7 @@ onMounted(() => {
                             </svg>
                         </a>
 
-                        <a href="https://twitter.com" target="_blank">
+                        <a href="https://twitter.com" target="_blank" title="Twitter">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">

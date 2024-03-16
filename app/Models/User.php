@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -47,7 +50,37 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class)
+            ->withPivot(['price', 'duration'])
+            ->withTimestamps();
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function portfolio(): BelongsTo
+    {
+        return $this->belongsTo(Portfolio::class);
+    }
+
+    public function responses(): HasMany
+    {
+        return $this->hasMany(Response::class);
+    }
+
+    public function worktimes()
+    {
+        return $this->hasMany(Worktime::class);
+    }
 
     public function isAdmin(): bool
     {
@@ -57,5 +90,13 @@ class User extends Authenticatable
     public function isEmployee(): bool
     {
         return $this->role_id == Role::IS_EMPLOYEE;
+    }
+
+    public function getRedirectRoute()
+    {
+        return match ((int)$this->role_id) {
+            Role::IS_ADMIN => '/a/dashboard',
+            Role::IS_EMPLOYEE => '/e/dashboard',
+        };
     }
 }

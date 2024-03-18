@@ -10,6 +10,9 @@ const props = defineProps({
         type: String,
         default: '2xl',
     },
+    bgLight: {
+        type: Boolean
+    },
     closeable: {
         type: Boolean,
         default: true,
@@ -89,7 +92,7 @@ const maxWidthClass = computed(() => {
                     <div
                         v-show="show"
                         class="max-h-full overflow-auto shadow-xl transform transition-all sm:w-full sm:mx-auto"
-                        :class="maxWidthClass"
+                        :class="[maxWidthClass,{'bg-white rounded-lg' : bgLight}]"
                     >
                         <slot v-if="show"/>
                     </div>

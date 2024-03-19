@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Employee;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $userId = Auth::id();
         $employeeServices = User::query()->find($userId)->services()->get();
@@ -29,17 +31,9 @@ class ServiceController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'service_id' => 'required|numeric',
@@ -65,65 +59,23 @@ class ServiceController extends Controller
         );
     }
 
-    public function storeForStaff(Request $request)
-    {
-        $request->validate([
-            'service_id' => 'required|numeric',
-            'price' => 'required|numeric|min:0',
-        ]);
-
-        $staff = User::find(Auth::id());
-        $serviceId = $request->service_id;
-
-        if ($staff->services->contains($serviceId)) {
-            return redirect()->route('services.index')->with(
-                [
-                    'type' => 'error',
-                    'message' => 'This service is already associated with the staff.',
-                ]
-            );
-        }
-
-        $staff->services()->attach($serviceId, ['price' => $request->price]);
-
-        return redirect()->route('services.index')->with(
-            [
-                'message' => 'Service was create successfully',
-            ]
-        );
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Service $service)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Service $service)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Service $service)
+    public function update(Request $request, Service $service): RedirectResponse
     {
         $request->validate([
-            'price' => 'required|numeric|min:0',
+            'duration' => 'required|numeric|min:1|max:500',
+            'price' => 'required|numeric|min:0|max:10000',
         ]);
 
-        $staff = User::find(Auth::id());
-        $staff->services()->updateExistingPivot($service, ['price' => $request->price]);
+        $user = User::find(Auth::id());
+        $user->services()->updateExistingPivot($service, ['duration' => $request->duration, 'price' => $request->price]
+        );
 
         return redirect()->route('services.index')->with(
             [
-                'message' => 'Service was update successfully',
+                'message' => 'Service was updated successfully',
             ]
         );
     }
@@ -131,10 +83,10 @@ class ServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Service $service)
+    public function destroy(Service $service): RedirectResponse
     {
-        $staff = User::find(Auth::id());
-        $staff->services()->detach($service);
+        $user = User::find(Auth::id());
+        $user->services()->detach($service);
 
         return redirect()->route('services.index')->with(
             [

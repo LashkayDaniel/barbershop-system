@@ -10,6 +10,40 @@ const showConfig = ref(false)
 
 const isAdmin = usePage().props.auth.isAdmin
 
+const adminRoutes = ref([
+    {
+        title: 'Dashboard',
+        route: 'admin.dashboard'
+    },
+    {
+        title: 'Landing',
+        route: 'landing.index'
+    },
+    {
+        title: 'Services',
+        route: 'admin.services.index'
+    },
+]);
+
+const employeeRoutes = ref([
+    {
+        title: 'Dashboard',
+        route: 'employee.dashboard'
+    },
+    {
+        title: 'Services',
+        route: 'services.index'
+    },
+    {
+        title: 'Portfolio',
+        route: 'portfolio.index'
+    },
+    {
+        title: 'Worktime',
+        route: 'worktime.index'
+    },
+]);
+
 const isDark = ref();
 
 function toggleDarkMode() {
@@ -47,103 +81,49 @@ onMounted(() => {
                 </div>
                 <div class="m-4">
                     <ul class="mb-4 flex flex-col gap-1">
-                        <li v-if="isAdmin">
-                            <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
-                                <div
-                                    class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
-                                    :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':$page.url.startsWith('/a/dashboard')}"
-                                    style="position: relative; overflow: hidden;">
+                        <template v-if="isAdmin">
+                            <li v-for="link in adminRoutes">
+                                <NavLink :href="route(link.route)" :active="route().current(link.route)">
+                                    <div
+                                        class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
+                                        :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':route().current(link.route)}"
+                                        style="position: relative; overflow: hidden;">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         aria-hidden="true" class="w-5 h-5 text-inherit">
-                                        <path
-                                            d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
-                                        <path
-                                            d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
-                                    </svg>
-                                    <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                                        Dashboard</p>
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li v-else>
-                            <NavLink :href="route('employee.dashboard')"
-                                     :active="route().current('employee.dashboard')">
-                                <div
-                                    class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
-                                    :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':$page.url.startsWith('/e/dashboard')}"
-                                    style="position: relative; overflow: hidden;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                             aria-hidden="true" class="w-5 h-5 text-inherit">
+                                            <path
+                                                d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
+                                            <path
+                                                d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
+                                        </svg>
+                                        <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                                            {{ link.title }}</p>
+                                    </div>
+                                </NavLink>
+                            </li>
+                        </template>
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         aria-hidden="true" class="w-5 h-5 text-inherit">
-                                        <path
-                                            d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
-                                        <path
-                                            d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
-                                    </svg>
-                                    <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                                        Dashboard</p>
-                                </div>
-                            </NavLink>
-                        </li>
+                        <template v-else>
+                            <li v-for="link in employeeRoutes">
+                                <NavLink :href="route(link.route)" :active="route().current(link.route)">
+                                    <div
+                                        class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
+                                        :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':route().current(link.route)}"
+                                        style="position: relative; overflow: hidden;">
 
-                        <li v-if="isAdmin">
-                            <NavLink :href="route('landing.index')" :active="route().current('landing.index')">
-                                <div
-                                    class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
-                                    :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':route().current('landing.index')}"
-                                    style="position: relative; overflow: hidden;">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"/>
-                                    </svg>
-
-                                    <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                                        Landing</p>
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li v-if="!isAdmin">
-                            <NavLink :href="route('services.index')" :active="route().current('services.index')">
-                                <div
-                                    class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
-                                    :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':route().current('services.index')}"
-                                    style="position: relative; overflow: hidden;">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         class="w-5 h-5">
-                                        <path fill-rule="evenodd"
-                                              d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z"
-                                              clip-rule="evenodd"/>
-                                    </svg>
-
-                                    <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                                        Services</p>
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li v-else>
-                            <NavLink :href="route('admin.services.index')"
-                                     :active="route().current('admin.services.index')">
-                                <div
-                                    class="align-middle select-none font-sans font-bold text-center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-blue-gray-500 active:bg-blue-gray-500/30 w-full flex items-center gap-4 px-4 capitalize"
-                                    :class="{'bg-gradient-to-tr from-gold-secondary to-[#A28160FF] opacity-85 dark:from-gray-900 dark:to-gray-700 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85]':route().current('admin.services.index')}"
-                                    style="position: relative; overflow: hidden;">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                         class="w-5 h-5">
-                                        <path fill-rule="evenodd"
-                                              d="M2.625 6.75a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0A.75.75 0 0 1 8.25 6h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75ZM2.625 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 12a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12A.75.75 0 0 1 7.5 12Zm-4.875 5.25a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875 0a.75.75 0 0 1 .75-.75h12a.75.75 0 0 1 0 1.5h-12a.75.75 0 0 1-.75-.75Z"
-                                              clip-rule="evenodd"/>
-                                    </svg>
-
-                                    <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                                        admin Services</p>
-                                </div>
-                            </NavLink>
-                        </li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                             aria-hidden="true" class="w-5 h-5 text-inherit">
+                                            <path
+                                                d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
+                                            <path
+                                                d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
+                                        </svg>
+                                        <p class="antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                                            {{ link.title }}</p>
+                                    </div>
+                                </NavLink>
+                            </li>
+                        </template>
                     </ul>
                 </div>
             </aside>
@@ -158,19 +138,7 @@ onMounted(() => {
                             </h6>
                         </div>
                         <div class="inline-flex items-center">
-                            <div class="relative inline-block w-8 h-4 cursor-pointer rounded-full bg-gray-500">
-                                <input id="navbar-fixed"
-                                       @click="toggleDarkMode"
-                                       :checked="isDark"
-                                       type="checkbox"
-                                       class="peer sr-only"
-                                       value="false">
-                                <label for="navbar-fixed"
-                                       class="bg-white w-5 h-5 border border-blue-gray-100 rounded-full shadow-md absolute top-2/4 -left-1 -translate-y-2/4 peer-checked:translate-x-full transition-all duration-300 cursor-pointer before:content[''] before:block before:bg-blue-gray-500 before:w-10 before:h-10 before:rounded-full before:absolute before:top-2/4 before:left-2/4 before:-translate-y-2/4 before:-translate-x-2/4 before:transition-opacity before:opacity-0 hover:before:opacity-10 peer-checked:border-gray-900 peer-checked:before:bg-gray-900">
-                                    <div
-                                        class="inline-block top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 p-5 rounded-full"></div>
-                                </label>
-                            </div>
+
                         </div>
                         <div class="flex items-center">
                             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -205,6 +173,25 @@ onMounted(() => {
                                             <DropdownLink :href="route('logout')" method="post" as="button">
                                                 Log Out
                                             </DropdownLink>
+
+                                            <hr class="border border-slate-300 my-2">
+                                            <div class="w-full flex justify-center items-center">
+                                                <h3 class="text-gray-400 mr-3">Theme mode</h3>
+                                                <div
+                                                    class="relative inline-block p-2 w-8 h-4 cursor-pointer rounded-full bg-gray-500">
+                                                    <input id="navbar-fixed"
+                                                           @click="toggleDarkMode"
+                                                           :checked="isDark"
+                                                           type="checkbox"
+                                                           class="peer sr-only"
+                                                           value="false">
+                                                    <label for="navbar-fixed"
+                                                           class="bg-white w-5 h-5 border border-blue-gray-100 rounded-full shadow-md absolute top-2/4 -left-1 -translate-y-2/4 peer-checked:translate-x-full transition-all duration-300 cursor-pointer before:content[''] before:block before:bg-blue-gray-500 before:w-10 before:h-10 before:rounded-full before:absolute before:top-2/4 before:left-2/4 before:-translate-y-2/4 before:-translate-x-2/4 before:transition-opacity before:opacity-0 hover:before:opacity-10 peer-checked:border-gray-900 peer-checked:before:bg-gray-900">
+                                                        <div
+                                                            class="inline-block top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 p-5 rounded-full"></div>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </template>
                                     </Dropdown>
                                 </div>

@@ -11,7 +11,7 @@ class Service extends Model
 {
     use HasFactory;
 
-    public $fillable = ['name', 'duration', 'description'];
+    public $fillable = ['name', 'description'];
 
     public function users(): BelongsToMany
     {

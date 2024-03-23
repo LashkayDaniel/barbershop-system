@@ -12,7 +12,7 @@ class PageDataController extends Controller
 {
     public function index()
     {
-        $pageData = PageData::query()->first()->get(['address', 'logo', 'schedule', 'gallery', 'socials']);
+        $pageData = PageData::query()->first();
         return Inertia::render('Admin/Landing/Index', [
             'pageData' => $pageData,
         ]);
@@ -26,8 +26,6 @@ class PageDataController extends Controller
             'schedule' => 'required|min:5',
             'socials' => 'required|min:5',
         ]);
-
-        \Log::info($request);
 
         $pageData = PageData::query()->firstOrCreate();
         $pageData->logo = $request->logo;

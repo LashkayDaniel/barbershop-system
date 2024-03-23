@@ -200,7 +200,8 @@ import {computed, reactive, ref, watch} from "vue";
 const props = defineProps({
     pageData: {
         type: Object,
-        required: true
+        required: true,
+        default: {}
     },
 })
 const imageView = reactive({
@@ -209,19 +210,19 @@ const imageView = reactive({
 })
 
 const galleryImages = computed(() => {
-    return JSON.parse(props.pageData[0]?.gallery)
+    return JSON.parse(props.pageData?.gallery)
 })
 
 const parseSocials = computed(() => {
-    return props.pageData[0]?.socials.split('|').map(i => i.trim())
+    return props.pageData?.socials.split('|').map(i => i.trim())
 })
 
 const [instagram, facebook, twitter] = parseSocials.value;
 
 const form = useForm({
-    svgIcon: props.pageData[0]?.logo,
-    address: props.pageData[0]?.address,
-    schedule: props.pageData[0]?.schedule,
+    svgIcon: props.pageData?.logo,
+    address: props.pageData?.address,
+    schedule: props.pageData?.schedule,
     socials: reactive({
         instagram,
         facebook,

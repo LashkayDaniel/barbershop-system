@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageDataController;
 use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\PageDataController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:admin', 'verified'])
@@ -20,6 +20,9 @@ Route::middleware(['auth', 'role:admin'])
     ->name('landing.')
     ->group(function () {
         Route::get('/landing', 'index')->name('index');
+        Route::patch('/landing', 'update')->name('update');
+        Route::post('/upload-image', 'uploadImage')->name('imageUpload');
+        Route::delete('/delete-image', 'deleteImage')->name('imageDelete');
     });
 
 Route::middleware(['auth', 'role:admin'])

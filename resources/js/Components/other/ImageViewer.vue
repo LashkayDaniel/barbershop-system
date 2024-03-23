@@ -34,7 +34,7 @@
                             </button>
                         </div>
                         <img :src="src" alt="image"
-                             class="transform object-contain h-full mx-auto">
+                             class="transform object-contain h-full max-w-[80%] mx-auto">
                     </div>
                 </Transition>
             </div>

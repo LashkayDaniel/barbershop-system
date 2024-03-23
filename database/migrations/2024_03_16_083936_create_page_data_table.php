@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('page_data', function (Blueprint $table) {
             $table->id();
             $table->string('address');
-            $table->string('logo');
-            $table->text('gallery');
+            $table->longText('logo');
+            $table->json('gallery');
             $table->string('schedule');
             $table->tinyText('socials');
         });

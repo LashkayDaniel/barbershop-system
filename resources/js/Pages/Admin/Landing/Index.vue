@@ -55,9 +55,8 @@
                     <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
                         Address</h3>
                     <TextInput v-model="form.address"
+                               placeholder="Input address"
                                class="w-full"/>
-
-
                 </div>
                 <div class="border border-gray-500 rounded-lg p-2">
                     <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
@@ -85,8 +84,6 @@
                     <div class="flex items-center">
                         <h2 class="uppercase font-bold text-gray-300 text-xl p-2 tracking-wide">
                             Gallery</h2>
-
-
                     </div>
                     <div class="flex gap-x-2 pr-4">
                         <span id="pagination"></span>
@@ -108,7 +105,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="h-[300px] p-2 mt-4 border-b border-gray-600">
+                <div v-if="galleryImages.length>0"
+                     class="h-[300px] p-2 mt-4 border-b border-gray-600">
                     <swiper class="flex w-full h-full gap-x-2"
                             :slides-per-view="5"
                             :slides-per-group="5"
@@ -140,6 +138,7 @@
                         </swiper-slide>
                     </swiper>
                 </div>
+                <p v-else class="text-sm text-gray-400 p-2">Empty gallery list. Add new images...</p>
                 <div class="w-full items-center flex p-4">
                     <label class="block ml-4">
                         <span class="sr-only">Upload new</span>
@@ -210,10 +209,18 @@ const imageView = reactive({
 })
 
 const galleryImages = computed(() => {
+    const gallery = props.pageData?.gallery;
+    if (!gallery) {
+        return []
+    }
     return JSON.parse(props.pageData?.gallery)
 })
 
 const parseSocials = computed(() => {
+    const socials = props.pageData?.socials;
+    if (!socials) {
+        return []
+    }
     return props.pageData?.socials.split('|').map(i => i.trim())
 })
 

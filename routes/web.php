@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\PageData;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,7 +27,10 @@ use Inertia\Inertia;
 //});
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    $pageData = PageData::query()->first();
+    return Inertia::render('Home', [
+        'pageData' => $pageData,
+    ]);
 });
 
 Route::get('/test', function () {

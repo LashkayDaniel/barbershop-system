@@ -4,10 +4,33 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import {onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import Modal from '@/Components/Modal.vue'
-import ImageViewer from '@/Components/ImageViewer.vue'
+import ImageViewer from '@/Components/other/ImageViewer.vue'
 import EmployeeInfo from '@/Components/other/EmployeeInfo.vue'
+
+
+const props = defineProps({
+    pageData: {
+        type: Object,
+        required: true,
+        default: {}
+    }
+})
+
+const galleryImages = computed(() => {
+    return JSON.parse(props.pageData?.gallery)
+})
+
+const parseSocials = computed(() => {
+    return props.pageData?.socials.split('|').map(i => i.trim())
+})
+const [instagram, facebook, twitter] = parseSocials.value;
+
+const parseSchedule = computed(() => {
+    return props.pageData?.schedule.split('|').map(i => i.trim());
+})
+const [scheduleDays, scheduleTimes] = parseSchedule.value;
 
 const showBtnToUp = ref(false);
 
@@ -115,7 +138,7 @@ onMounted(() => {
     <header class="w-full h-screen relative">
         <nav class="z-50 w-full py-2 flex justify-between items-start text-[#9F7A53]">
             <div class="pl-10 z-50 w-23">
-                <img src="/img/logo.svg" alt="logo">
+                <span v-html="pageData?.logo"></span>
             </div>
             <ul class="flex items-start border-b border-gray-light pl-8 pr-10 mr-2 mt-4">
                 <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
@@ -374,15 +397,13 @@ onMounted(() => {
                         :autoplay="{delay:4000}"
 
                 >
-                    <swiper-slide v-for="i in 10" class="flex items-center">
-                        <div @click="showImage('/img/1.png')"
+                    <swiper-slide v-for="(image,index) in galleryImages"
+                                  :key="index"
+                                  class="flex items-center">
+                        <div @click="showImage(image)"
                              class="grow h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
-                            <img v-if="i%2===0"
-                                 class="select-none mx-auto object-cover h-full"
-                                 src="/img/1.png" alt=""
-                                 loading="lazy">
-                            <img v-else class="select-none mx-auto object-cover h-full"
-                                 src="/img/7.webp" alt=""
+                            <img class="relative select-none mx-auto object-cover h-full"
+                                 :src="image" :alt="'gallery image '+index"
                                  loading="lazy">
                         </div>
                     </swiper-slide>
@@ -557,21 +578,21 @@ onMounted(() => {
             <hr class="h-0.5 bg-gold-secondary border-0 rounded-full">
             <div class="w-full h-40 flex py-5 px-2 text-gray-secondary">
                 <div class="basis-1/3 text-[#D09C65]">
-                    <img src="/img/logo.svg" alt="logo">
+                    <span v-html="pageData?.logo"></span>
                 </div>
                 <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Графік</h3>
-                    <p class="tracking-wide">ПН-ПТ</p>
-                    <p class="tracking-wide">9:00 - 19:00</p>
+                    <p class="tracking-wide">{{ scheduleDays }}</p>
+                    <p class="tracking-wide">{{ scheduleTimes }}</p>
                 </div>
                 <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Адреса</h3>
-                    <p class="tracking-wide">вул. Шевченка, 45, Ужгород</p>
+                    <p class="tracking-wide">{{ pageData?.address }}</p>
                 </div>
                 <div class="grow mt-2">
                     <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text text-center">Соцмережі</h3>
                     <div class="flex gap-x-3 justify-center">
-                        <a href="https://facebook.com/" target="_blank" title="Facebook">
+                        <a :href="facebook" target="_blank" title="Facebook">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -581,7 +602,7 @@ onMounted(() => {
                             </svg>
                         </a>
 
-                        <a href="https://www.instagram.com" target="_blank" title="Instagram">
+                        <a :href="instagram" target="_blank" title="Instagram">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -591,7 +612,7 @@ onMounted(() => {
                             </svg>
                         </a>
 
-                        <a href="https://twitter.com" target="_blank" title="Twitter">
+                        <a :href="twitter" target="_blank" title="Twitter">
                             <svg class="hover:opacity-70 transition-all"
                                  width="25" height="25" viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">

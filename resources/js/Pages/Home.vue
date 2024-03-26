@@ -15,6 +15,11 @@ const props = defineProps({
         type: Object,
         required: true,
         default: {}
+    },
+    services: {
+        type: Object,
+        required: true,
+        default: {}
     }
 })
 
@@ -194,88 +199,46 @@ onMounted(() => {
                 </div>
             </header>
 
-            <section class="relative bg-gray-primary w-3/5 mx-auto m-10 p-20 flex flex-col gap-y-5">
+            <section class="relative bg-gray-primary w-3/5 mx-auto m-10 p-16 pb-20 flex flex-col gap-y-6">
                 <div class="absolute top-0 right-0 bg-body w-32 h-20 translate-x-16 -translate-y-10 rotate-45"></div>
                 <div class="absolute bottom-0 left-0 bg-body w-40 h-20 -translate-x-16 translate-y-8 rotate-45">
                 </div>
 
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
+                <template v-for="service in services">
+                    <div class="">
+                        <div class="flex items-center gap-x-3">
+                            <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
+                                {{ service?.name }}
+                            </h3>
+                            <span
+                                class="block w-full h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
+                            <div class="flex items-center text-gold-primary font-black text-xl">
+                                <span class="font-semibold mr-2 tracking-wider opacity-85 text-sm">від</span>
+                                <div class="flex items-center">
+                                    <span class="">{{ service?.min_price }}</span>
+                                    <span class="text-sm font-semibold ml-1">грн</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-start">
+                            <p class="text-gray-secondary text-bold text-sm tracking-wide w-4/6">{{
+                                    service.description
+                                }}</p>
+                            <div class="flex items-center text-sm text-gray-text opacity-85">
+                                <span>~{{ service?.avg_duration }} хв</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor" class="size-5 ml-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
-
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
-                    </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
-
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
-                    </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
-
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
-                    </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
-
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
-                    </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
-
-                <div class="">
-                    <div class="flex items-center gap-x-5">
-                        <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                            Чоловіча
-                            стрижка</h3>
-                        <span class="block w-full border-b-2 border-gold-primary"></span>
-                        <span class="text-gold-primary font-black text-xl">$20</span>
-                    </div>
-                    <p class="text-gray-secondary text-bold tracking-wide w-4/6">Виключно для чоловіків, які хочуть
-                        виглядити
-                        брутально та модно</p>
-                </div>
+                </template>
+                <!--                <button-->
+                <!--                    class="absolute right-0 bottom-0 mt-2 px-5 py-1 text-gray-text text-opacity-85 m-3 transition-all duration-200 tracking-wider hover:bg-opacity-100 bg-opacity-65 bg-gold-secondary border border-gold-primary">-->
+                <!--                    Детальніше-->
+                <!--                </button>-->
             </section>
         </article>
 

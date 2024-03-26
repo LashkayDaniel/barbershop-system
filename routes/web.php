@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Models\PageData;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,8 +29,21 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     $pageData = PageData::query()->first();
+    $services = DB::table('service_user as su')
+        ->join('services as s', 's.id', '=', 'su.service_id')
+        ->select(
+            's.name',
+            's.description',
+            DB::raw('ROUND(AVG(su.duration)) as avg_duration'),
+            DB::raw('MIN(su.price) as min_price')
+        )
+        ->where('s.is_available', true)
+        ->groupBy('su.service_id')
+        ->get();
+
     return Inertia::render('Home', [
         'pageData' => $pageData,
+        'services' => $services,
     ]);
 });
 

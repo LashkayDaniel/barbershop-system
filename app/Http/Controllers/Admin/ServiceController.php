@@ -59,10 +59,6 @@ class ServiceController extends Controller
             'description' => 'required|min:10|max:80',
         ]);
 
-        $existingService = Service::where('name', $data['name'])->first();
-        if ($existingService) {
-            return redirect()->back()->withInput()->withErrors(['name' => 'Service with this name already exists.']);
-        }
         $service->update($data);
 
         return redirect()->route('admin.services.index')->with(

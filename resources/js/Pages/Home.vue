@@ -20,6 +20,10 @@ const props = defineProps({
         type: Object,
         required: true,
         default: {}
+    },
+    employees: {
+        type: Object,
+        required: true,
     }
 })
 
@@ -41,7 +45,7 @@ const showBtnToUp = ref(false);
 
 const employeeDetails = reactive({
     show: ref(false),
-    employeeInfo: reactive({})
+    employeeInfo: ref({})
 })
 
 const imageView = reactive({
@@ -78,8 +82,9 @@ const showImage = (src) => {
     imageView.src = src
 }
 
-const showEmployeeDetails = () => {
+const showEmployeeDetails = (employee) => {
     employeeDetails.show = true
+    employeeDetails.employeeInfo = employee
 }
 
 const reservationBtnPrev = () => {
@@ -265,7 +270,7 @@ onMounted(() => {
                         :modules="[Navigation, Autoplay]"
                         :autoplay="{delay:4000}"
                 >
-                    <swiper-slide v-for="s in 5">
+                    <swiper-slide v-for="employee in employees">
                         <div class="bg-gray-primary flex">
                             <div class="w-2/5 bg-gold-secondary">
                                 <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
@@ -286,18 +291,18 @@ onMounted(() => {
                                     </div>
                                 </div>
                                 <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">John
-                                        Smith</h3>
-                                    <span class="text-gray-secondary font-medium tracking-wide">barber</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide">Lorem ipsum dolor sit amet,
-                                        consectetur
-                                        adipisicing elit. Debitis doloribus, laborum!
-                                        Adipisci asperiores beatae consequuntur deleniti distinctio, dolor error labore
-                                        minima mollitia necessitatibus nemo nisi nulla praesentium quaerat saepe
-                                        suscipit.</p>
+                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">
+                                        {{ employee?.name }}</h3>
+                                    <span
+                                        class="text-gray-secondary font-medium tracking-wide">{{
+                                            employee?.rank
+                                        }}</span>
+                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide whitespace-normal hyphens-auto text-wrap">
+                                        {{ employee?.description }}
+                                    </p>
                                 </div>
                                 <div class="flex justify-end">
-                                    <button @click="showEmployeeDetails"
+                                    <button @click="showEmployeeDetails(employee)"
                                             class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
                                         Детальніше
                                     </button>

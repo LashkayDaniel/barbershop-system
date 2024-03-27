@@ -12,6 +12,7 @@ class Service extends Model
     use HasFactory;
 
     public $fillable = ['name', 'description'];
+    protected $hidden = ['pivot'];
 
     public function users(): BelongsToMany
     {

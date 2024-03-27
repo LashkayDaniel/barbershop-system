@@ -50,16 +50,14 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class)
-            ->withPivot(['price', 'duration'])
-            ->withTimestamps();
+        return $this->belongsToMany(Service::class);
     }
 
     public function orders(): HasMany
@@ -67,9 +65,9 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function portfolio(): BelongsTo
+    public function portfolio(): HasMany
     {
-        return $this->belongsTo(Portfolio::class);
+        return $this->hasMany(Portfolio::class);
     }
 
     public function responses(): HasMany

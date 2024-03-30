@@ -18,10 +18,12 @@ class PortfolioController extends Controller
         $user = Auth::user();
         $userPortfolioImages = $user->portfolio()->get(['id', 'url', 'created_at']);
         $avatar = $user->avatar;
+        $description = $user->description ?? '';
 
         return Inertia::render('Employee/Portfolio/Index', [
             'galleryImages' => $userPortfolioImages,
             'avatar' => $avatar == null ? $avatar : Storage::url($avatar),
+            'description' => $description,
         ]);
     }
 
@@ -76,6 +78,23 @@ class PortfolioController extends Controller
         return redirect()->route('portfolio.index')->with(
             [
                 'message' => 'Avatar was successfully changed!',
+            ]
+        );
+    }
+
+    public function storeDescription(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|min:10|max:320',
+        ]);
+
+        $user = Auth::user();
+        $user->description = $request->text;
+        $user->save();
+
+        return redirect()->route('portfolio.index')->with(
+            [
+                'message' => 'Description was successfully changed!',
             ]
         );
     }

@@ -31,6 +31,7 @@ Route::middleware(['auth', 'role:employee'])
         Route::get('/portfolio', 'index')->name('index');
         Route::post('/portfolio', 'store')->name('create');
         Route::post('/portfolio/avatar', 'avatarUpload')->name('avatar');
+        Route::post('/portfolio/description', 'storeDescription')->name('description');
         Route::delete('/portfolio/{portfolio}', 'destroy')->name('delete');
     });
 

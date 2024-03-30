@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->string('phone')->unique();
             $table->string('rank')->nullable();
             $table->tinyText('description')->nullable();
+            $table->tinyText('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

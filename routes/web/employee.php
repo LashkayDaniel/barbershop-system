@@ -26,8 +26,12 @@ Route::middleware(['auth', 'role:employee'])
 
 Route::middleware(['auth', 'role:employee'])
     ->controller(PortfolioController::class)
+    ->name('portfolio.')
     ->group(function () {
-        Route::get('/portfolio', 'index')->name('portfolio.index');
+        Route::get('/portfolio', 'index')->name('index');
+        Route::post('/portfolio', 'store')->name('create');
+        Route::post('/portfolio/avatar', 'avatarUpload')->name('avatar');
+        Route::delete('/portfolio/{portfolio}', 'destroy')->name('delete');
     });
 
 Route::middleware(['auth', 'role:employee'])

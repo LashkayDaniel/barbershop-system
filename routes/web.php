@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -37,6 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::controller(ResponseController::class)
+    ->name('response.')
+    ->group(function () {
+        Route::post('/response', 'store')->name('create');
+    });
 
 require __DIR__ . '/web/admin.php';
 require __DIR__ . '/web/employee.php';

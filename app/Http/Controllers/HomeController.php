@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\PageData;
+use App\Models\Response;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -31,10 +33,18 @@ class HomeController extends Controller
                 'services' => function ($query) {
                     $query->select(['id', 'name', 'is_available', 'price', 'duration']);
                 },
-                'responses',
+                'responses' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
                 'portfolio',
             ])
-            ->get(['id', 'name', 'email', 'birth', 'phone', 'rank', 'description']);
+            ->get(['id', 'name', 'email', 'birth', 'phone', 'rank', 'description', 'avatar'])
+            ->map(function ($user) {
+                $rating = round(Response::query()->where('user_id', $user->id)->avg('rating'), 1);
+                $user['rating'] = number_format($rating, 1, '.', '');
+                $user['avatar'] = $user->avatar ? Storage::url($user->avatar) : null;
+                return $user;
+            });
 
         return Inertia::render('Home', [
             'pageData' => $pageData,

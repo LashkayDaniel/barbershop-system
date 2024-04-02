@@ -8,7 +8,7 @@
     <article class="bg-body flex flex-col px-10 py-5 gap-y-2 h-full overflow-auto">
         <header class="bg-gray-primary h-96 flex">
             <div class="w-2/5 h-full">
-                <img src="/img/7.webp" class="object-contain w-full h-full" alt="master photo">
+                <img :src="data?.avatar" class="object-contain w-full h-full" alt="master photo">
             </div>
             <div class="flex-1 px-5 text-gray-text py-4">
                 <div class="flex items-start gap-x-">
@@ -19,13 +19,16 @@
                     <div class="flex-1 flex justify-end">
                         <div
                             class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                            <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                            <b class="text-gray-text tracking-wide font-bold">{{ data?.rating }}</b>
                             <div class="flex flex-row justify-center items-center">
-                                <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10"
+                                     fill="currentColor"
+                                     class="text-gray-500"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
+                                        :class="{'text-[#E5B454]':i<=Math.floor(data?.rating)}"
                                         d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                        fill="#E5B454"/>
+                                    />
                                 </svg>
                             </div>
                         </div>
@@ -134,7 +137,7 @@
             <div class="flex items-start gap-x-4 -translate-x-5 pt-5">
                 <span class="block w-20 border-b border-gold-primary translate-y-4"></span>
                 <h2 class="uppercase text-gray-text text-2xl font-bold tracking-widest">Відгуки</h2>
-                <span class="text-gray-secondary tracking-wider">(45)</span>
+                <span class="text-gray-secondary tracking-wider">({{ responses.length }})</span>
             </div>
 
             <swiper class="w-full py-5 my-5 flex gap-x-2"
@@ -148,14 +151,14 @@
                     :autoplay="{delay:4000}"
 
             >
-                <swiper-slide class="w-full" v-for="item in 5">
-                    <div class="p-2 bg-gray-primary flex ">
+                <swiper-slide class="w-full" v-for="response in responses">
+                    <div class="p-2 bg-gray-primary flex">
                         <div
                             class="size-12 rounded-full flex items-center justify-center bg-[#393737] text-[#7E6B6B]"><span
-                            class="font-bold text-3xl uppercase">i</span></div>
+                            class="font-bold text-3xl uppercase">{{ response.name.slice(0, 1) }}</span></div>
                         <div class="text-gray-text flex-1 px-5">
-                            <div class="flex justify-between border-b pb-1 border-gray-light">
-                                <h3 class="uppercase font-bold text-xl tracking-wide">Ivan</h3>
+                            <div class="flex justify-between items-center border-b pb-1 border-gray-light">
+                                <h3 class="uppercase font-bold text-sm tracking-wide">{{ response.name }}</h3>
                                 <div class="flex items-center">
                                     <svg width="15" height="15" viewBox="0 0 11 10" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -163,19 +166,24 @@
                                             d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
                                             fill="#E5B454"/>
                                     </svg>
-                                    <span class="pl-1">5.0</span>
+                                    <span class="pl-1">{{ response.rating }}.0</span>
                                 </div>
                             </div>
 
-                            <p class="my-2 indent-4 hyphens-auto text-gray-secondary text-sm">Lorem ipsum dolor
-                                sit amet, consectetur adipisicing elit.</p>
-                            <div class="mt-4 text-xs text-end opacity-45">2 days ago</div>
+                            <p class="my-2 indent-4 hyphens-auto text-gray-secondary text-sm">{{ response.text }}</p>
+                            <div class="mt-4 text-xs text-end opacity-45">
+                                {{ moment(response.created_at).fromNow() }}
+                            </div>
                         </div>
                     </div>
                 </swiper-slide>
             </swiper>
         </section>
 
+        <p v-if="$page.props.flash.type === 'success' && $page.props.flash.message"
+           class="w-full text-center text-green-600 bg-green-300 font-medium p-2 my-4">
+            {{ $page.props.flash.message }}
+        </p>
         <section class="flex flex-col justify-center">
             <div class="bg-gray-primary w-1/2 text-gray-text px-5 py-5 border border-gold-primary">
                 <div class="flex items-center">
@@ -184,12 +192,14 @@
                         відгук</h2>
                     <span class="block w-full border-b border-gold-primary"></span>
                 </div>
-                <form class="py-5 px-5">
+                <form class="py-5 px-5" @submit.prevent="submitResponse">
                     <div class="flex flex-col">
                         <label for="name" class="font-bold opacity-65">Ім'я</label>
                         <input v-model="responseForm.name"
                                class="bg-transparent border-2 focus:border-gray-400 focus:ring-offset-0 focus:ring-0 placeholder:font-medium"
                                name="name" type="text" placeholder="Введіть ім'я" required>
+                        <p v-if="responseForm.errors.name"
+                           class="text-sm tracking-wide text-red-400">{{ responseForm.errors.name }}</p>
                     </div>
                     <div class="flex flex-col mt-2">
                         <label for="response" class="font-bold opacity-65">Відгук</label>
@@ -224,7 +234,6 @@
                         Надіслати
                     </button>
                 </form>
-
             </div>
         </section>
     </article>
@@ -235,9 +244,9 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import {reactive, ref, watch} from "vue";
-import {useForm} from "@inertiajs/vue3";
-
+import {computed, reactive, ref, watch} from "vue";
+import {useForm, usePage} from "@inertiajs/vue3";
+import moment from 'moment';
 import ImageViewer from '@/Components/other/ImageViewer.vue'
 
 const props = defineProps({
@@ -253,24 +262,39 @@ const imageView = reactive({
 })
 
 const responseForm = useForm({
+    employee_id: props.data?.id,
     name: ref(''),
     response: ref(''),
     rating: ref(1)
 })
 
+const responses = computed(() => {
+    return props.data?.responses;
+})
+
 watch(
-    () => responseForm.response,
-    () => {
-        if (responseForm.response.split(' ').length > 7) {
-            responseForm.setError('response', 'Максимальна кількість слів повинна не перебільшувати 7')
-        } else {
-            responseForm.setError('response', '')
+    () => usePage().props.flash.message,
+    (value) => {
+        if (value) {
+            setTimeout(() => {
+                usePage().props.flash.message = ''
+            }, 4000)
         }
     }
 )
+
 const showImage = (src) => {
     imageView.show = true
     imageView.src = src
+}
+
+function submitResponse() {
+    responseForm.post(route('response.create'), {
+        onSuccess: () => {
+            responses.value.push()
+            responseForm.reset()
+        }
+    })
 }
 </script>
 

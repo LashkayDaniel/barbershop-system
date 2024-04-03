@@ -41,9 +41,27 @@
                         <h2 class="uppercase text-gray-text text-xl font-bold tracking-widest">Послуги</h2>
                         <ul class="opacity-65 *:tracking-wider" v-for="service in data?.services">
                             <li class="flex items-center gap-x-2">
-                                    <span
-                                        class="block size-2 border-2 border-gold-primary bg-gold-secondary rounded-full"></span>
-                                {{ service.name }} - {{ service.price }}
+                                <span class="block size-2 border-2 border-gold-primary bg-gold-secondary rounded-full"/>
+                                <div class="flex items-center w-full">
+                                    <span class="font-bold whitespace-nowrap">{{ service.name }}</span>
+                                    <div
+                                        class="relative block bg-gradient-to-r from-gold-secondary to-transparent h-[1.2px] min-w-[40px] w-full mx-1">
+                                        <span
+                                            class="absolute size-1 bg-gold-primary left-0 rounded-full -translate-y-[30%] -translate-x-[1px]"/>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="font-bold">{{ service.price }}</span>
+                                        <span class="text-sm">грн</span>
+                                        <span class="size-1 bg-gold-primary left-0 rounded-full mx-2"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="size-4 mr-1">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                        </svg>
+                                        <span class="font-bold">{{ service.duration }}</span>
+                                        <span class="text-sm">хв</span>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -143,10 +161,6 @@
             <swiper class="w-full py-5 my-5 flex gap-x-2"
                     :slides-per-view="3"
                     :space-between="10"
-                    :navigation="{
-                                nextEl: '#gallery-btn-next',
-                                prevEl: '#gallery-btn-prev'
-                            }"
                     :modules="[Navigation, Autoplay]"
                     :autoplay="{delay:4000}"
 
@@ -170,7 +184,7 @@
                                 </div>
                             </div>
 
-                            <p class="my-2 indent-4 hyphens-auto text-gray-secondary text-sm">{{ response.text }}</p>
+                            <p class="my-2 hyphens-auto text-gray-secondary text-sm">{{ response.text }}</p>
                             <div class="mt-4 text-xs text-end opacity-45">
                                 {{ moment(response.created_at).fromNow() }}
                             </div>

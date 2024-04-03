@@ -31,7 +31,7 @@ class HomeController extends Controller
             ->where('role_id', Role::IS_EMPLOYEE)
             ->with([
                 'services' => function ($query) {
-                    $query->select(['id', 'name', 'is_available', 'price', 'duration']);
+                    $query->select(['id', 'name', 'price', 'duration'])->where('is_available', true);
                 },
                 'responses' => function ($query) {
                     $query->orderBy('created_at', 'desc');
@@ -43,6 +43,7 @@ class HomeController extends Controller
                 $rating = round(Response::query()->where('user_id', $user->id)->avg('rating'), 1);
                 $user['rating'] = number_format($rating, 1, '.', '');
                 $user['avatar'] = $user->avatar ? Storage::url($user->avatar) : null;
+                $user->services->makeHidden('pivot');
                 return $user;
             });
 

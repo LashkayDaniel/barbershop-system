@@ -57,7 +57,8 @@ class User extends Authenticatable
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class);
+        return $this->belongsToMany(Service::class)
+            ->withPivot(['price', 'duration']);
     }
 
     public function orders(): HasMany

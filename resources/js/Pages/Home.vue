@@ -4,11 +4,14 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import Modal from '@/Components/Modal.vue'
 import ImageViewer from '@/Components/other/ImageViewer.vue'
 import EmployeeInfo from '@/Components/other/EmployeeInfo.vue'
-
+import ChooseService from '@/Components/reservation/ChooseService.vue'
+import ChooseMaster from '@/Components/reservation/ChooseMaster.vue'
+import ChooseDateTime from '@/Components/reservation/ChooseDateTime.vue'
+import moment from "moment";
 
 const props = defineProps({
     pageData: {
@@ -54,12 +57,13 @@ const imageView = reactive({
 })
 
 const reservationForm = useForm({
-    selectedMaster: ref(''),
-    selectedDate: ref(''),
-    selectedTime: ref(''),
+    selectedService: ref(null),
+    selectedMaster: ref(null),
+    selectedDate: ref(null),
+    selectedTime: ref(null),
     name: ref(''),
+    email: ref(''),
     phone: ref(''),
-    phoneError: ref(''),
     step: ref(1),
     successStep: ref(0)
 })
@@ -94,16 +98,18 @@ const reservationBtnPrev = () => {
 
 const reservationBtnNext = () => {
     if (reservationForm.step < 2) {
+        // if (activeSelectDateTimeBtn && reservationForm.selectedDate && reservationForm.selectedTime) {
         reservationForm.successStep = reservationForm.step
         reservationForm.step++
+        // }
     }
 }
 
 const reservationBtn = () => {
-    reservationForm.successStep = reservationForm.step
-
+    if (reservationForm.name && reservationForm.email && reservationForm.phone) {
+        reservationForm.successStep = reservationForm.step
+    }
 }
-
 
 onMounted(() => {
     window.addEventListener("scroll", () => {
@@ -112,6 +118,96 @@ onMounted(() => {
     });
 });
 
+// reservation
+const masterWorktimes = computed(() => {
+    const data = reservationForm.selectedMaster?.available_worktimes
+    return data ? data : {}
+})
+
+
+const optionsShow = reactive({
+    selectService: {
+        show: false,
+        error: false
+    },
+    selectMaster: {
+        show: false,
+        error: false
+    },
+    selectDateTime: {
+        show: false,
+        error: false
+    }
+})
+
+watch(
+    () => reservationForm.selectedService,
+    () => {
+        reservationForm.selectedMaster = null
+        reservationForm.selectedDate = null
+        reservationForm.selectedTime = null
+    }
+)
+
+const serviceMasters = computed(() => {
+    const selectedService = reservationForm.selectedService
+    if (selectedService) {
+        return props.employees.filter(master => {
+            return master.services.some(service => service.name === selectedService?.name)
+        });
+    }
+    return {}
+})
+
+const activeSelectMasterBtn = computed(() => {
+    return !!reservationForm.selectedService
+})
+
+const activeSelectDateTimeBtn = computed(() => {
+    return !!reservationForm.selectedService && !!reservationForm.selectedMaster
+})
+
+function closeSelectedServiceModal() {
+    optionsShow.selectService.show = false
+    optionsShow.selectService.error = !reservationForm.selectedService
+}
+
+function closeSelectedMasterModal() {
+    optionsShow.selectMaster.show = false
+    optionsShow.selectMaster.error = !reservationForm.selectedMaster
+}
+
+function closeSelectedDateTimeModal() {
+    optionsShow.selectDateTime.show = false
+    optionsShow.selectDateTime.error = !reservationForm.selectedDate || !reservationForm.selectedTime
+}
+
+function selectedServiceEvent(service) {
+    optionsShow.selectService.show = false
+    optionsShow.selectService.error = false
+
+    reservationForm.selectedService = service
+}
+
+function selectedMasterEvent(master) {
+    optionsShow.selectMaster.show = false
+    optionsShow.selectMaster.error = false
+
+    reservationForm.selectedMaster = master
+}
+
+function selectedDateTimeEvent(dateTime) {
+    optionsShow.selectDateTime.show = false
+    optionsShow.selectDateTime.error = false
+
+    const {date, time} = dateTime
+    reservationForm.selectedDate = date
+    reservationForm.selectedTime = time
+}
+
+const makeReservation = () => {
+
+}
 
 </script>
 
@@ -124,6 +220,27 @@ onMounted(() => {
            @close="employeeDetails.show = false"
     >
         <EmployeeInfo :data="employeeDetails.employeeInfo"/>
+    </Modal>
+
+    <Modal :show="optionsShow.selectService.show"
+           :max-width="'lg'"
+           @close="closeSelectedServiceModal"
+    >
+        <ChooseService @selectedService="selectedServiceEvent" :services="services"/>
+    </Modal>
+
+    <Modal :show="optionsShow.selectMaster.show"
+           :max-width="'lg'"
+           @close="closeSelectedMasterModal"
+    >
+        <ChooseMaster @selectedMaster="selectedMasterEvent" :masters="serviceMasters"/>
+    </Modal>
+
+    <Modal :show="optionsShow.selectDateTime.show"
+           :max-width="'lg'"
+           @close="closeSelectedDateTimeModal"
+    >
+        <ChooseDateTime @selectedDateTime="selectedDateTimeEvent" :worktimes="masterWorktimes"/>
     </Modal>
 
     <ImageViewer
@@ -271,21 +388,24 @@ onMounted(() => {
                         :autoplay="{delay:4000}"
                 >
                     <swiper-slide v-for="employee in employees">
-                        <div class="bg-gray-primary flex">
+                        <div class="h-full bg-gray-primary flex">
                             <div class="w-2/5 bg-gold-secondary">
-                                <img src="/img/7.webp" class="h-full m-auto object-cover" alt="">
+                                <img :src="employee?.avatar" class="h-full m-auto object-cover" alt="">
                             </div>
                             <div class="flex flex-1 flex-col">
                                 <div class="flex justify-end">
                                     <div
                                         class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">5.0</b>
+                                        <b class="text-gray-text tracking-wide font-bold">{{ employee.rating }}</b>
                                         <div class="flex flex-row justify-center items-center">
-                                            <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10" fill="none"
+                                            <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10"
+                                                 fill="currentColor"
+                                                 class="text-gray-500"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path
+                                                    :class="{'text-[#E5B454]':i<=Math.floor(employee.rating)}"
                                                     d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"
-                                                    fill="#E5B454"/>
+                                                />
                                             </svg>
                                         </div>
                                     </div>
@@ -369,10 +489,19 @@ onMounted(() => {
                                   :key="index"
                                   class="flex items-center">
                         <div @click="showImage(image)"
-                             class="grow h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
-                            <img class="relative select-none mx-auto object-cover h-full"
+                             class="group grow relative h-full cursor-pointer transition-all duration-200 hover:translate-x-1 hover:-translate-y-2">
+                            <img class="select-none mx-auto object-cover h-full z-20"
                                  :src="image" :alt="'gallery image '+index"
                                  loading="lazy">
+                            <div
+                                class="hidden group-hover:flex transition-all duration-500 absolute z-10 inset-0 items-center bg-gray-light bg-opacity-45">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1" stroke="currentColor"
+                                     class="mx-auto size-10 bg-opacity-100 text-gold-primary">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                                </svg>
+                            </div>
                         </div>
                     </swiper-slide>
                 </swiper>
@@ -381,7 +510,7 @@ onMounted(() => {
                     <div id="gallery-btn-prev"
                          class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
                         <svg
-                            class="rotate-180 "
+                            class="rotate-180"
                             width="78" height="16" viewBox="0 0 78 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -411,13 +540,15 @@ onMounted(() => {
                 <img src="/img/dots.svg" alt="dots" class="select-none">
             </div>
             <div class="bg-gray-primary flex">
-                <img class="select-none object-contain h-full w-1/2" src="/img/7.webp" alt="reservation">
-                <div class="flex flex-col">
+                <div class="w-1/2">
+                    <img class="select-none object-cover h-full" src="/img/7.webp" alt="reservation">
+                </div>
+                <form @submit.prevent="makeReservation" class="flex flex-col">
                     <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
                         <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
                         <div class="">
                             <h2 class="uppercase text-gray-text text-4xl font-bold tracking-widest">Бронювання</h2>
-                            <p class="text-gray-secondary text-bold tracking-widest">
+                            <p class="text-gray-secondary text-bold tracking-widest whitespace-nowrap">
                                 Саме час втілювати свої ідеї в реальність</p>
                         </div>
                     </header>
@@ -435,7 +566,7 @@ onMounted(() => {
                                 </div>
                                 <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-sm whitespace-nowrap"
                                     :class="{'text-opacity-45':reservationForm.successStep===1 || reservationForm.successStep===2}">
-                                    Вибір майстра
+                                    Вибір послуги
                                 </h3>
                             </div>
                             <div class="flex justify-center">
@@ -462,30 +593,60 @@ onMounted(() => {
 
                         <template v-if="reservationForm.step===1">
                             <div class="w-full">
-                                <div :class="{'border-red-500 border-opacity-75':true}"
+                                <div @click="optionsShow.selectService.show = true"
+                                     :class="[{'border-red-500 border-opacity-75' : optionsShow.selectService.error},{'border-gold-primary border-opacity-55':reservationForm.selectedService}]"
                                      class="border-2 border-[#939393] p-2 flex items-center cursor-pointer w-full">
-                                    <img src="/img/master_icon.svg" alt="master icon" class="size-10">
-                                    <p class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть майстра</p>
+                                    <img src="/img/service_icon.svg" alt="master icon" class="size-10">
+                                    <h3 v-if="!reservationForm.selectedService"
+                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть послугу</h3>
+                                    <h3 v-else class="ml-4 font-semibold text-gold-primary tracking-wider">
+                                        {{ reservationForm.selectedService?.name }}
+                                    </h3>
                                 </div>
-                                <p v-if="true"
-                                   class="inline-block text-red-500 text-sm opacity-75">werwer</p>
+                                <p v-if="optionsShow.selectService.error"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">Послугу не вибрано</p>
                             </div>
 
-                            <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
-                                <img src="/img/date_icon.svg" alt="date icon" class="size-8">
-                                <p class="ml-5 font-semibold text-[#757575] tracking-wider">Виберіть дату</p>
+                            <div class="w-full cursor-pointer"
+                                 :class="{'disabled opacity-35 cursor-not-allowed' : !activeSelectMasterBtn}">
+                                <div @click="optionsShow.selectMaster.show = activeSelectMasterBtn"
+                                     :class="[{'border-red-500 border-opacity-75' : optionsShow.selectMaster.error},{'border-gold-primary border-opacity-55':reservationForm.selectedMaster}]"
+                                     class="border-2 border-[#939393] p-2 flex items-center w-full">
+                                    <img src="/img/master_icon.svg" alt="master icon" class="size-10">
+                                    <h3 v-if="!reservationForm.selectedMaster"
+                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть майстра</h3>
+                                    <h3 v-else class="ml-4 font-semibold text-gold-primary tracking-wider">
+                                        {{ reservationForm.selectedMaster?.name }}
+                                    </h3>
+                                </div>
+                                <p v-if="optionsShow.selectMaster.error"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">Майстра не вибрано</p>
                             </div>
 
-                            <div class="border-2 border-[#939393] p-3 flex items-center cursor-pointer w-full">
-                                <img src="/img/time_icon.svg" alt="date icon" class="size-8">
-                                <p class="ml-5 font-semibold text-[#757575] tracking-wider">Виберіть час</p>
+                            <div class="w-full cursor-pointer"
+                                 :class="{'disabled opacity-35 cursor-not-allowed' : !activeSelectDateTimeBtn}">
+                                <div @click="optionsShow.selectDateTime.show = activeSelectDateTimeBtn"
+                                     :class="[{'border-red-500 border-opacity-75' : optionsShow.selectDateTime.error},{'border-gold-primary border-opacity-55' : !!reservationForm.selectedDate && !!reservationForm.selectedTime}]"
+                                     class="border-2 border-[#939393] p-3 flex items-center w-full">
+                                    <img src="/img/date_icon.svg" alt="master icon" class="size-8">
+                                    <h3 v-if="!reservationForm.selectedDate"
+                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть дату та
+                                        час</h3>
+                                    <h3 v-else class="ml-5 font-semibold text-gold-primary tracking-wider">
+                                        {{ moment(reservationForm.selectedDate).format("dddd, D MMMM") }},
+                                        {{ reservationForm.selectedTime.time.toString().slice(0, 5) }}
+                                    </h3>
+                                </div>
+                                <p v-if="optionsShow.selectDateTime.error"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">Дату або час не вибрано</p>
                             </div>
                         </template>
 
                         <template v-if="reservationForm.step===2">
-                            <label class="relative block cursor-pointer w-full">
-                                <span class="sr-only">Name</span>
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                            <div class="cursor-pointer w-full">
+                                <label class="relative block">
+                                    <span class="sr-only">Name</span>
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1" stroke="currentColor"
                                     class="size-10 text-[#FCF2E7] text-opacity-80">
@@ -493,14 +654,39 @@ onMounted(() => {
                                           d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                                 </svg>
                             </span>
-                                <input v-model="reservationForm.name"
-                                       class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
-                                       placeholder="Ваше ім'я" type="text" name="name" required/>
-                            </label>
+                                    <input v-model="reservationForm.name"
+                                           :class="{'border-red-500 border-opacity-75':reservationForm.errors.name}"
+                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           placeholder="Ваше ім'я" type="text" name="name" required/>
+                                </label>
+                                <p v-if="reservationForm.errors.name"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                    {{ reservationForm.errors.name }}</p>
+                            </div>
 
-                            <label class="relative block cursor-pointer w-full">
-                                <span class="sr-only">Phone</span>
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <div class="cursor-pointer w-full">
+                                <label class="relative block">
+                                    <span class="sr-only">Email</span>
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1" stroke="currentColor"
+                                         class="size-10 text-[#FCF2E7] text-opacity-80"><path
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"></path></svg>
+                            </span>
+                                    <input v-model="reservationForm.email"
+                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           placeholder="Ваш email" type="email" name="name" required/>
+                                </label>
+                                <p v-if="reservationForm.errors.name"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                    {{ reservationForm.errors.name }}</p>
+                            </div>
+
+                            <div class="cursor-pointer w-full">
+                                <label class="relative block">
+                                    <span class="sr-only">Phone</span>
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor"
                                      class="size-8 text-[#FCF2E7] text-opacity-80">
@@ -508,14 +694,18 @@ onMounted(() => {
                                           d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
                                 </svg>
                             </span>
-                                <input v-model="reservationForm.phone"
-                                       @input="formatPhoneNumber"
-                                       class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
-                                       placeholder="(050) xxx-xxxx"
-                                       type="tel"
-                                       name="phone"
-                                       required/>
-                            </label>
+                                    <input v-model="reservationForm.phone"
+                                           @input="formatPhoneNumber"
+                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           placeholder="(050) xxx-xxxx"
+                                           type="tel"
+                                           name="phone"
+                                           required/>
+                                </label>
+                                <p v-if="reservationForm.errors.name"
+                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                    {{ reservationForm.errors.name }}</p>
+                            </div>
                         </template>
 
                         <div class="w-full grid grid-cols-2">
@@ -531,6 +721,7 @@ onMounted(() => {
                             </button>
 
                             <button v-if="reservationForm.step===2"
+                                    type="submit"
                                     @click="reservationBtn"
                                     title="Забронювати зараз"
                                     class="px-1 py-2 mt-2 col-start-2 uppercase tracking-wider text-[#FAD6BC] font-bold bg-[#BE7B36] hover:text-gray-text hover:bg-[#A76D32] transition-all duration-100">
@@ -538,7 +729,7 @@ onMounted(() => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </article>
 

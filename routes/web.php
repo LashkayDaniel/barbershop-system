@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -43,6 +44,8 @@ Route::controller(ResponseController::class)
     ->group(function () {
         Route::post('/response', 'store')->name('create');
     });
+
+Route::post('/reservation',[ReservationController::class,'store'])->name('reservation');
 
 require __DIR__ . '/web/admin.php';
 require __DIR__ . '/web/employee.php';

@@ -1,5 +1,5 @@
 <script setup>
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head, useForm, usePage} from '@inertiajs/vue3';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
@@ -98,10 +98,10 @@ const reservationBtnPrev = () => {
 
 const reservationBtnNext = () => {
     if (reservationForm.step < 2) {
-        // if (activeSelectDateTimeBtn && reservationForm.selectedDate && reservationForm.selectedTime) {
-        reservationForm.successStep = reservationForm.step
-        reservationForm.step++
-        // }
+        if (activeSelectDateTimeBtn && reservationForm.selectedDate && reservationForm.selectedTime) {
+            reservationForm.successStep = reservationForm.step
+            reservationForm.step++
+        }
     }
 }
 
@@ -144,6 +144,14 @@ watch(
     () => reservationForm.selectedService,
     () => {
         reservationForm.selectedMaster = null
+        reservationForm.selectedDate = null
+        reservationForm.selectedTime = null
+    }
+)
+
+watch(
+    () => reservationForm.selectedMaster,
+    () => {
         reservationForm.selectedDate = null
         reservationForm.selectedTime = null
     }
@@ -205,8 +213,32 @@ function selectedDateTimeEvent(dateTime) {
     reservationForm.selectedTime = time
 }
 
-const makeReservation = () => {
+watch(
+    () => usePage().props.flash.message,
+    (value) => {
+        if (value) {
+            setTimeout(() => {
+                usePage().props.flash.message = ''
+            }, 5000)
+        }
+    }
+)
 
+const makeReservation = () => {
+    reservationForm.transform((data) => ({
+        'master_id': data.selectedMaster.id,
+        'service': data.selectedService.name,
+        'worktime_id': data.selectedTime.id,
+        'name': data.name.toString().trim(),
+        'email': data.email.toString().trim(),
+        'phone': data.phone
+    }))
+        .post(route('reservation'), {
+            onSuccess: () => {
+                reservationForm.reset()
+            },
+            preserveScroll: true
+        })
 }
 
 </script>
@@ -591,6 +623,11 @@ const makeReservation = () => {
                             </div>
                         </div>
 
+                        <div v-if="$page.props.flash.message"
+                             class="p-2 bg-gold-secondary w-full font-bold bg-opacity-35 tracking-wide text-center text-gold-primary border border-gold-primary border-opacity-85">
+                            {{ $page.props.flash.message }}
+                        </div>
+
                         <template v-if="reservationForm.step===1">
                             <div class="w-full">
                                 <div @click="optionsShow.selectService.show = true"
@@ -675,12 +712,13 @@ const makeReservation = () => {
                                         d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"></path></svg>
                             </span>
                                     <input v-model="reservationForm.email"
+                                           :class="{'border-red-500 border-opacity-75':reservationForm.errors.email}"
                                            class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
                                            placeholder="Ваш email" type="email" name="name" required/>
                                 </label>
-                                <p v-if="reservationForm.errors.name"
+                                <p v-if="reservationForm.errors.email"
                                    class="inline-block text-red-500 text-[13px] opacity-75">
-                                    {{ reservationForm.errors.name }}</p>
+                                    {{ reservationForm.errors.email }}</p>
                             </div>
 
                             <div class="cursor-pointer w-full">
@@ -696,25 +734,28 @@ const makeReservation = () => {
                             </span>
                                     <input v-model="reservationForm.phone"
                                            @input="formatPhoneNumber"
+                                           :class="{'border-red-500 border-opacity-75':reservationForm.errors.phone}"
                                            class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
                                            placeholder="(050) xxx-xxxx"
                                            type="tel"
                                            name="phone"
                                            required/>
                                 </label>
-                                <p v-if="reservationForm.errors.name"
+                                <p v-if="reservationForm.errors.phone"
                                    class="inline-block text-red-500 text-[13px] opacity-75">
-                                    {{ reservationForm.errors.name }}</p>
+                                    {{ reservationForm.errors.phone }}</p>
                             </div>
                         </template>
 
                         <div class="w-full grid grid-cols-2">
                             <button v-if="reservationForm.step!==1"
+                                    type="button"
                                     @click="reservationBtnPrev"
                                     class="px-8 py-2 mt-2 justify-self-start col-start-1 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
                                 Назад
                             </button>
                             <button v-if="reservationForm.step!==2"
+                                    type="button"
                                     @click="reservationBtnNext"
                                     class="px-8 py-2 mt-2 justify-self-end col-start-2 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
                                 Далі

@@ -65,12 +65,13 @@ const props = defineProps({
     }
 })
 
-const selectedDate = ref();
+const selectedDate = ref(moment());
 const selectedTime = ref()
 
 onMounted(() => {
     moment.updateLocale("uk", uk);
     loadMarkers()
+    changeDateHandle(selectedDate.value)
 })
 
 watch(selectedDate, () => {

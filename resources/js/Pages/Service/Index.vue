@@ -75,8 +75,15 @@
                         </div>
                     </li>
                 </ul>
-
             </section>
+
+            <div class="p-6 bg-gray-300 rounded-lg mt-4">
+                <apexchart type="donut"
+                           height="300"
+                           :options="popularServicesOptions"
+                           :series="popularServicesSeries"
+                />
+            </div>
 
         </div>
     </AuthenticatedLayout>
@@ -88,9 +95,9 @@ import {Head, router} from '@inertiajs/vue3';
 import Modal from '@/Components/Modal.vue'
 import Add from '@/Pages/Service/Partials/Add.vue'
 import Edit from '@/Pages/Service/Partials/Edit.vue'
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 
-defineProps({
+const props = defineProps({
     allServices: {
         type: Array,
         required: true
@@ -98,8 +105,59 @@ defineProps({
     employeeServices: {
         type: Array,
         required: true
+    },
+    statistics: {
+        type: Object,
+        required: true
     }
 })
+
+const popularServicesTitle = computed(() => {
+    return props.statistics.map(i => i.name)
+})
+const popularServicesSeries = computed(() => {
+    return props.statistics.map(i => i.percent)
+})
+
+const popularServicesOptions = {
+    chart: {
+        type: 'donut',
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    plotOptions: {
+        pie: {
+            customScale: 0.8,
+            donut: {
+                size: '75%',
+            },
+            offsetY: 20,
+        },
+        stroke: {
+            colors: undefined
+        }
+    },
+    colors: ['#00D8B6', '#008FFB', '#FEB019', '#FF4560', '#775DD0'],
+    title: {
+        text: 'Popular services',
+        style: {
+            fontSize: '18px'
+        }
+    },
+    labels: popularServicesTitle.value,
+    legend: {
+        position: 'left',
+        offsetY: 80
+    },
+    tooltip: {
+        y: {
+            formatter: function (value) {
+                return value + '%';
+            }
+        }
+    }
+}
 
 const modal = reactive({
     show: ref(false),

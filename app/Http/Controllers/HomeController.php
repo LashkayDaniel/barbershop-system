@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WorktimeResource;
 use App\Models\PageData;
 use App\Models\Response;
 use App\Models\Role;
@@ -37,6 +38,7 @@ class HomeController extends Controller
                     $query->orderBy('created_at', 'desc');
                 },
                 'portfolio',
+                'availableWorktimes',
             ])
             ->get(['id', 'name', 'email', 'birth', 'phone', 'rank', 'description', 'avatar'])
             ->map(function ($user) {

@@ -91,6 +91,16 @@ class User extends Authenticatable
         return $this->role_id == Role::IS_EMPLOYEE;
     }
 
+    public function availableWorktimes()
+    {
+        return $this
+            ->worktimes()
+            ->whereDate('date', '>=', now()->toDateString())
+            ->where('is_free', true)
+            ->orderBy('date')
+            ->orderBy('time');
+    }
+
     public function getRedirectRoute()
     {
         return match ((int)$this->role_id) {

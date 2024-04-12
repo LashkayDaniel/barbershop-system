@@ -353,46 +353,64 @@ const makeReservation = () => {
                 </div>
             </header>
 
-            <section class="relative bg-gray-primary w-3/5 mx-auto m-10 p-16 pb-20 flex flex-col gap-y-6">
-                <div class="absolute top-0 right-0 bg-body w-32 h-20 translate-x-16 -translate-y-10 rotate-45"></div>
-                <div class="absolute bottom-0 left-0 bg-body w-40 h-20 -translate-x-16 translate-y-8 rotate-45">
+            <section class="flex gap-x-4 m-10">
+                <div class="flex-1 flex flex-col gap-y-4 px-20 justify-center divide-y divide-gray-primary">
+                    <div
+                        class="p-2 mx-10 flex items-center justify-center">
+                        <img src="/img/fast_icon.svg" alt="fast icon" class="w-20">
+                        <h3 class="uppercase text-2xl tracking-wider font-semibold ml-4 text-gray-text text-opacity-70">
+                            Швидко</h3>
+                    </div>
+                    <div
+                        class="p-2 flex items-center justify-center">
+                        <h3 class="uppercase text-2xl tracking-wider font-semibold mr-4 text-gray-text text-opacity-70">
+                            Професійно</h3>
+                        <img src="/img/quality_icon.svg" alt="fast icon" class="w-20">
+                    </div>
+                    <div
+                        class="p-2 flex items-center justify-center">
+                        <img src="/img/trends_icon.svg" alt="fast icon" class="w-16">
+                        <h3 class="uppercase text-2xl tracking-wider font-semibold ml-2 text-gray-text text-opacity-70">
+                            Сучасно</h3>
+                    </div>
                 </div>
+                <div class="relative bg-gray-primary w-3/5 mx-auto p-16 pb-20 flex flex-col gap-y-6">
+                    <div class="absolute bottom-0 left-0 w-0 h-0 border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
+                    <div class="absolute top-0 right-0 w-0 h-0 border-[30px] border-b-transparent border-t-body border-l-transparent border-r-body"></div>
 
-                <template v-for="service in services">
-                    <div class="">
-                        <div class="flex items-center gap-x-3">
-                            <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
-                                {{ service?.name }}
-                            </h3>
-                            <span
-                                class="block w-full h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
-                            <div class="flex items-center text-gold-primary font-black text-xl">
-                                <span class="font-semibold mr-2 tracking-wider opacity-85 text-sm">від</span>
-                                <div class="flex items-center">
-                                    <span class="">{{ service?.min_price }}</span>
-                                    <span class="text-sm font-semibold ml-1">грн</span>
+                    <template v-for="service in services">
+                        <div class="">
+                            <div class="flex items-center gap-x-3">
+                                <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
+                                    {{ service?.name }}
+                                </h3>
+                                <span
+                                    class="block w-full h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
+                                <div class="flex items-center text-gold-primary font-black text-xl">
+                                    <span class="font-semibold mr-2 tracking-wider opacity-85 text-sm">від</span>
+                                    <div class="flex items-center">
+                                        <span class="">{{ service?.min_price }}</span>
+                                        <span class="text-sm font-semibold ml-1">грн</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <p class="text-gray-secondary text-bold text-sm tracking-wide w-4/6">{{
+                                        service.description
+                                    }}</p>
+                                <div class="flex items-center text-sm text-gray-text opacity-85">
+                                    <span>~{{ service?.avg_duration }} хв</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5" stroke="currentColor" class="size-5 ml-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-between items-start">
-                            <p class="text-gray-secondary text-bold text-sm tracking-wide w-4/6">{{
-                                    service.description
-                                }}</p>
-                            <div class="flex items-center text-sm text-gray-text opacity-85">
-                                <span>~{{ service?.avg_duration }} хв</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="currentColor" class="size-5 ml-1">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <!--                <button-->
-                <!--                    class="absolute right-0 bottom-0 mt-2 px-5 py-1 text-gray-text text-opacity-85 m-3 transition-all duration-200 tracking-wider hover:bg-opacity-100 bg-opacity-65 bg-gold-secondary border border-gold-primary">-->
-                <!--                    Детальніше-->
-                <!--                </button>-->
+                    </template>
+                </div>
+
             </section>
         </article>
 

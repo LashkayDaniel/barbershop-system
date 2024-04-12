@@ -33,7 +33,7 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->string('status');
-            $table->integer('discount')->nullable();
+            $table->integer('discount')->default(0);
             $table->timestamps();
         });
     }

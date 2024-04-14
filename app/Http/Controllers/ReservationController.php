@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendReservationEmailJob;
 use App\Models\Client;
 use App\Models\Order;
 use App\Models\Service;
+use App\Models\User;
 use App\Models\Worktime;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -42,6 +45,22 @@ class ReservationController extends Controller
 
         $worktime->is_free = 0;
         $worktime->update();
+
+        $master = User::find($request->master_id);
+        $masterService = $master->services()->where('service_id', $service->id)->first();
+        Carbon::setLocale('uk_UA');
+
+        $data = [
+            'receiver' => $customer->email,
+            'service' => $service->name,
+            'master' => $master->name,
+            'datetime' => Carbon::parse($worktime->date)->translatedFormat('l, j F') . ' о ' .
+                substr($worktime->time, 0, 5),
+            'duration' => $masterService->pivot->duration,
+            'cost' => $masterService->pivot->price,
+        ];
+
+        dispatch(new SendReservationEmailJob($data));
 
         return redirect()->back()->with([
             'status' => 'success',

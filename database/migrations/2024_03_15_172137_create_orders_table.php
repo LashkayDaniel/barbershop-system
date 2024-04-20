@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Client;
+use App\Models\Discount;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\Worktime;
@@ -32,8 +33,12 @@ return new class extends Migration {
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->foreignIdFor(Discount::class)
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('status');
-            $table->integer('discount')->default(0);
             $table->timestamps();
         });
     }

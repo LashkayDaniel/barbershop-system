@@ -13,6 +13,8 @@ import ChooseMaster from '@/Components/reservation/ChooseMaster.vue'
 import ChooseDateTime from '@/Components/reservation/ChooseDateTime.vue'
 import FadeInAnimation from '@/Components/animations/FadeIn.vue'
 import moment from "moment";
+import AOS from "aos";
+import 'aos/dist/aos.css';
 
 const props = defineProps({
     pageData: {
@@ -117,6 +119,7 @@ onMounted(() => {
         let scroll = window.scrollY;
         showBtnToUp.value = scroll > 350;
     });
+    AOS.init();
 });
 
 // reservation
@@ -301,16 +304,16 @@ const makeReservation = () => {
                 <span v-html="pageData?.logo"></span>
             </div>
             <ul class="flex items-start border-b border-gray-light pl-8 pr-10 mr-2 mt-4">
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
                     <a href="#">Головна</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
                     <a href="#services">Послуги</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
                     <a href="#masters">Майстри</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all cursor-pointer px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
                     <a href="#gallery">Галерея</a>
                 </li>
             </ul>
@@ -354,26 +357,27 @@ const makeReservation = () => {
 
             <section class="flex gap-x-4 m-10">
                 <div class="flex-1 flex flex-col gap-y-4 px-20 justify-center divide-y divide-gray-primary">
-                    <div
-                        class="p-2 mx-10 flex items-center justify-center">
+                    <div data-aos="fade-left"
+                         class="p-2 mx-10 flex items-center justify-center">
                         <img src="/img/fast_icon.svg" alt="fast icon" class="w-20">
                         <h3 class="uppercase text-2xl tracking-wider font-semibold ml-4 text-gray-text text-opacity-70">
                             Швидко</h3>
                     </div>
-                    <div
-                        class="p-2 flex items-center justify-center">
+                    <div data-aos="fade-right" data-aos-delay="400"
+                         class="p-2 flex items-center justify-center">
                         <h3 class="uppercase text-2xl tracking-wider font-semibold mr-4 text-gray-text text-opacity-70">
                             Професійно</h3>
                         <img src="/img/quality_icon.svg" alt="fast icon" class="w-20">
                     </div>
-                    <div
-                        class="p-2 flex items-center justify-center">
+                    <div data-aos="fade-left" data-aos-delay="600"
+                         class="p-2 flex items-center justify-center">
                         <img src="/img/trends_icon.svg" alt="fast icon" class="w-16">
                         <h3 class="uppercase text-2xl tracking-wider font-semibold ml-2 text-gray-text text-opacity-70">
                             Сучасно</h3>
                     </div>
                 </div>
-                <div class="relative bg-gray-primary w-3/5 mx-auto p-16 pb-20 flex flex-col gap-y-6">
+                <div data-aos="zoom-in-up" data-aos-duration="1000"
+                     class="relative bg-gray-primary w-3/5 mx-auto p-16 pb-20 flex flex-col gap-y-6">
                     <div
                         class="absolute bottom-0 left-0 w-0 h-0 border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
                     <div
@@ -425,7 +429,7 @@ const makeReservation = () => {
 
 
         <article id="masters">
-            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
+            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5" data-aos="fade-right">
                 <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
                 <div class="">
                     <h2 class="uppercase text-gray-text text-4xl font-bold tracking-wide">Наші майстри</h2>
@@ -520,7 +524,7 @@ const makeReservation = () => {
 
 
         <article id="gallery">
-            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
+            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5" data-aos="fade-right">
                 <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
                 <div class="">
                     <h2 class="uppercase text-gray-text text-4xl font-bold tracking-wide">Галерея</h2>
@@ -602,7 +606,7 @@ const makeReservation = () => {
                 <div class="w-1/2">
                     <img class="select-none object-cover h-full" src="/img/7.webp" alt="reservation">
                 </div>
-                <form @submit.prevent="makeReservation" class="flex flex-col">
+                <form @submit.prevent="makeReservation" class="flex flex-col" data-aos="zoom-in-right">
                     <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
                         <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
                         <div class="">
@@ -662,7 +666,8 @@ const makeReservation = () => {
                                      class="border-2 border-[#939393] p-2 flex items-center cursor-pointer w-full">
                                     <img src="/img/service_icon.svg" alt="master icon" class="size-10">
                                     <h3 v-if="!reservationForm.selectedService"
-                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть послугу</h3>
+                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть
+                                        послугу</h3>
                                     <h3 v-else class="ml-4 font-semibold text-gold-primary tracking-wider">
                                         {{ reservationForm.selectedService?.name }}
                                     </h3>

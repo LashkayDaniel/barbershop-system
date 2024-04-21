@@ -6,6 +6,7 @@ use App\Http\Resources\WorktimeResource;
 use App\Models\PageData;
 use App\Models\Response;
 use App\Models\Role;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -22,11 +23,24 @@ class HomeController extends Controller
                 's.name',
                 's.description',
                 DB::raw('ROUND(AVG(su.duration)) as avg_duration'),
-                DB::raw('MIN(su.price) as min_price')
+                DB::raw('MIN(su.price) as min_price'),
             )
             ->where('s.is_available', true)
             ->groupBy('su.service_id')
-            ->get();
+            ->get()
+            ->map(function ($service) {
+                $foundedService = Service::query()->where('name', $service->name)->first();
+                $discount = $foundedService?->discount;
+                if ($discount) {
+                    $discountPercent = $discount?->percent;
+                    $price = $service->min_price;
+                    $discountWeight = $price * ($discountPercent / 100);
+                    $service->min_price = round($price - $discountWeight);
+                    $service->discount = $discountPercent;
+                    $service->discount_last_day = $discount->end;
+                }
+                return $service;
+            });
 
         $employeesData = User::query()
             ->where('role_id', Role::IS_EMPLOYEE)

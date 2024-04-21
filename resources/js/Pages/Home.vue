@@ -11,6 +11,7 @@ import EmployeeInfo from '@/Components/other/EmployeeInfo.vue'
 import ChooseService from '@/Components/reservation/ChooseService.vue'
 import ChooseMaster from '@/Components/reservation/ChooseMaster.vue'
 import ChooseDateTime from '@/Components/reservation/ChooseDateTime.vue'
+import FadeInAnimation from '@/Components/animations/FadeIn.vue'
 import moment from "moment";
 
 const props = defineProps({
@@ -281,7 +282,7 @@ const makeReservation = () => {
         @close="imageView.show = !imageView.show">
     </ImageViewer>
 
-    <transition name="fade">
+    <FadeInAnimation>
         <button v-if="showBtnToUp"
                 @click="scrollToUp"
                 class="fixed bottom-5 right-10 z-50 bg-gold-secondary size-12 items-center hover:scale-125 transition-all duration-200">
@@ -292,7 +293,7 @@ const makeReservation = () => {
                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
             </svg>
         </button>
-    </transition>
+    </FadeInAnimation>
 
     <header class="w-full h-screen relative">
         <nav class="z-50 w-full py-2 flex justify-between items-start text-[#9F7A53]">
@@ -324,12 +325,10 @@ const makeReservation = () => {
 
             <div class="flex items-center absolute -top-14 ">
                 <span class="block w-24 border-b border-gold-primary"></span>
-                <button
-                    class="absolute left-[calc(100%-15px)] hover:left-[calc(100%-5px)] hover:border-2 transition-all duration-200 uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 ">
-                    <a href="#reservation">
-                        Записатися
-                    </a>
-                </button>
+                <a href="#reservation"
+                   class="absolute left-[calc(100%-15px)] hover:left-[calc(100%-5px)] hover:border-2 transition-all duration-200 uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 ">
+                    Записатися
+                </a>
             </div>
 
             <div class="bg-slate-200 bg-contain overflow-hidden z-10 shadow-2xl shadow-gray-primary">
@@ -375,17 +374,28 @@ const makeReservation = () => {
                     </div>
                 </div>
                 <div class="relative bg-gray-primary w-3/5 mx-auto p-16 pb-20 flex flex-col gap-y-6">
-                    <div class="absolute bottom-0 left-0 w-0 h-0 border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
-                    <div class="absolute top-0 right-0 w-0 h-0 border-[30px] border-b-transparent border-t-body border-l-transparent border-r-body"></div>
+                    <div
+                        class="absolute bottom-0 left-0 w-0 h-0 border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
+                    <div
+                        class="absolute top-0 right-0 w-0 h-0 border-[30px] border-b-transparent border-t-body border-l-transparent border-r-body"></div>
 
                     <template v-for="service in services">
                         <div class="">
                             <div class="flex items-center gap-x-3">
-                                <h3 class="whitespace-nowrap inline-block uppercase text-gray-text text-xl font-bold tracking-widest">
+                                <h3 class="whitespace-nowrap inline-block opacity-85 uppercase text-gray-text text-lg font-bold tracking-widest">
                                     {{ service?.name }}
                                 </h3>
-                                <span
-                                    class="block w-full h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
+                                <div class="relative w-full text-center">
+                                    <span v-if="service?.discount"
+                                          class="absolute bottom-1 left-5 text-sm text-gold-primary">діє знижка
+                                        <b> -{{ service?.discount }}%</b>
+                                        <span class="text-[12px]">
+                                            ( до {{ moment(service?.discount_last_day).format('D MMMM') }})
+                                        </span>
+                                    </span>
+                                    <span
+                                        class="block relative h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
+                                </div>
                                 <div class="flex items-center text-gold-primary font-black text-xl">
                                     <span class="font-semibold mr-2 tracking-wider opacity-85 text-sm">від</span>
                                     <div class="flex items-center">
@@ -410,7 +420,6 @@ const makeReservation = () => {
                         </div>
                     </template>
                 </div>
-
             </section>
         </article>
 
@@ -853,22 +862,8 @@ const makeReservation = () => {
         </article>
     </main>
 
-
     <footer class="text-center text-gray-text p-2 bg-gray-light">Copyright © {{ new Date().getFullYear() }}</footer>
-
-
 </template>
 
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>
 

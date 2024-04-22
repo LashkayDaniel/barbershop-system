@@ -61,6 +61,16 @@ class User extends Authenticatable
             ->withPivot(['price', 'duration']);
     }
 
+    public function availableServices(): BelongsToMany
+    {
+        return $this->services()->where('is_available', true);
+    }
+
+    public function servicesWithDiscount(): BelongsToMany
+    {
+        return $this->availableServices()->with('discount');
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

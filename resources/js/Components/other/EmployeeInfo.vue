@@ -6,12 +6,12 @@
     </ImageViewer>
 
     <article class="bg-body flex flex-col px-10 py-5 gap-y-2 h-full overflow-auto">
-        <header class="bg-gray-primary h-96 flex">
-            <div class="w-2/5 h-full">
-                <img :src="data?.avatar" class="object-contain w-full h-full" alt="master photo">
+        <header class="bg-gray-primary flex">
+            <div class="w-2/5 h-auto">
+                <img :src="data?.avatar" class="object-cover w-full h-full" alt="master photo">
             </div>
             <div class="flex-1 px-5 text-gray-text py-4">
-                <div class="flex items-start gap-x-">
+                <div class="flex items-start">
                     <div class="flex-1">
                         <h2 class="font-bold text-2xl tracking-wider uppercase whitespace-nowrap">{{ data?.name }}</h2>
                         <p class="text-gray-secondary tracking-wider">{{ data?.rank }}</p>
@@ -39,26 +39,44 @@
                     <span class="block w-20 border-b border-gold-primary translate-y-3"></span>
                     <div class="">
                         <h2 class="uppercase text-gray-text text-xl font-bold tracking-widest">Послуги</h2>
-                        <ul class="opacity-65 *:tracking-wider" v-for="service in data?.services">
-                            <li class="flex items-center gap-x-2">
+                        <ul class="opacity-75 *:tracking-wider" v-for="service in data?.services">
+                            <li class="flex items-center gap-x-2 my-2">
                                 <span class="block size-2 border-2 border-gold-primary bg-gold-secondary rounded-full"/>
-                                <div class="flex items-center w-full">
-                                    <span class="font-bold whitespace-nowrap">{{ service.name }}</span>
+                                <div class="flex items-center w-full justify-between">
+                                    <span class="font-semibold whitespace-nowrap">{{ service.name }}</span>
                                     <div
-                                        class="relative block bg-gradient-to-r from-gold-secondary to-transparent h-[1.2px] min-w-[40px] w-full mx-1">
+                                        class="relative grow block bg-gradient-to-r from-gold-secondary to-transparent h-[1.2px] min-w-[40px] w-full mx-1">
                                         <span
                                             class="absolute size-1 bg-gold-primary left-0 rounded-full -translate-y-[30%] -translate-x-[1px]"/>
+                                        <span v-if="service?.discount"
+                                              class="absolute left-[calc(50%-10px)] bottom-0 text-[10px] text-[#D69A5F] opacity-100">-{{
+                                                service?.discount
+                                            }}%</span>
                                     </div>
-                                    <div class="flex items-center">
-                                        <span class="font-bold">{{ service.price }}</span>
-                                        <span class="text-sm">грн</span>
+
+                                    <div class="w-full flex items-center">
+                                        <template v-if="service?.discount_price">
+                                            <p class="flex items-center">
+                                                <span class="text-gold-primary font-bold">{{
+                                                        service?.discount_price
+                                                    }}</span>
+                                                <span class="font-medium text-gold-primary text-sm">₴</span>
+                                                <span
+                                                    class="ml-1 line-through text-sm text-gold-secondary font-medium">
+                                                {{ service.price }}
+                                            </span>
+                                            </p>
+                                        </template>
+                                        <p v-else class="text-gold-primary font-bold">
+                                            <span>{{ service.price }}</span>
+                                            <span class="font-medium text-sm">₴</span></p>
                                         <span class="size-1 bg-gold-primary left-0 rounded-full mx-2"/>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              stroke-width="1.5" stroke="currentColor" class="size-4 mr-1">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                   d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                         </svg>
-                                        <span class="font-bold">{{ service.duration }}</span>
+                                        <span class="font-bold text-sm">{{ service.duration }}</span>
                                         <span class="text-sm">хв</span>
                                     </div>
                                 </div>

@@ -45,9 +45,6 @@ class HomeController extends Controller
         $employeesData = User::query()
             ->where('role_id', Role::IS_EMPLOYEE)
             ->with([
-                'services' => function ($query) {
-                    $query->select(['id', 'name', 'price', 'duration'])->where('is_available', true);
-                },
                 'responses' => function ($query) {
                     $query->orderBy('created_at', 'desc');
                 },
@@ -59,7 +56,25 @@ class HomeController extends Controller
                 $rating = round(Response::query()->where('user_id', $user->id)->avg('rating'), 1);
                 $user['rating'] = number_format($rating, 1, '.', '');
                 $user['avatar'] = $user->avatar ? Storage::url($user->avatar) : null;
-                $user->services->makeHidden('pivot');
+
+                $user['services'] = $user->servicesWithDiscount()
+                    ->get()
+                    ->map(function ($service) {
+                        $price = $service->pivot->price;
+                        $resultingFields = [
+                            'id' => $service->id,
+                            'name' => $service->name,
+                            'price' => $price,
+                            'duration' => $service->pivot->duration,
+                        ];
+
+                        $discount = $service->discount?->percent;
+                        if ($discount) {
+                            $resultingFields['discount'] = $discount;
+                            $resultingFields['discount_price'] = round($price * (1 - $discount / 100));
+                        }
+                        return $resultingFields;
+                    });
                 return $user;
             });
 

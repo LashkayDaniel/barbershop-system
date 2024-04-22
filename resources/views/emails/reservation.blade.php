@@ -4,7 +4,10 @@
 **Послуга:** {{$data['service']}}<br>
 **Тривалість:** {{$data['duration']}}хв<br>
 **Майстер:** {{$data['master']}}<br>
-**Дата та час:** {{$data['datetime']}}
+**Дата та час:** {{$data['datetime']}}<br>
+@if(isset($data['discount']))
+**Знижка:** -{{$data['discount']}}%
+@endif
 
 ---
 

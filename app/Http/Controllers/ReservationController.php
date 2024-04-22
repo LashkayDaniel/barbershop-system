@@ -40,7 +40,12 @@ class ReservationController extends Controller
         $order->client_id = $customer->id;
         $order->worktime_id = $worktime->id;
         $order->status = 'created';
-        $order->discount = 0;
+
+        $discount = $service->discount;
+        if ($discount) {
+            $order->discount_id = $discount->id;
+        }
+
         $order->save();
 
         $worktime->is_free = 0;
@@ -48,7 +53,6 @@ class ReservationController extends Controller
 
         $master = User::find($request->master_id);
         $masterService = $master->services()->where('service_id', $service->id)->first();
-        Carbon::setLocale('uk_UA');
 
         $data = [
             'receiver' => $customer->email,
@@ -59,6 +63,12 @@ class ReservationController extends Controller
             'duration' => $masterService->pivot->duration,
             'cost' => $masterService->pivot->price,
         ];
+
+        if ($discount) {
+            $data['discount'] = $discount->percent;
+            $price = $data['cost'];
+            $data['cost'] = round($price * (1 - $discount->percent / 100));
+        }
 
         dispatch(new SendReservationEmailJob($data));
 

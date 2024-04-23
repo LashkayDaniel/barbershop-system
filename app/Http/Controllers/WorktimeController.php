@@ -6,6 +6,7 @@ use App\Models\Worktime;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class WorktimeController extends Controller
@@ -19,7 +20,11 @@ class WorktimeController extends Controller
             ->whereDate('date', '>=', now()->toDateString())
             ->orderBy('date')
             ->orderBy('time')
-            ->get(['id', 'date', 'time', 'is_free']);
+            ->get(['id', 'date', 'time', 'is_free'])
+            ->map(function ($worktime) {
+                $worktime->reserved = $worktime->isReserved();
+                return $worktime;
+            });
         return Inertia::render('Employee/Worktime/Index', ['worktimes' => $worktimes]);
     }
 
@@ -29,6 +34,7 @@ class WorktimeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'required|numeric',
             'date' => 'required|after_or_equal:' . Carbon::now()->toDateString(),
             'time' => 'required',
         ]);
@@ -36,12 +42,10 @@ class WorktimeController extends Controller
         $timeFormat = $request->time . ':00';
 
         if ($request->date == Carbon::now()->toDateString()) {
-            if ($timeFormat < Carbon::now()->setTimezone(
-                    'Europe/Kiev'
-                )->format('H:i' . ':00')) {
+            if ($timeFormat < Carbon::now()->format('H:i' . ':00')) {
                 return redirect()->route('worktime.index')->with(
                     [
-                        'message' => 'Time must be in future',
+                        'message' => 'Година повинна бути в майбутньому',
                         'type' => 'error',
                     ]
                 );
@@ -56,7 +60,7 @@ class WorktimeController extends Controller
         if ($existingWorktime) {
             return redirect()->route('worktime.index')->with(
                 [
-                    'message' => 'This time already exist in selected date.',
+                    'message' => 'Ця година вже існує у вибраній даті',
                     'type' => 'error',
                 ]
             );
@@ -71,7 +75,50 @@ class WorktimeController extends Controller
 
         return redirect()->route('worktime.index')->with(
             [
-                'message' => 'Time successfully added!',
+                'message' => 'Годину успішно додано!',
+                'type' => 'success',
+            ]
+        );
+    }
+
+    private function storeWorktime(int $userId, string $date, string $time, int $isFree = 1)
+    {
+        $worktimeExist = Worktime::where('user_id', $userId)
+            ->where('date', $date)
+            ->where('time', $time)
+            ->exists();
+
+        if (!$worktimeExist) {
+            $worktime = new Worktime();
+            $worktime->user_id = $userId;
+            $worktime->date = $date;
+            $worktime->time = $time;
+            $worktime->is_free = $isFree;
+            $worktime->save();
+        }
+    }
+
+    public function generate(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric',
+            'date' => 'required|after_or_equal:' . Carbon::now()->toDateString(),
+            'times' => 'required|array',
+        ]);
+
+        foreach ($request->times as $time) {
+            if ($request->date == Carbon::now()->toDateString()) {
+                if ($time > Carbon::now()->format('H:i:s')) {
+                    $this->storeWorktime($request->user_id, $request->date, $time);
+                }
+            } else {
+                $this->storeWorktime($request->user_id, $request->date, $time);
+            }
+        }
+
+        return redirect()->route('worktime.index')->with(
+            [
+                'message' => 'Графік успішно згенеровано!',
                 'type' => 'success',
             ]
         );
@@ -95,7 +142,7 @@ class WorktimeController extends Controller
         $worktime->delete();
         return redirect()->route('worktime.index')->with(
             [
-                'message' => 'Time was deleted successfully!',
+                'message' => 'Годину успішно видалено!',
                 'type' => 'success',
             ]
         );

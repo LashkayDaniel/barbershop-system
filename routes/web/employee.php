@@ -37,15 +37,11 @@ Route::middleware(['auth', 'role:employee'])
 
 Route::middleware(['auth', 'role:employee'])
     ->controller(WorktimeController::class)
+    ->name('worktime.')
     ->group(function () {
-        Route::get('/worktime', 'index')->name('worktime.index');
-    });
-
-Route::middleware(['auth', 'role:employee'])
-    ->controller(WorktimeController::class)
-    ->group(function () {
-        Route::get('/worktimes', 'index')->name('worktime.index');
-        Route::post('/worktime/create', 'store')->name('worktime.create');
-        Route::patch('/worktime/{worktime}', 'update')->name('worktime.update');
-        Route::delete('/worktime/{worktime}', 'destroy')->name('worktime.delete');
+        Route::get('/worktimes', 'index')->name('index');
+        Route::post('/worktime/create', 'store')->name('create');
+        Route::post('/worktime/generate', 'generate')->name('generate');
+        Route::patch('/worktime/{worktime}', 'update')->name('update');
+        Route::delete('/worktime/{worktime}', 'destroy')->name('delete');
     });

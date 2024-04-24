@@ -63,14 +63,25 @@ class ReservationController extends Controller
             'duration' => $masterService->pivot->duration,
             'cost' => $masterService->pivot->price,
         ];
-
         if ($discount) {
             $data['discount'] = $discount->percent;
             $price = $data['cost'];
             $data['cost'] = round($price * (1 - $discount->percent / 100));
         }
-
         dispatch(new SendReservationEmailJob($data));
+
+        $startTime = Carbon::createFromTimeString($worktime->time);
+        $endTime = $startTime->copy()->addMinutes($masterService->pivot->duration)->toTimeString();
+
+        Worktime::query()
+            ->whereDate('date', $worktime->date)
+            ->whereTime('time', '>', $startTime->format('H:i:s'))
+            ->whereTime('time', '<', $endTime)
+            ->get()
+            ->map(function ($time) {
+                $time->is_free = 0;
+                $time->save();
+            });
 
         return redirect()->back()->with([
             'status' => 'success',

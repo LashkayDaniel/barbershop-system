@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PageDataController;
@@ -47,4 +48,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/discounts', 'index')->name('index');
         Route::post('/discounts', 'store')->name('store');
         Route::delete('/discounts/{discount}', 'destroy')->name('delete');
+    });
+
+Route::middleware(['auth', 'role:admin'])
+    ->namespace('App\Http\Controllers\Admin')
+    ->controller(BillingController::class)
+    ->name('billing.')
+    ->group(function () {
+        Route::get('/billing', 'index')->name('index');
     });

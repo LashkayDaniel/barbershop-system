@@ -10,10 +10,12 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','email','phone'];
+    protected $fillable = ['name', 'email', 'phone'];
 
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class)
+            ->with(['user', 'service', 'client', 'worktime', 'discount'])
+            ->orderByDesc('created_at');
     }
 }

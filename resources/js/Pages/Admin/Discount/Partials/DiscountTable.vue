@@ -25,13 +25,13 @@
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200 dark:divide-gray-500">
-        <tr v-if="allDiscounts.length===0">
+        <tr v-if="discounts.length===0">
             <td class="p-2 text-center text-sm text-gray-secondary tracking-wider">Відсутні знижки</td>
         </tr>
         <template v-else>
-            <tr v-for="(discount,i) in allDiscounts" :key="i"
+            <tr v-for="(discount,i) in discounts" :key="i"
                 class="hover:bg-gray-300 transition-all bg-green-300 bg-opacity-25 hover:cursor-pointer hover:dark:bg-gray-700 hover:bg-opacity-55"
-                :class="[{'bg-red-300': moment().isAfter(moment(discount.end))},{'bg-yellow-300':moment().isBetween(moment(discount.start),moment(discount.end)) }]">
+                :class="[{'bg-red-300': moment().isAfter(discount.end,'day')},{'bg-yellow-300': (moment().isSameOrAfter(discount.start,'day') && moment().isSameOrBefore(discount.end,'day')) }]">
                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {{ discount.id }}
                 </td>
@@ -49,7 +49,7 @@
                 </td>
                 <td class="py-3 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 flex gap-x-2 justify-center">
                     <template
-                        v-if="moment().isBefore(moment(discount.end)) && !moment().isBetween(moment(discount.start),moment(discount.end))">
+                        v-if="moment().isBefore(discount.start,'day')">
                         <button type="button"
                                 title="Видалити"
                                 @click="deleteDiscount(discount)"
@@ -80,17 +80,24 @@
         </template>
         </tbody>
     </table>
+    <Pagination :links="allDiscounts.links"/>
 </template>
 
 <script setup>
+import Pagination from "@/Components/dashboard/Pagination.vue";
 import moment from 'moment';
 import {router} from "@inertiajs/vue3";
+import {computed} from "vue";
 
 const props = defineProps({
     allDiscounts: {
         type: Object,
         required: true
     }
+})
+
+const discounts = computed(() => {
+    return props.allDiscounts.data
 })
 
 function deleteDiscount(discount) {

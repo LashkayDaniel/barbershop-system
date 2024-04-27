@@ -22,7 +22,7 @@ class DiscountController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $allDiscounts = Discount::with('service')->orderByDesc('start')->get();
+        $allDiscounts = Discount::with('service')->orderByDesc('start')->paginate(5);
 
         return Inertia::render(
             'Admin/Discount/Index',

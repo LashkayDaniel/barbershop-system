@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PageDataController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:admin', 'verified'])
@@ -56,4 +58,14 @@ Route::middleware(['auth', 'role:admin'])
     ->name('billing.')
     ->group(function () {
         Route::get('/billing', 'index')->name('index');
+    });
+
+Route::middleware(['auth', 'role:admin'])
+    ->namespace('App\Http\Controllers\Admin')
+    ->controller(StaffController::class)
+    ->name('staff.')
+    ->group(function () {
+        Route::get('/staff', 'index')->name('index');
+        Route::post('/staff/register', [RegisteredUserController::class, 'store'])->name('register');
+        Route::patch('/staff/update/{user}', [RegisteredUserController::class, 'update'])->name('update');
     });

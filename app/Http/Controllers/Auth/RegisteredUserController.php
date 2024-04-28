@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -32,21 +30,48 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'name' => 'required|string|max:255|unique:' . User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'birth' => 'required|date',
+            'phone' => 'required|string|size:14',
+            'rank' => 'required|string|min:2|max:30',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->birth = $request->birth;
+        $user->role_id = Role::IS_EMPLOYEE;
+        $user->phone = $request->phone;
+        $user->rank = $request->rank;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('staff.index')->with([
+            'message' => 'Працівника успішно додано!',
+        ]);
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255',
+            'birth' => 'required|date',
+            'phone' => 'required|string|size:14',
+            'rank' => 'required|string|min:2|max:30',
         ]);
 
-        event(new Registered($user));
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->birth = $request->birth;
+        $user->phone = $request->phone;
+        $user->rank = $request->rank;
+        $user->update();
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('staff.index')->with([
+            'message' => 'Дані успішно оновлено!',
+        ]);
     }
 }

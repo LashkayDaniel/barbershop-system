@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Employee\DashboardController;
+use App\Http\Controllers\Employee\ScheduleController;
 use App\Http\Controllers\Employee\ServiceController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\WorktimeController;
@@ -44,4 +45,12 @@ Route::middleware(['auth', 'role:employee'])
         Route::post('/worktime/generate', 'generate')->name('generate');
         Route::patch('/worktime/{worktime}', 'update')->name('update');
         Route::delete('/worktime/{worktime}', 'destroy')->name('delete');
+    });
+
+Route::middleware(['auth', 'role:employee'])
+    ->controller(ScheduleController::class)
+    ->name('schedule.')
+    ->group(function () {
+        Route::get('/schedule', 'index')->name('index');
+        Route::get('/schedule/{date}', 'getOrdersByDate')->name('orders');
     });

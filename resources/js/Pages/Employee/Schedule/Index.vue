@@ -77,13 +77,6 @@ import {computed, onMounted, ref, watch} from "vue";
 import moment from 'moment';
 import uk from "moment/dist/locale/uk";
 
-const props = defineProps({
-    user: {
-        type: Object,
-        required: true,
-    },
-})
-
 const selectedDate = ref(moment())
 const showLoading = ref(false)
 const orders = ref([])

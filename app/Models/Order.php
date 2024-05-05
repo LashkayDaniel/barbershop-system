@@ -29,4 +29,10 @@ class Order extends Model
     {
         return $this->belongsTo(Worktime::class);
     }
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class);
+    }
+
 }

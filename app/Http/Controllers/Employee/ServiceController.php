@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,26 +22,11 @@ class ServiceController extends Controller
         $employeeServices = User::query()->find($userId)->services()->get();
         $allServices = Service::query()->where('is_available', true)->get();
 
-        $allEmployeeOrdersCount = User::query()->find($userId)->orders()->count();
-        $popularServicesData = Order::with('service')
-            ->select('service_id', DB::raw('count(*) as total_orders'))
-            ->where('user_id', $userId)
-            ->groupBy('service_id')
-            ->get();
-
-        $popularServices = $popularServicesData->map(function ($item) use ($allEmployeeOrdersCount) {
-            return [
-                'name' => $item->service->name,
-                'percent' => round(($item->total_orders / $allEmployeeOrdersCount) * 100),
-            ];
-        });
-
         return Inertia::render(
             'Service/Index',
             [
                 'allServices' => $allServices,
                 'employeeServices' => $employeeServices,
-                'statistics' => $popularServices,
             ]
         );
     }

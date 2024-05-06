@@ -12,7 +12,7 @@
             @close="modal.show = false"
             :bg-light="true"
         >
-            <Add v-if="modal.hasCreate" :services="allServices"/>
+            <Add v-if="modal.hasCreate" :services="unusedServices"/>
             <Edit v-if="modal.hasEdit" :service="editableService"/>
         </Modal>
 
@@ -76,15 +76,6 @@
                     </li>
                 </ul>
             </section>
-
-            <div class="p-6 bg-gray-300 rounded-lg mt-4">
-                <apexchart type="donut"
-                           height="300"
-                           :options="popularServicesOptions"
-                           :series="popularServicesSeries"
-                />
-            </div>
-
         </div>
     </AuthenticatedLayout>
 </template>
@@ -95,7 +86,7 @@ import {Head, router} from '@inertiajs/vue3';
 import Modal from '@/Components/Modal.vue'
 import Add from '@/Pages/Service/Partials/Add.vue'
 import Edit from '@/Pages/Service/Partials/Edit.vue'
-import {computed, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 
 const props = defineProps({
     allServices: {
@@ -112,52 +103,10 @@ const props = defineProps({
     }
 })
 
-const popularServicesTitle = computed(() => {
-    return props.statistics.map(i => i.name)
-})
-const popularServicesSeries = computed(() => {
-    return props.statistics.map(i => i.percent)
+const unusedServices = computed(() => {
+    return props.allServices.filter(service => !props.employeeServices.some(item => item.id === service.id))
 })
 
-const popularServicesOptions = {
-    chart: {
-        type: 'donut',
-    },
-    dataLabels: {
-        enabled: false,
-    },
-    plotOptions: {
-        pie: {
-            customScale: 0.8,
-            donut: {
-                size: '75%',
-            },
-            offsetY: 20,
-        },
-        stroke: {
-            colors: undefined
-        }
-    },
-    colors: ['#00D8B6', '#008FFB', '#FEB019', '#FF4560', '#775DD0'],
-    title: {
-        text: 'Popular services',
-        style: {
-            fontSize: '18px'
-        }
-    },
-    labels: popularServicesTitle.value,
-    legend: {
-        position: 'left',
-        offsetY: 80
-    },
-    tooltip: {
-        y: {
-            formatter: function (value) {
-                return value + '%';
-            }
-        }
-    }
-}
 
 const modal = reactive({
     show: ref(false),

@@ -1,15 +1,16 @@
 <template>
-    <form @submit.prevent="update" class="p-2 bg-slate-700">
+    <form @submit.prevent="update" class="p-2 bg-gray-300 dark:bg-slate-700">
 
-        <h2 class="text-2xl font-bold text-sky-500 text-center border-b-2 border-sky-800 mb-2">Edit service</h2>
+        <h2 class="text-xl font-bold text-gold-secondary dark:text-sky-500 text-center border-b border-gold-secondary dark:border-sky-800 mb-2">
+            Edit service</h2>
 
         <div>
-            <InputLabel for="name" value="Name"/>
+            <InputLabel for="name" value="Назва"/>
 
             <TextInput
                 id="name"
                 type="text"
-                class="mt-1 block w-full disabled:opacity-75 disabled:select-none"
+                class="mt-1 block w-full disabled:opacity-45 disabled:select-none"
                 v-model="form.name"
                 required
                 disabled
@@ -18,7 +19,7 @@
         </div>
 
         <div>
-            <InputLabel for="duration" value="Duration"/>
+            <InputLabel for="duration" value="Тривалість"/>
 
             <TextInput
                 id="duration"
@@ -32,7 +33,7 @@
         </div>
 
         <div>
-            <InputLabel for="price" value="Price"/>
+            <InputLabel for="price" value="Ціна"/>
 
             <TextInput
                 id="price"
@@ -50,7 +51,7 @@
             <PrimaryButton v-if="form.isDirty"
                            class="ms-4"
                            :class="{ 'opacity-25': form.processing }">
-                Update
+                Змінити
             </PrimaryButton>
         </div>
 

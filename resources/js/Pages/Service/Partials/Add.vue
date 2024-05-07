@@ -1,8 +1,9 @@
 <template>
-    <form @submit.prevent="create" class="p-2 bg-slate-700">
-        <h2 class="text-2xl font-bold text-sky-500 text-center border-b-2 border-sky-800 mb-2">Add new service</h2>
+    <form @submit.prevent="create" class="p-2 bg-gray-300 dark:bg-slate-700">
+        <h2 class="text-xl font-bold text-gold-secondary dark:text-sky-500 text-center border-b border-gold-secondary dark:border-sky-800 mb-2">
+            Нова послуга</h2>
         <div>
-            <InputLabel for="service" value="Choose service"/>
+            <InputLabel for="service" value="Виберіть послугу"/>
 
             <select class="rounded-lg w-full"
                     id="service"
@@ -19,7 +20,7 @@
         </div>
 
         <div>
-            <InputLabel for="duration" value="Duration"/>
+            <InputLabel for="duration" value="Тривалість"/>
 
             <TextInput
                 id="duration"
@@ -34,7 +35,7 @@
         </div>
 
         <div>
-            <InputLabel for="price" value="Price"/>
+            <InputLabel for="price" value="Ціна"/>
 
             <TextInput
                 id="price"
@@ -50,7 +51,7 @@
 
         <div class="flex justify-end mt-4">
             <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Create
+                Додати
             </PrimaryButton>
         </div>
 

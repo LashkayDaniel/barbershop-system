@@ -24,6 +24,7 @@ export default {
                     secondary: '#A4A4A4',
                 },
                 gold: {
+                    light: '#e7c8a2',
                     primary: '#D69A5F',
                     secondary: '#775D43'
                 }

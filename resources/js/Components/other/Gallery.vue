@@ -5,10 +5,10 @@
         @close="imageView.show = !imageView.show">
     </ImageViewer>
 
-    <div class="border border-gray-500 rounded-lg mt-4">
-        <div class="flex justify-between items-center border-b p-2 border-gray-600">
+    <div class="border border-gray-300 dark:border-gray-500 rounded-lg mt-4 bg-gray-100 dark:bg-inherit">
+        <div class="flex justify-between items-center border-b p-2 border-gray-300 dark:border-gray-500">
             <div class="flex items-center">
-                <h2 class="uppercase font-bold text-gray-300 text-xl p-2 tracking-wide">
+                <h2 class="uppercase font-bold text-gold-secondary dark:text-gray-300 text-xl p-2 tracking-wide">
                     {{ title }}
                 </h2>
             </div>
@@ -17,7 +17,7 @@
                 <button id="gallery-btn-prev" title="previous">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor"
-                         class="size-6 transition-all duration-200 text-sky-200 hover:text-sky-500">
+                         class="size-6 transition-all duration-200 text-gold-secondary dark:text-sky-200 hover:text-gold-primary dark:hover:text-sky-500">
                         <path stroke-linecap="round" stroke-linejoin="round"
                               d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"/>
                     </svg>
@@ -25,7 +25,7 @@
                 <button id="gallery-btn-next" title="next">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor"
-                         class="size-6 transition-all duration-200 text-sky-200 hover:text-sky-500">
+                         class="size-6 transition-all duration-200 text-gold-secondary dark:text-sky-200 hover:text-gold-primary dark:hover:text-sky-500">
                         <path stroke-linecap="round" stroke-linejoin="round"
                               d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"/>
                     </svg>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div v-if="galleryImages.length>0"
-             class="h-[300px] p-2 mt-4 border-b border-gray-600">
+             class="h-[300px] p-2 mt-4 border-b border-gray-300 dark:border-gray-500">
             <swiper class="flex w-full h-full gap-x-2"
                     :slides-per-view="5"
                     :slides-per-group="5"
@@ -59,7 +59,7 @@
                         <button @click.stop="deleteImage(image)"
                                 title="delete image"
                                 class="z-20 md:hidden block group-hover:block absolute top-0 right-0 bg-red-400 px-2 rounded-bl-lg hover:bg-red-500">
-                            Delete
+                            Видалити
                         </button>
                     </div>
                 </swiper-slide>
@@ -94,14 +94,14 @@
         </div>
 
         <div class="p-2 max-w-[400px]" v-if="uploadImgForm.uploadedImgUrl">
-            <h3 class="text-gray-300">Preview:</h3>
+            <h3 class="text-gold-secondary dark:text-gray-300">Preview:</h3>
             <img :src="uploadImgForm.uploadedImgUrl" alt="img">
             <p v-if="uploadImgForm.errors" class="text-red-500 text-sm">
                 {{ uploadImgForm.errors.image }}
             </p>
             <button @click="uploadGalleryImage"
                     class="bg-sky-500 font-bold px-4 py-1 text-sky-200 mt-2 rounded-full tracking-wide hover:bg-sky-600 transition-all duration-200">
-                Add image
+                Додати
             </button>
         </div>
     </div>
@@ -114,7 +114,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import ImageViewer from '@/Components/other/ImageViewer.vue'
-import {computed, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import {useForm} from "@inertiajs/vue3";
 
 

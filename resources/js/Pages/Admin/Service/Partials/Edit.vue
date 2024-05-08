@@ -18,7 +18,7 @@
         </div>
 
         <div>
-            <InputLabel for="description" value="description"/>
+            <InputLabel for="description" value="Description"/>
 
             <textarea
                 id="description"

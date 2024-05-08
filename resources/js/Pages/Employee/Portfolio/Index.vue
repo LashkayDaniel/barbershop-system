@@ -3,29 +3,34 @@
 
     <AuthenticatedLayout>
         <template #header>
-            Portfolio
+            Портфоліо
         </template>
-        <p v-if="$page.props.flash.type === 'success' && $page.props.flash.message"
-           class="w-full text-center text-green-600 bg-green-300 font-medium p-2 my-4">
-            {{ $page.props.flash.message }}
-        </p>
+        <FadeInAnimation>
+            <p v-if="$page.props.flash.type === 'success' && $page.props.flash.message"
+               class="w-full text-center text-green-600 bg-green-300 font-medium p-2 my-4">
+                {{ $page.props.flash.message }}
+            </p>
 
-        <p v-if="$page.props.flash.type === 'error' && $page.props.flash.message"
-           class="w-full text-center text-red-600 bg-red-300 font-medium p-2 my-4">
-            {{ $page.props.flash.message }}
-        </p>
+            <p v-if="$page.props.flash.type === 'error' && $page.props.flash.message"
+               class="w-full text-center text-red-600 bg-red-300 font-medium p-2 my-4">
+                {{ $page.props.flash.message }}
+            </p>
+        </FadeInAnimation>
         <article class="flex flex-col gap-y-8">
             <div class="flex gap-x-5">
-                <div class="border border-gray-500 max-w-[300px] rounded-lg mt-4">
-                    <div class="border-b p-2 border-gray-600 flex items-center justify-between">
-                        <h2 class="uppercase font-bold text-gray-300 text-xl p-2 tracking-wide">
+                <div
+                    class="border border-gray-300 dark:border-gray-500 max-w-[300px] rounded-lg mt-4 bg-gray-100 dark:bg-inherit">
+                    <div class="border-b p-2 border-gray-300 dark:border-gray-500 flex items-center justify-between">
+                        <h2 class="uppercase font-bold text-gold-secondary dark:text-gray-300 text-xl p-2 tracking-wide">
                             Avatar
                         </h2>
-                        <button v-if="uploadAvatarForm.url"
-                                @click="uploadAvatar"
-                                class="bg-sky-500 font-bold px-4 py-1 text-sky-200 rounded-full tracking-wide hover:bg-sky-600 transition-all duration-200">
-                            Save
-                        </button>
+                        <fade-in-animation>
+                            <button v-if="uploadAvatarForm.url"
+                                    @click="uploadAvatar"
+                                    class="bg-sky-500 font-bold px-4 py-1 text-sky-200 rounded-full tracking-wide hover:bg-sky-600 transition-all duration-200">
+                                Зберегти
+                            </button>
+                        </fade-in-animation>
                     </div>
 
                     <div class="group grow h-72 my-2 mx-4 transition-all duration-200">
@@ -84,21 +89,24 @@
                     </div>
                 </div>
 
-                <div class="grow border border-gray-500 rounded-lg mt-4 flex flex-col">
-                    <div class="border-b p-2 border-gray-600 flex items-center justify-between">
-                        <h2 class="uppercase font-bold text-gray-300 w-full text-center text-xl p-2 tracking-wide">
-                            About you
+                <div
+                    class="grow border border-gray-300 dark:border-gray-500 rounded-lg mt-4 flex flex-col bg-gray-100 dark:bg-inherit">
+                    <div class="border-b p-2 border-gray-300 dark:border-gray-500 flex items-center justify-between">
+                        <h2 class="uppercase font-bold text-gold-secondary dark:text-gray-300 w-full text-center text-xl p-2 tracking-wide">
+                            Про вас
                         </h2>
-                        <button v-if="descriptionForm.isDirty"
-                                @click="saveDescription"
-                                class="bg-sky-500 font-bold px-4 py-1 text-sky-200 rounded-full tracking-wide hover:bg-sky-600 transition-all duration-200">
-                            Save
-                        </button>
+                        <fade-in-animation>
+                            <button v-if="descriptionForm.isDirty"
+                                    @click="saveDescription"
+                                    class="bg-sky-500 font-bold px-4 py-1 text-sky-200 rounded-full tracking-wide hover:bg-sky-600 transition-all duration-200">
+                                Зберегти
+                            </button>
+                        </fade-in-animation>
                     </div>
                     <div class="p-3 h-full flex flex-col">
                         <textarea
                             v-model="descriptionForm.text"
-                            class="resize-none rounded-lg text-gray-400 focus:border-sky-400 opacity-25 focus:opacity-100 w-full transition-all duration-200 h-full">
+                            class="resize-none rounded-lg text-gray-400 focus:border-sky-400 opacity-45 focus:opacity-100 w-full transition-all duration-200 h-full">
                         </textarea>
                         <p class="w-full text-red-500 text-sm px-2">{{ descriptionForm.errors.text }}</p>
                     </div>
@@ -108,7 +116,7 @@
             <div class="flex-1">
                 <Gallery ref="gallery"
                          :gallery-images="galleryImages"
-                         title="Works"
+                         title="Роботи"
                          @upload-gallery-image="uploadGalleryImage"
                          @delete-image="deleteImage"/>
             </div>
@@ -119,6 +127,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Gallery from '@/Components/other/Gallery.vue';
+import FadeInAnimation from '@/Components/animations/FadeIn.vue';
 import {Head, router, useForm, usePage} from '@inertiajs/vue3';
 import {ref, watch} from "vue";
 
@@ -165,7 +174,7 @@ function handleAvatarUpload(event) {
             uploadAvatarForm.src = file;
         } else {
             event.target.value = null;
-            chooseAvatarError.value = 'Choose correct format (.png, .jpeg, .jpg)'
+            chooseAvatarError.value = 'Виберіть правильний формат (.png, .jpeg, .jpg)'
         }
     }
 }
@@ -206,7 +215,7 @@ function uploadGalleryImage(imageSrc) {
 }
 
 function deleteImage(image) {
-    if (confirm('You really want to delete image?')) {
+    if (confirm('Ви впевнені, що бажаєте видалити зображення?')) {
         router.delete(route('portfolio.delete', image.id))
     }
 }

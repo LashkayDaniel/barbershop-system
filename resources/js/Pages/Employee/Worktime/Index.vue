@@ -1,18 +1,20 @@
 <template>
-    <Head title="Worktime"/>
+    <Head title="Робочий час"/>
 
     <AuthenticatedLayout>
         <template #header>
-            Worktime
+            Робочий час
         </template>
 
         <div class="p-6 space-y-6">
-            <div class="max-w-2xl mx-auto p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <div
+                class="max-w-2xl mx-auto p-4 sm:p-8 dark:bg-inherit dark:border dark:border-gray-500 bg-white shadow sm:rounded-lg">
                 <section class="max-w-xl mx-auto">
                     <header>
-                        <h2 class="text-lg font-medium text-gray-900">Створіть свій робочий графік</h2>
+                        <h2 class="text-lg font-medium text-gold-secondary dark:text-sky-400">Створіть свій робочий
+                            графік</h2>
 
-                        <p class="text-sm text-gray-600">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
                             Вибираючи потрібну дату додавайте або генеруйте бажані години
                         </p>
                     </header>
@@ -56,9 +58,13 @@
                         </Datepicker>
 
                         <ul class="flex flex-wrap">
-                            <li v-for="(time,index) in availableTimes" :key="index">
+                            <li v-if="availableTimes.length===0">
+                                <p class="text-sm p-2 text-yellow-600">Немає робочих годин на цей день</p>
+                            </li>
+                            <li v-else v-for="(time,index) in availableTimes" :key="index">
                                 <template v-if="!time?.reserved">
-                                    <div class="border rounded-full ps-4 m-1 gap-1 inline-flex items-center py-1 pe-0">
+                                    <div
+                                        class="border rounded-full ps-4 m-1 gap-1 inline-flex items-center py-1 pe-0 dark:bg-sky-300 dark:bg-opacity-20">
                                         <input type="checkbox"
                                                :id="time.id"
                                                :checked="time.is_free"
@@ -106,7 +112,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
-                            Add new
+                            Додати
                         </span>
                         <span v-else class="flex gap-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -114,16 +120,16 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
                             </svg>
-                            Hide
+                            Сховати
                         </span>
                     </button>
                     <FadeInAnimation>
                         <form v-if="showCreateForm" @submit.prevent="submitCreateForm"
-                              class="mt-2 space-y-2 shadow-md border rounded-lg border-gray-300 p-2">
-                            <h2 class="text-xl font-medium text-center">Додайте новий час</h2>
+                              class="mt-2 space-y-2 shadow-md border rounded-lg border-gray-300 dark:border-gray-400 p-2">
+                            <h2 class="text-xl font-medium text-center dark:text-sky-400">Додайте нову годину</h2>
 
                             <div>
-                                <InputLabel for="name" value="time"/>
+                                <InputLabel for="name" value="Година"/>
                                 <TextInput
                                     placeholder="input time"
                                     id="name"
@@ -137,14 +143,17 @@
 
                                 <InputError class="mt-1" :message="createForm.errors.time"/>
                             </div>
+                            <p v-if="createForm.time" class="dark:text-sky-300">
+                                {{
+                                    moment(moment(date).format('YYYY-MM-DD') + " " + createForm.time).calendar()
+                                }}
+                            </p>
                             <primary-button
                                 v-if="createForm.time"
                                 class="mt-3"
-                                type="submit">create
+                                type="submit">
+                                Зберегти
                             </primary-button>
-                            <p v-if="createForm.time">{{
-                                    moment(moment(date).format('YYYY-MM-DD') + " " + createForm.time).calendar()
-                                }}</p>
                         </form>
                     </FadeInAnimation>
 
@@ -159,7 +168,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                             </svg>
-                            Generate
+                            Згенерувати
                         </span>
                         <span v-else class="flex gap-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -167,7 +176,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
                             </svg>
-                            Hide
+                            Сховати
                         </span>
                     </button>
 

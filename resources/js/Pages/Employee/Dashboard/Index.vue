@@ -8,7 +8,7 @@
         <div class="flex gap-2">
             <div class="flex-1 flex flex-col items-stretch gap-y-2">
                 <div
-                    class="border-blue-gray-100 h-full relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                    class="h-full relative flex flex-col rounded-xl dark:bg-gray-400 bg-white text-gray-700 shadow-sm">
                     <div
                         class="absolute mx-4 mt-4 grid h-20 w-20 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -33,7 +33,7 @@
                 </div>
 
                 <div
-                    class="border-blue-gray-100 h-full relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                    class="h-full relative flex flex-col rounded-xl dark:bg-gray-400 bg-white text-gray-700 shadow-sm">
                     <div
                         class="absolute mx-4 mt-4 grid h-20 w-20 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-1 p-6 bg-white rounded-lg">
+            <div class="flex-1 p-6 dark:bg-gray-400 bg-white rounded-lg">
                 <apexchart type="pie"
                            :options="popularServicesOptions"
                            :series="popularServicesSeries"

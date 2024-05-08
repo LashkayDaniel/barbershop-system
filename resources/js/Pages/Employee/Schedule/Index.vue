@@ -3,14 +3,15 @@
 
     <AuthenticatedLayout>
         <template #header>
-            Schedule
+            Графік записів
         </template>
 
-        <section class="max-w-2xl mx-auto p-8 bg-white dark:bg-gray-400 rounded-lg">
+        <section
+            class="max-w-2xl mx-auto p-8 bg-white dark:bg-inherit dark:border dark:border-gray-500 dark:bg-gray-400 rounded-lg">
             <header>
-                <h2 class="text-lg font-medium text-gray-900">Ваш графік записів</h2>
+                <h2 class="text-lg font-medium text-gold-secondary dark:text-sky-400">Ваш графік записів</h2>
 
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     Вибираючи потрібну дату переглядайте всі записи клієнтів
                 </p>
             </header>
@@ -36,7 +37,8 @@
                 </div>
 
                 <div class="flex-1 h-[500px] flex flex-col justify-between">
-                    <h2 class="font-bold text-center mb-2 text-lg text-sky-700">Всі записи на цей день
+                    <h2 class="font-bold text-center mb-2 text-lg text-gold-primary dark:text-sky-500">Всі записи на цей
+                        день
                         <span class="text-sm">({{ moment(selectedDate).format('L') }})</span>
                     </h2>
 
@@ -47,16 +49,17 @@
 
                     <ul class="flex flex-col h-full gap-y-1 overflow-y-auto">
                         <li v-if="!showLoading && orders.length===0">
-                            <p class="text-center">Записів не знайдено</p>
+                            <p class="text-center text-sm dark:text-yellow-500">Записів не знайдено</p>
                         </li>
                         <li v-else v-for="order in sortedOrdersByTime"
-                            class="w-full rounded-xl bg-gray-700 bg-opacity-30 p-2 flex">
+                            class="w-full rounded-xl bg-gold-light dark:bg-sky-300 dark:bg-opacity-20 border border-gold-primary dark:border-sky-500 dark:bg-gray-700 bg-opacity-30 p-2 flex">
                             <div class="flex-1">
-                                <h3 class="font-bold">{{ order?.service?.name }}</h3>
+                                <h3 class="font-bold text-gold-secondary dark:text-sky-300 dark:text-opacity-60">
+                                    {{ order?.service?.name }}</h3>
                                 <p class="text-sm">від: {{ order?.client?.name }}</p>
                                 <p class="text-sm">тел: {{ order?.client?.phone }}</p>
                             </div>
-                            <div class="text-sm font-bold flex items-center">
+                            <div class="text-sm font-bold flex items-center dark:text-gray-400">
                                 {{ order?.start_time }} - {{ order?.end_time }}
                             </div>
                         </li>

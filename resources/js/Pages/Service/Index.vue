@@ -50,7 +50,7 @@
                             </svg>
                             {{ service?.pivot.duration }} хв
                             <span class="block size-1 rounded-full bg-gray-400 mx-2"></span>
-                            {{ service?.pivot.price }}$
+                            {{ service?.pivot.price }}₴
                         </div>
                         <div class="flex gap-x-2">
                             <button type="button"

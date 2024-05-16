@@ -1,12 +1,11 @@
 <script setup>
 import {onMounted, ref} from 'vue';
-import {usePage} from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 import NavLink from '@/Components/dashboard/NavLink.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 
 const showingNavigationDropdown = ref(false);
-const showConfig = ref(false)
 
 const isAdmin = usePage().props.auth.isAdmin
 
@@ -123,13 +122,14 @@ onMounted(() => {
 <template>
     <div>
         <div class="min-h-screen bg-gray-300 dark:bg-gray-700">
-
             <aside
                 class="bg-white dark:bg-gray-500 dark:border-none shadow-sm -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100">
-                <div class="relative"><h6
-                    class="block antialiased tracking-normal flex justify-center font-sans text-base p-2 border-b border-gold-primary bg-gray-200 dark:bg-gray-800 rounded-t-lg font-semibold leading-relaxed text-blue-gray-900">
-                    <img src="/img/logo.svg" alt="logo" class="size-[70px]">
-                </h6>
+                <div class="relative block antialiased tracking-normal flex justify-center font-sans text-base p-2 border-b
+                    border-gold-primary bg-gray-200 dark:bg-gray-800 rounded-t-lg font-semibold leading-relaxed
+                    text-blue-gray-900">
+                    <Link href="/">
+                        <img src="/img/logo.svg" alt="logo" class="size-[70px]">
+                    </Link>
                 </div>
                 <div class="m-4">
                     <ul class="mb-4 flex flex-col gap-1">
@@ -172,7 +172,7 @@ onMounted(() => {
                 <nav
                     class="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
                     <div class="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
-                        <div class="capitalize">
+                        <div>
                             <h6 class="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-gray-700 dark:text-gray-400 text-xl leading-tight">
                                 <slot name="header"/>
                             </h6>
@@ -239,33 +239,6 @@ onMounted(() => {
                         </div>
                     </div>
                 </nav>
-                <aside
-                    :class="[{'translate-x-0':showConfig},{'translate-x-96':!showConfig}]"
-                    class="fixed top-0 right-0 z-50 h-screen w-96 bg-white px-2.5 shadow-lg transition-transform duration-300">
-                    <div class="flex items-start justify-between px-6 pt-8 pb-6">
-                        <div><h5
-                            class="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900">
-                            Dashboard Configurator</h5></div>
-                        <button
-                            @click="showConfig=false"
-                            class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                            type="button"><span
-                            class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"><svg
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
-                            stroke="currentColor" aria-hidden="true" class="h-5 w-5"><path stroke-linecap="round"
-                                                                                           stroke-linejoin="round"
-                                                                                           d="M6 18L18 6M6 6l12 12"></path></svg></span>
-                        </button>
-                    </div>
-                </aside>
-                <button
-                    @click="showConfig=!showConfig"
-                    class="align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-12 max-w-[48px] h-12 max-h-[48px] text-sm bg-white text-blue-gray-900 shadow-md hover:shadow-lg hover:shadow-blue-gray-500/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none fixed bottom-8 right-8 z-40 rounded-full shadow-blue-gray-900/10"
-                    type="button"><span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"><svg
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                    class="h-5 w-5"><path fill-rule="evenodd"
-                                          d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                                          clip-rule="evenodd"></path></svg></span></button>
 
                 <main class="mt-5">
                     <slot></slot>

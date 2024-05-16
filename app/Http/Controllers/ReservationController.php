@@ -39,7 +39,6 @@ class ReservationController extends Controller
         $order->service_id = $service->id;
         $order->client_id = $customer->id;
         $order->worktime_id = $worktime->id;
-        $order->status = 'created';
 
         $discount = $service->discount;
         if ($discount) {

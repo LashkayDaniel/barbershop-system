@@ -38,7 +38,6 @@ return new class extends Migration {
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('status');
             $table->timestamps();
         });
     }

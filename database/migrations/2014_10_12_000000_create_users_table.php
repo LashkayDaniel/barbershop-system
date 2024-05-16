@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->date('birth');
             $table->string('phone')->unique();
             $table->string('rank')->nullable();
-            $table->tinyText('description')->nullable();
+            $table->text('description')->nullable();
             $table->tinyText('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

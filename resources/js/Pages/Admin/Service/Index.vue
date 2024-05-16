@@ -89,9 +89,7 @@
                         </div>
                     </li>
                 </ul>
-
             </section>
-
         </div>
     </AuthenticatedLayout>
 </template>

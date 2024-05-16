@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Employee;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -25,7 +26,7 @@ class ScheduleController extends Controller
     {
         $reservations = Order::query()
             ->with(['service', 'client', 'worktime', 'discount'])
-            ->where('user_id', 21)
+            ->where('user_id', Auth::id())
             ->get()
             ->filter(function ($order) use ($date) {
                 return $order->worktime()->whereDate('date', $date)->exists();

@@ -1,13 +1,14 @@
 <template>
     <div class="p-2 bg-gray-primary">
 
-        <h2 class="text-2xl text-gold-primary text-opacity-85 font-bold text-center mb-2 tracking-wide">Вибір
+        <h2 class="text-lg sm:text-xl lg:text-2xl text-gold-primary text-opacity-85 font-bold text-center mb-2 tracking-wide">
+            Вибір
             майстра</h2>
         <span
             class="block bg-gradient-to-r text-gray-text from-transparent to-transparent via-gold-secondary h-[1.2px] w-full mb-2"></span>
         <p v-if="masters===undefined">Loading...</p>
 
-        <ul v-else class="flex flex-col gap-y-4 max-h-[calc(100vh-200px)] overflow-auto p-6">
+        <ul v-else class="flex flex-col gap-y-2 sm:gap-y-4 max-h-[calc(100vh-200px)] overflow-auto p-2 sm:p-6">
             <li v-for="(master,index) in masters"
                 :key="index"
                 @click="chooseMaster(master)"
@@ -17,7 +18,7 @@
                      :src="master.avatar" alt="avatar">
                 <div class="flex flex-col justify-center p-2">
                     <div class="flex items-center">
-                        <h2 class="text-xl font-semibold text-gray-secondary">{{ master.name }}</h2>
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-secondary">{{ master.name }}</h2>
                         <svg width="17" height="17" viewBox="0 0 11 10"
                              fill="currentColor"
                              class="ml-2 text-gold-primary"
@@ -25,9 +26,11 @@
                             <path
                                 d="M5.69515 0L6.81772 3.45492H10.4504L7.51151 5.59017L8.63408 9.04508L5.69515 6.90983L2.75623 9.04508L3.8788 5.59017L0.93987 3.45492H4.57258L5.69515 0Z"/>
                         </svg>
-                        <h3 class="font-bold text-gray-text ml-1 text-opacity-75">{{ master.rating }}</h3>
+                        <h3 class="font-bold text-sm sm:text-base text-gray-text ml-1 text-opacity-75">{{
+                                master.rating
+                            }}</h3>
                     </div>
-                    <p class="text-sm tracking-wider font-medium text-gray-primary">{{ master.rank }}</p>
+                    <p class="text-xs sm:text-sm tracking-wider font-medium text-gray-primary">{{ master.rank }}</p>
                 </div>
             </li>
         </ul>

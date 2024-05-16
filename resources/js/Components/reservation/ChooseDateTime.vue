@@ -1,8 +1,9 @@
 <template>
-    <div class="p-2 px-10 pb-10 bg-gray-primary">
+    <div class="p-2 px-4 sm:px-10 pb-10 bg-gray-primary">
 
-        <h2 class="text-2xl text-gold-primary text-opacity-85 font-bold text-center mb-2 tracking-wide">Вибір
-            дати та часу</h2>
+        <h2 class="text-lg sm:text-xl lg:text-2xl text-gold-primary text-opacity-85 font-bold text-center mb-2 tracking-wide">
+            Вибір дати та часу
+        </h2>
         <span
             class="block bg-gradient-to-r from-transparent to-transparent via-gold-secondary h-[1.2px] w-full mb-2"></span>
         <p v-if="worktimes===undefined">Loading...</p>
@@ -33,13 +34,14 @@
         </div>
         <ul class="flex gap-2 flex-wrap my-5 pb-3 border-b border-gold-secondary">
             <li v-if="validTimes.length===0"
-                class="text-yellow-600 text-sm tracking-wide">* Немає вільних місць. Спробуйте вибрати інший день
+                class="text-yellow-600 text-xs sm:text-sm tracking-wide">
+                * Немає вільних місць. Спробуйте вибрати інший день
             </li>
             <li v-else
                 v-for="(time,index) in validTimes"
                 :key="index"
                 @click="selectTime(time)"
-                class="px-3 text-gold-primary hover:bg-opacity-50 font-bold bg-gray-light border border-gold-primary rounded-full cursor-pointer">
+                class="px-3 text-gold-primary text-sm sm:text-base hover:bg-opacity-50 font-bold bg-gray-light border border-gold-primary rounded-full cursor-pointer">
                 {{ timeFormat(time.time) }}
             </li>
         </ul>

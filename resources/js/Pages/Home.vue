@@ -4,7 +4,7 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Autoplay, Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref, watch} from "vue";
 import Modal from '@/Components/Modal.vue'
 import ImageViewer from '@/Components/other/ImageViewer.vue'
 import EmployeeInfo from '@/Components/other/EmployeeInfo.vue'
@@ -33,6 +33,10 @@ const props = defineProps({
     }
 })
 
+const sortedServicesByPrice = computed(() => {
+    return props.services.sort((a, b) => (a.min_price - b.min_price))
+})
+
 const galleryImages = computed(() => {
     return JSON.parse(props.pageData?.gallery)
 })
@@ -48,6 +52,9 @@ const parseSchedule = computed(() => {
 const [scheduleDays, scheduleTimes] = parseSchedule.value;
 
 const showBtnToUp = ref(false);
+const slidesCount = computed(() => {
+    return windowWidth.value < 900 ? '1' : '2';
+})
 
 const employeeDetails = reactive({
     show: ref(false),
@@ -160,6 +167,18 @@ watch(
         reservationForm.selectedTime = null
     }
 )
+
+const windowWidth = ref(window.innerWidth)
+onMounted(() => {
+    window.addEventListener('resize', () => {
+        windowWidth.value = window.innerWidth
+    })
+})
+onUnmounted(() => {
+    window.removeEventListener('resize', () => {
+        windowWidth.value = window.innerWidth
+    })
+})
 
 const serviceMasters = computed(() => {
     const selectedService = reservationForm.selectedService
@@ -288,182 +307,207 @@ const makeReservation = () => {
     <FadeInAnimation>
         <button v-if="showBtnToUp"
                 @click="scrollToUp"
-                class="fixed bottom-5 right-10 z-50 bg-gold-secondary size-12 items-center hover:scale-125 transition-all duration-200">
+                class="fixed bottom-5 right-10 z-50 bg-gold-secondary size-8 sm:size-12 items-center hover:scale-125 transition-all duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor"
-                 class="w-8 h-8 m-auto text-gold-primary">
+                 class="size-6 sm:size-8 m-auto text-gold-primary">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5"/>
                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5"/>
             </svg>
         </button>
     </FadeInAnimation>
 
-    <header class="w-full h-screen relative">
+    <header class="w-full min-h-[700px] max-h-[800px] sm:h-screen relative">
         <nav class="z-50 w-full py-2 flex justify-between items-start text-[#9F7A53]">
-            <div class="pl-10 z-50 w-23">
+            <div class="pl-4 sm:pl-10 z-50">
                 <span v-html="pageData?.logo"></span>
             </div>
-            <ul class="flex items-start border-b border-gray-light pl-8 pr-10 mr-2 mt-4">
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
-                    <a href="#">Головна</a>
-                </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
+            <ul class="flex items-start justify-center gap-x-4 border-l sm:border-b sm:border-l-0 border-gray-light pl-2 flex-col sm:flex-row sm:pr-10 mr-2 mt-4">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-2 py-2">
                     <a href="#services">Послуги</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-2 py-2">
                     <a href="#masters">Майстри</a>
                 </li>
-                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-4 py-2">
+                <li class="uppercase font-bold tracking-widest text-sm hover:-translate-y-1 hover:translate-x-1 hover:opacity-70 transition-all px-2 py-2">
                     <a href="#gallery">Галерея</a>
                 </li>
             </ul>
         </nav>
-
         <div class="z-0 absolute top-0 left-0 w-2/5 h-3/4 bg-gray-primary"></div>
-        <div class="z-0 absolute bottom-0 right-0 w-2/5 h-3/5 bg-gray-primary"></div>
-        <div class="z-10 absolute left-0 right-0 bottom-0 pb-6 flex justify-center items-center">
-            <h1 class="uppercase select-none text-gray-text z-40 tracking-[.4rem] font-bold text-5xl max-w-[700px] absolute left-40 -top-5">
+        <div class="z-0 absolute bottom-0 right-0 w-2/5 h-1/5 lg:h-3/5 bg-gray-primary"></div>
+        <div class="z-10 absolute left-0 right-0 bottom-20 md:bottom-0 pb-6 flex justify-center items-center">
+            <h1 class="uppercase select-none text-gray-text z-40 tracking-[.3rem] sm:tracking-[.4rem] font-bold left-4 lg:max-w-[700px] absolute lg:left-40 sm:left-8 -top-5 lg:text-5xl md:left-16 sm:max-w-[600px] sm:text-4xl text-2xl max-w-[500px]">
                 Створіть свій стиль разом з нами!
             </h1>
 
-            <div class="flex items-center absolute -top-14 ">
+            <div class="flex items-center absolute -top-20 -translate-x-8 sm:-translate-x-0 md:-top-14">
                 <span class="block w-24 border-b border-gold-primary"></span>
                 <a href="#reservation"
-                   class="absolute left-[calc(100%-15px)] hover:left-[calc(100%-5px)] hover:border-2 transition-all duration-200 uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 ">
+                   class="absolute left-[calc(100%-15px)] hover:left-[calc(100%-5px)] hover:border-2 transition-all duration-200 uppercase border border-gold-primary text-gray-text font-semibold tracking-widest px-6 py-2 text-xs sm:text-sm">
                     Записатися
                 </a>
             </div>
 
-            <div class="bg-slate-200 bg-contain overflow-hidden z-10 shadow-2xl shadow-gray-primary">
+            <div class="relative bg-contain shadow-2xl shadow-gray-primary">
                 <img class="w-full" src="/img/1.png" alt="main image">
+                <img
+                    class="absolute right-0 bottom-0 self-end lg:mb-10 lg:translate-x-[45%] translate-y-[45%] -translate-x-[45%] sm:size-auto size-14"
+                    src="/img/dots.svg"
+                    alt="dots">
             </div>
-            <img class="self-end mb-10 -translate-x-[45%] z-20" src="/img/dots.svg" alt="dots">
         </div>
-
     </header>
 
 
-    <main class="w-4/5 mx-auto my-5 ">
+    <main class="w-[calc(100%-15px)] sm:w-5/6 xl:w-4/5 mx-auto my-5">
         <article id="services">
-            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
-                <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
+            <header class="flex items-start gap-x-4 -translate-x-10 mt-4 sm:mt-24 pt-5" data-aos="fade-right">
+                <span
+                    class="block w-10 sm:w-20 md:w-28 border-b border-gold-primary translate-y-3 sm:translate-y-5"></span>
                 <div class="">
-                    <h2 class="uppercase text-gray-text text-4xl font-bold tracking-wide">Наші послуги</h2>
-                    <p class="text-gray-secondary text-bold tracking-wide">
+                    <h2 class="uppercase text-gray-text text-xl sm:text-3xl lg:text-4xl font-bold tracking-wide">Наші
+                        послуги</h2>
+                    <p class="text-gray-secondary text-wrap text-xs sm:text-sm text-bold tracking-wide">
                         Відкрийте для себе асортимент послуг, які відтворять ваш стиль та
                         додадуть вам впевненості</p>
                 </div>
             </header>
 
-            <section class="flex gap-x-4 m-10">
-                <div class="flex-1 flex flex-col gap-y-4 px-20 justify-center divide-y divide-gray-primary">
-                    <div data-aos="fade-left"
-                         class="p-2 mx-10 flex items-center justify-center">
-                        <img src="/img/fast_icon.svg" alt="fast icon" class="w-20">
-                        <h3 class="uppercase text-2xl tracking-wider font-semibold ml-4 text-gray-text text-opacity-70">
+            <section
+                class="flex xl:flex-row mx-auto max-w-6xl flex-col-reverse gap-x-2 xl:gap-x-10 m-4 md:m-6 m-10">
+                <div class="flex flex-col px-2 mr-4 mt-10 xl:mt-0 justify-center divide-y divide-gray-primary">
+                    <div data-aos="fade-right"
+                         class="p-2 flex items-center justify-center">
+                        <img src="/img/fast_icon.svg" alt="fast icon" class="w-14 sm:w-20">
+                        <h3 class="uppercase text-lg sm:text-2xl tracking-wider font-semibold ml-4 text-gray-text text-opacity-70">
                             Швидко</h3>
+                    </div>
+                    <div data-aos="fade-right" data-aos-delay="200"
+                         class="p-2 flex items-center justify-center">
+                        <h3 class="uppercase text-lg sm:text-2xl tracking-wider font-semibold mr-4 text-gray-text text-opacity-70">
+                            Професійно</h3>
+                        <img src="/img/quality_icon.svg" alt="fast icon" class="w-14 sm:w-20">
                     </div>
                     <div data-aos="fade-right" data-aos-delay="400"
                          class="p-2 flex items-center justify-center">
-                        <h3 class="uppercase text-2xl tracking-wider font-semibold mr-4 text-gray-text text-opacity-70">
-                            Професійно</h3>
-                        <img src="/img/quality_icon.svg" alt="fast icon" class="w-20">
-                    </div>
-                    <div data-aos="fade-left" data-aos-delay="600"
-                         class="p-2 flex items-center justify-center">
-                        <img src="/img/trends_icon.svg" alt="fast icon" class="w-16">
-                        <h3 class="uppercase text-2xl tracking-wider font-semibold ml-2 text-gray-text text-opacity-70">
+                        <img src="/img/trends_icon.svg" alt="fast icon" class="w-12 sm:w-16">
+                        <h3 class="uppercase text-lg sm:text-2xl tracking-wider font-semibold ml-2 text-gray-text text-opacity-70">
                             Сучасно</h3>
                     </div>
                 </div>
                 <div data-aos="zoom-in-up" data-aos-duration="1000"
-                     class="relative bg-gray-primary w-3/5 mx-auto p-16 pb-20 flex flex-col gap-y-6">
+                     class="relative bg-gray-primary flex-1 mx-auto pt-10 px-6 sm:p-16 pb-20 flex flex-col gap-y-6">
                     <div
-                        class="absolute bottom-0 left-0 w-0 h-0 border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
+                        class="absolute bottom-0 left-0 w-0 h-0 border-[30px] sm:border-[40px] border-t-transparent border-b-body border-r-transparent border-l-body"></div>
                     <div
-                        class="absolute top-0 right-0 w-0 h-0 border-[30px] border-b-transparent border-t-body border-l-transparent border-r-body"></div>
+                        class="absolute top-0 right-0 w-0 h-0 border-[20px] sm:border-[30px] border-b-transparent border-t-body border-l-transparent border-r-body"></div>
 
-                    <template v-for="service in services">
-                        <div class="">
-                            <div class="flex items-center gap-x-3">
-                                <h3 class="whitespace-nowrap inline-block opacity-85 uppercase text-gray-text text-lg font-bold tracking-widest">
-                                    {{ service?.name }}
-                                </h3>
-                                <div class="relative w-full text-center">
+                    <div v-for="service in sortedServicesByPrice"
+                         class="max-[400px]:border-b max-[400px]:pb-2 border-gray-700">
+                        <div
+                            class="flex items-center max-[400px]:flex-col sm:flex-row gap-x-3">
+                            <h3 class="relative whitespace-nowrap inline-block opacity-85 uppercase text-gray-text text-sm sm:text-base font-bold tracking-wider">
+                                {{ service?.name }}
+                                <template v-if="windowWidth<700">
                                     <span v-if="service?.discount"
-                                          class="absolute bottom-1 left-5 text-sm text-gold-primary">діє знижка
-                                        <b> -{{ service?.discount }}%</b>
-                                        <span class="text-[12px]">
-                                            ( до {{ moment(service?.discount_last_day).format('D MMMM') }})
-                                        </span>
+                                          class="absolute text-[10px] min-[400px]:bg-[#453A30] rounded-full font-light px-2 min-[400px]:border border-gold-primary min-[400px]:block min-[400px]:-top-4 min-[400px]:-right-6">
+                                        -{{ service?.discount }}%
                                     </span>
+                                </template>
+                            </h3>
+                            <div class="relative w-full text-center">
+                                <template v-if="windowWidth>700">
+                                        <span v-if="service?.discount"
+                                              class="absolute bottom-1 left-5 text-xs text-gold-primary">діє знижка
+                                            <b> -{{ service?.discount }}%</b>
+                                            <span class="text-[12px]">
+                                                ( до {{ moment(service?.discount_last_day).format('D MMMM') }})
+                                            </span>
+                                        </span>
+                                </template>
+                                <span
+                                    class="hidden min-[400px]:block relative h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
+                            </div>
+                            <div
+                                class="hidden min-[400px]:flex items-center text-gold-primary font-black text-lg md:text-xl">
                                     <span
-                                        class="block relative h-[2px] rounded-full opacity-75 bg-gradient-to-r from-gold-primary"></span>
-                                </div>
-                                <div class="flex items-center text-gold-primary font-black text-xl">
-                                    <span class="font-semibold mr-2 tracking-wider opacity-85 text-sm">від</span>
-                                    <div class="flex items-center">
-                                        <span class="">{{ service?.min_price }}</span>
-                                        <span class="text-sm font-semibold ml-1">грн</span>
-                                    </div>
+                                        class="font-semibold mr-1 sm:mr-2 tracking-wider opacity-85 text-xs sm:text-sm">від</span>
+                                <div class="flex items-center">
+                                    <span class="text-sm sm:text-lg">{{ service?.min_price }}</span>
+                                    <span class="text-xs sm:text-sm font-semibold ml-1">грн</span>
                                 </div>
                             </div>
-                            <div class="flex justify-between items-start">
-                                <p class="text-gray-secondary text-bold text-sm tracking-wide w-4/6">{{
-                                        service.description
-                                    }}</p>
-                                <div class="flex items-center text-sm text-gray-text opacity-85">
+                        </div>
+                        <div class="flex justify-between items-center min-[400px]:items-start">
+                            <p class="text-gray-secondary text-bold text-[10px] sm:text-sm tracking-wide w-4/6">
+                                {{ service.description }}
+                            </p>
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="flex min-[400px]:hidden items-center text-gold-primary font-black text-lg md:text-xl">
+                                    <span
+                                        class="font-semibold mr-1 sm:mr-2 tracking-wider opacity-85 text-xs sm:text-sm">від</span>
+                                    <div class="flex items-center">
+                                        <span class="text-sm sm:text-lg">{{ service?.min_price }}</span>
+                                        <span class="text-xs sm:text-sm font-semibold ml-1">грн</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-xs sm:text-sm text-gray-text opacity-85">
                                     <span>~{{ service?.avg_duration }} хв</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="size-5 ml-1">
+                                         stroke-width="1.5" stroke="currentColor" class="size-4 sm:size-5 ml-1">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                               d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                    </template>
+                    </div>
                 </div>
             </section>
         </article>
 
 
         <article id="masters">
-            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5" data-aos="fade-right">
-                <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
+            <header class="flex items-start gap-x-4 -translate-x-10 mt-10 md:mt-20 lg:mt-24 pt-5" data-aos="fade-right">
+                <span
+                    class="block w-10 sm:w-20 md:w-28 border-b border-gold-primary translate-y-3 sm:translate-y-5"></span>
                 <div class="">
-                    <h2 class="uppercase text-gray-text text-4xl font-bold tracking-wide">Наші майстри</h2>
-                    <p class="text-gray-secondary text-bold tracking-wide">
+                    <h2 class="uppercase text-gray-text text-xl sm:text-3xl lg:text-4xl font-bold tracking-wide">
+                        Наші майстри
+                    </h2>
+                    <p class="text-gray-secondary text-xs sm:text-sm text-bold tracking-wide">
                         Володарі мистецтва барберингу, які створять ваш неповторний образ</p>
                 </div>
             </header>
 
-            <section class="w-full h-80 my-8">
-                <swiper class="h-full grid grid-cols-2 grid-rows-1 gap-x-4"
-                        :slides-per-view="2"
+            <section class="w-full h-64 max-[400px]:h-52 lg:h-80 mt-5 mb-8 lg:my-8">
+                <swiper class="h-full"
+                        :slides-per-view="slidesCount"
                         :loop="true"
-                        :space-between="10"
+                        space-between="10"
                         :navigation="{
-                                nextEl: '#masters-btn-next',
-                                prevEl: '#masters-btn-prev'
-                            }"
+                            nextEl: '#masters-btn-next',
+                            prevEl: '#masters-btn-prev'
+                        }"
                         :modules="[Navigation, Autoplay]"
-                        :autoplay="{delay:4000}"
+                        :autoplay="{delay:6000}"
                 >
                     <swiper-slide v-for="employee in employees">
                         <div class="h-full bg-gray-primary flex">
-                            <div class="w-2/5 bg-gold-secondary">
-                                <img :src="employee?.avatar" class="h-full m-auto object-cover" alt="">
-                            </div>
+                            <img :src="employee?.avatar" class="w-2/5 bg-gold-secondary object-cover" alt="">
                             <div class="flex flex-1 flex-col">
                                 <div class="flex justify-end">
                                     <div
-                                        class="text-center px-4 border-2 border-gold-secondary bg-[#363434]">
-                                        <b class="text-gray-text tracking-wide font-bold">{{ employee.rating }}</b>
+                                        class="text-center px-2 lg:px-4 max-[400px]:border border-2 border-gold-secondary bg-[#363434]">
+                                        <b class="text-gray-text tracking-wide font-bold max-[400px]:text-xs text-sm lg:text-base">
+                                            {{ employee.rating }}
+                                        </b>
                                         <div class="flex flex-row justify-center items-center">
-                                            <svg v-for="i in 5" width="15" height="15" viewBox="0 0 11 10"
+                                            <svg v-for="i in 5" viewBox="0 0 11 10"
                                                  fill="currentColor"
-                                                 class="text-gray-500"
+                                                 class="text-gray-500 max-[400px]:size-2.5 size-3 lg:size-4"
                                                  xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     :class="{'text-[#E5B454]':i<=Math.floor(employee.rating)}"
@@ -473,20 +517,20 @@ const makeReservation = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex-1 text-center text-gray-text mb-10">
-                                    <h3 class="text-2xl tracking-widest font-extrabold uppercase mt-5">
+                                <div class="flex-1 text-center text-gray-text mb-4 lg:mb-10">
+                                    <h3 class="text-base max-[400px]:text-sm lg:text-lg xl:text-2xl tracking-widest font-extrabold uppercase max-[300px]:mt-2 mt-5 px-2">
                                         {{ employee?.name }}</h3>
                                     <span
-                                        class="text-gray-secondary font-medium tracking-wide">{{
+                                        class="text-gray-secondary max-[400px]:text-xs text-sm lg:text-base font-medium tracking-wide">{{
                                             employee?.rank
                                         }}</span>
-                                    <p class="w-4/5 mx-auto mt-5 line-clamp-4 tracking-wide whitespace-normal hyphens-auto text-wrap">
+                                    <p class="w-4/5 mx-auto max-[400px]:mt-2 mt-5 line-clamp-4 max-[400px]:line-clamp-3 max-[400px]:text-[10px] text-xs xl:text-base tracking-wide whitespace-normal hyphens-auto text-wrap">
                                         {{ employee?.description }}
                                     </p>
                                 </div>
                                 <div class="flex justify-end">
                                     <button @click="showEmployeeDetails(employee)"
-                                            class="text-gold-secondary font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
+                                            class="text-gold-secondary max-[400px]:text-xs text-sm lg:text-base font-semibold tracking-widest px-5 py-2 hover:text-[#C3A371] transition-all duration-200">
                                         Детальніше
                                     </button>
                                 </div>
@@ -498,8 +542,7 @@ const makeReservation = () => {
                     <div id="masters-btn-prev"
                          class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
                         <svg
-                            class="rotate-180 "
-                            width="78" height="16" viewBox="0 0 78 16" fill="none"
+                            class="rotate-180 w-18 h-3 lg:w-20 lg:h-4" viewBox="0 0 78 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M77.398 8.70711C77.7885 8.31658 77.7885 7.68342 77.398 7.29289L71.034 0.928932C70.6435 0.538408 70.0103 0.538408 69.6198 0.928932C69.2293 1.31946 69.2293 1.95262 69.6198 2.34315L75.2766 8L69.6198 13.6569C69.2293 14.0474 69.2293 14.6805 69.6198 15.0711C70.0103 15.4616 70.6435 15.4616 71.034 15.0711L77.398 8.70711ZM0.763367 9H76.6908V7H0.763367V9Z"
@@ -508,11 +551,8 @@ const makeReservation = () => {
                     </div>
                     <div id="masters-btn-next"
                          class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
-                        <svg
-                            width="78"
-                            height="16"
-                            viewBox="0 0 78 16" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-18 h-3 lg:w-20 lg:h-4" viewBox="0 0 78 16" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M77.398 8.70711C77.7885 8.31658 77.7885 7.68342 77.398 7.29289L71.034 0.928932C70.6435 0.538408 70.0103 0.538408 69.6198 0.928932C69.2293 1.31946 69.2293 1.95262 69.6198 2.34315L75.2766 8L69.6198 13.6569C69.2293 14.0474 69.2293 14.6805 69.6198 15.0711C70.0103 15.4616 70.6435 15.4616 71.034 15.0711L77.398 8.70711ZM0.763367 9H76.6908V7H0.763367V9Z"
                                 fill="#9C846E"/>
@@ -524,28 +564,29 @@ const makeReservation = () => {
 
 
         <article id="gallery">
-            <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5" data-aos="fade-right">
-                <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
+            <header class="flex items-start gap-x-4 -translate-x-10 mt-5 sm:mt-8 lg:mt-24 pt-5" data-aos="fade-right">
+                <span
+                    class="block w-10 sm:w-20 md:w-28 border-b border-gold-primary translate-y-3 sm:translate-y-5"></span>
                 <div class="">
-                    <h2 class="uppercase text-gray-text text-4xl font-bold tracking-wide">Галерея</h2>
-                    <!--                    <p class="text-gray-secondary text-bold tracking-wide">-->
-                    <!--                        Відкрийте для себе асортимент послуг, які відтворять ваш стиль та-->
-                    <!--                        додадуть вам впевненості</p>-->
+                    <h2 class="uppercase text-gray-text text-xl sm:text-3xl lg:text-4xl font-bold tracking-wide">
+                        Галерея</h2>
+                    <p class="text-gray-secondary text-xs sm:text-sm text-bold tracking-wide">
+                        Погляньте на професіоналізм та унікальність кожної роботи </p>
                 </div>
             </header>
 
-            <section class="w-full my-8 h-[500px]">
+            <section class="w-full my-4 lg:my-8 h-[200px] sm:h-[300px] lg:h-[500px]">
                 <swiper class="flex w-full h-full gap-x-2"
-                        :slides-per-view="3"
+                        slides-per-view="3"
                         :loop="true"
                         :centeredSlides="true"
-                        :space-between="10"
+                        space-between="10"
                         :navigation="{
-                                nextEl: '#gallery-btn-next',
-                                prevEl: '#gallery-btn-prev'
+                            nextEl: '#gallery-btn-next',
+                            prevEl: '#gallery-btn-prev'
                             }"
                         :modules="[Navigation, Autoplay]"
-                        :autoplay="{delay:4000}"
+                        :autoplay="{delay:8000}"
 
                 >
                     <swiper-slide v-for="(image,index) in galleryImages"
@@ -573,8 +614,7 @@ const makeReservation = () => {
                     <div id="gallery-btn-prev"
                          class="cursor-pointer hover:opacity-70 hover:-translate-x-2 duration-300 transition-all">
                         <svg
-                            class="rotate-180"
-                            width="78" height="16" viewBox="0 0 78 16" fill="none"
+                            class="rotate-180 w-18 h-3 lg:w-20 lg:h-4" viewBox="0 0 78 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M77.398 8.70711C77.7885 8.31658 77.7885 7.68342 77.398 7.29289L71.034 0.928932C70.6435 0.538408 70.0103 0.538408 69.6198 0.928932C69.2293 1.31946 69.2293 1.95262 69.6198 2.34315L75.2766 8L69.6198 13.6569C69.2293 14.0474 69.2293 14.6805 69.6198 15.0711C70.0103 15.4616 70.6435 15.4616 71.034 15.0711L77.398 8.70711ZM0.763367 9H76.6908V7H0.763367V9Z"
@@ -584,9 +624,7 @@ const makeReservation = () => {
                     <div id="gallery-btn-next"
                          class="cursor-pointer hover:opacity-70 hover:translate-x-2 duration-300 transition-all">
                         <svg
-                            width="78"
-                            height="16"
-                            viewBox="0 0 78 16" fill="none"
+                            class="w-18 h-3 lg:w-20 lg:h-4" viewBox="0 0 78 16" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M77.398 8.70711C77.7885 8.31658 77.7885 7.68342 77.398 7.29289L71.034 0.928932C70.6435 0.538408 70.0103 0.538408 69.6198 0.928932C69.2293 1.31946 69.2293 1.95262 69.6198 2.34315L75.2766 8L69.6198 13.6569C69.2293 14.0474 69.2293 14.6805 69.6198 15.0711C70.0103 15.4616 70.6435 15.4616 71.034 15.0711L77.398 8.70711ZM0.763367 9H76.6908V7H0.763367V9Z"
@@ -598,64 +636,72 @@ const makeReservation = () => {
         </article>
 
 
-        <article id="reservation" class="p-8 mt-20 relative">
-            <div class="absolute right-0 top-0">
-                <img src="/img/dots.svg" alt="dots" class="select-none">
+        <article id="reservation" class="p-1 sm:p-8 mt-20 relative">
+            <div class="absolute right-4 -top-4 sm:right-0 sm:top-0">
+                <img src="/img/dots.svg" alt="dots" class="select-none sm:size-auto size-14">
             </div>
-            <div class="bg-gray-primary flex">
-                <div class="w-1/2">
+            <div class="bg-gray-primary flex lg:border-0 border border-gold-primary border-opacity-50">
+                <div class="hidden lg:block w-1/2">
                     <img class="select-none object-cover h-full" src="/img/7.webp" alt="reservation">
                 </div>
-                <form @submit.prevent="makeReservation" class="flex flex-col" data-aos="zoom-in-right">
-                    <header class="flex items-start gap-x-4 -translate-x-10 mt-24 pt-5">
-                        <span class="block w-28 border-b border-gold-primary translate-y-5"></span>
+                <form @submit.prevent="makeReservation" class="mx-auto flex flex-col p-4" data-aos="zoom-in-right">
+                    <header class="flex items-start gap-x-4 lg:-translate-x-10 mt-4 lg:mt-24 pt-5">
+                        <span class="hidden lg:block w-28 border-b border-gold-primary translate-y-5"></span>
                         <div class="">
-                            <h2 class="uppercase text-gray-text text-4xl font-bold tracking-widest">Бронювання</h2>
-                            <p class="text-gray-secondary text-bold tracking-widest whitespace-nowrap">
+                            <h2 class="uppercase text-gray-text text-xl sm:text-3xl lg:text-4xl font-bold tracking-widest">
+                                Бронювання</h2>
+                            <p class="text-gray-secondary text-xs sm:text-sm text-bold tracking-widest whitespace-nowrap">
                                 Саме час втілювати свої ідеї в реальність</p>
                         </div>
                     </header>
-                    <div class="mx-10 pt-3 px-12 w-full flex flex-col items-start gap-y-4">
+                    <div class="lg:mx-10 pt-3 lg:px-12 w-full flex flex-col items-start gap-y-4">
                         <div class="flex border border-opacity-25 border-gold-primary p-1 w-full mb-2">
-                            <div class="flex flex-1 justify-center items-center gap-x-2">
+                            <div class="flex flex-1 justify-center items-center gap-x-2 px-2">
                                 <div
-                                    class="block size-8 border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
-                                    <svg v-if="reservationForm.successStep===1 || reservationForm.successStep===2"
-                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gold-primary">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                                    class="block size-7 sm:size-8 text-xs sm:text-base border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
+                                    <svg
+                                        v-if="reservationForm.successStep===1 || reservationForm.successStep===2"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor"
+                                        class="w-6 h-6 text-gold-primary">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="m4.5 12.75 6 6 9-13.5"/>
                                     </svg>
                                     <span v-else>1</span>
                                 </div>
-                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-sm whitespace-nowrap"
+                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-xs sm:text-sm whitespace-nowrap"
                                     :class="{'text-opacity-45':reservationForm.successStep===1 || reservationForm.successStep===2}">
                                     Вибір послуги
                                 </h3>
                             </div>
                             <div class="flex justify-center">
-                                <svg width="19" height="40" viewBox="0 0 19 40" fill="none"
+                                <svg viewBox="0 0 19 40" fill="none"
+                                     class="w-6 h-8 sm:w-8 sm:h-10"
                                      xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.53125 7.5L12.4688 20L6.53125 32.5" stroke="#9F7A54" stroke-width="1.5"
+                                    <path d="M6.53125 7.5L12.4688 20L6.53125 32.5" stroke="#9F7A54"
+                                          stroke-width="1.5"
                                           stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div>
-                            <div class="flex flex-1 justify-center items-center gap-x-2">
+                            <div class="flex flex-1 justify-center items-center gap-x-2 px-2">
                                 <div
-                                    class="block size-8 border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
+                                    class="block size-7 sm:size-8 text-xs sm:text-base border border-gold-secondary text-gray-text rounded-full flex justify-center items-center font-bold">
                                     <svg v-if="reservationForm.successStep===2"
                                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gold-primary">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                                         stroke-width="1.5" stroke="currentColor"
+                                         class="w-6 h-6 text-gold-primary">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="m4.5 12.75 6 6 9-13.5"/>
                                     </svg>
                                     <span v-else>2</span>
                                 </div>
-                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-sm whitespace-nowrap">
+                                <h3 class="text-[#C9AB8C] font-semibold tracking-wider text-xs sm:text-sm whitespace-nowrap">
                                     Контактні дані</h3>
                             </div>
                         </div>
 
                         <div v-if="$page.props.flash.message"
-                             class="p-2 bg-gold-secondary w-full font-bold bg-opacity-35 tracking-wide text-center text-gold-primary border border-gold-primary border-opacity-85">
+                             class="p-2 bg-gold-secondary text-sm sm:text-base w-full font-bold bg-opacity-35 tracking-wide text-center text-gold-primary border border-gold-primary border-opacity-85">
                             {{ $page.props.flash.message }}
                         </div>
 
@@ -664,16 +710,20 @@ const makeReservation = () => {
                                 <div @click="optionsShow.selectService.show = true"
                                      :class="[{'border-red-500 border-opacity-75' : optionsShow.selectService.error},{'border-gold-primary border-opacity-55':reservationForm.selectedService}]"
                                      class="border-2 border-[#939393] p-2 flex items-center cursor-pointer w-full">
-                                    <img src="/img/service_icon.svg" alt="master icon" class="size-10">
+                                    <img src="/img/service_icon.svg" alt="master icon" class="size-8 sm:size-10">
                                     <h3 v-if="!reservationForm.selectedService"
-                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть
+                                        class="ml-4 text-sm sm:text-base font-semibold text-[#757575] tracking-wider">
+                                        Виберіть
                                         послугу</h3>
-                                    <h3 v-else class="ml-4 font-semibold text-gold-primary tracking-wider">
+                                    <h3 v-else
+                                        class="ml-4 text-sm sm:text-base font-semibold text-gold-primary tracking-wider">
                                         {{ reservationForm.selectedService?.name }}
                                     </h3>
                                 </div>
                                 <p v-if="optionsShow.selectService.error"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">Послугу не вибрано</p>
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
+                                    Послугу не вибрано
+                                </p>
                             </div>
 
                             <div class="w-full cursor-pointer"
@@ -681,15 +731,20 @@ const makeReservation = () => {
                                 <div @click="optionsShow.selectMaster.show = activeSelectMasterBtn"
                                      :class="[{'border-red-500 border-opacity-75' : optionsShow.selectMaster.error},{'border-gold-primary border-opacity-55':reservationForm.selectedMaster}]"
                                      class="border-2 border-[#939393] p-2 flex items-center w-full">
-                                    <img src="/img/master_icon.svg" alt="master icon" class="size-10">
+                                    <img src="/img/master_icon.svg" alt="master icon" class="size-8 sm:size-10">
                                     <h3 v-if="!reservationForm.selectedMaster"
-                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть майстра</h3>
-                                    <h3 v-else class="ml-4 font-semibold text-gold-primary tracking-wider">
+                                        class="ml-4 text-sm sm:text-base font-semibold text-[#757575] tracking-wider">
+                                        Виберіть
+                                        майстра</h3>
+                                    <h3 v-else
+                                        class="ml-4 text-sm sm:text-base font-semibold text-gold-primary tracking-wider">
                                         {{ reservationForm.selectedMaster?.name }}
                                     </h3>
                                 </div>
                                 <p v-if="optionsShow.selectMaster.error"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">Майстра не вибрано</p>
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
+                                    Майстра не вибрано
+                                </p>
                             </div>
 
                             <div class="w-full cursor-pointer"
@@ -697,17 +752,21 @@ const makeReservation = () => {
                                 <div @click="optionsShow.selectDateTime.show = activeSelectDateTimeBtn"
                                      :class="[{'border-red-500 border-opacity-75' : optionsShow.selectDateTime.error},{'border-gold-primary border-opacity-55' : !!reservationForm.selectedDate && !!reservationForm.selectedTime}]"
                                      class="border-2 border-[#939393] p-3 flex items-center w-full">
-                                    <img src="/img/date_icon.svg" alt="master icon" class="size-8">
+                                    <img src="/img/date_icon.svg" alt="master icon" class="size-6 sm:size-8">
                                     <h3 v-if="!reservationForm.selectedDate"
-                                        class="ml-4 font-semibold text-[#757575] tracking-wider">Виберіть дату та
-                                        час</h3>
-                                    <h3 v-else class="ml-5 font-semibold text-gold-primary tracking-wider">
+                                        class="ml-4 text-sm sm:text-base font-semibold text-[#757575] tracking-wider">
+                                        Виберіть дату та час
+                                    </h3>
+                                    <h3 v-else
+                                        class="ml-5 text-sm sm:text-base font-semibold text-gold-primary tracking-wider">
                                         {{ moment(reservationForm.selectedDate).format("dddd, D MMMM") }},
                                         {{ reservationForm.selectedTime.time.toString().slice(0, 5) }}
                                     </h3>
                                 </div>
                                 <p v-if="optionsShow.selectDateTime.error"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">Дату або час не вибрано</p>
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
+                                    Дату або час не вибрано
+                                </p>
                             </div>
                         </template>
 
@@ -716,20 +775,21 @@ const makeReservation = () => {
                                 <label class="relative block">
                                     <span class="sr-only">Name</span>
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1" stroke="currentColor"
-                                    class="size-10 text-[#FCF2E7] text-opacity-80">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                </svg>
-                            </span>
+                                                   <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1" stroke="currentColor"
+                                                        class="size-8 sm:size-10 text-[#FCF2E7] text-opacity-80">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                    </svg>
+                                                </span>
                                     <input v-model="reservationForm.name"
                                            :class="{'border-red-500 border-opacity-75':reservationForm.errors.name}"
-                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           class="text-gray-200 text-sm sm:text-base tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-12 sm:pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
                                            placeholder="Ваше ім'я" type="text" name="name" required/>
                                 </label>
                                 <p v-if="reservationForm.errors.name"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
                                     {{ reservationForm.errors.name }}</p>
                             </div>
 
@@ -737,19 +797,20 @@ const makeReservation = () => {
                                 <label class="relative block">
                                     <span class="sr-only">Email</span>
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1" stroke="currentColor"
-                                         class="size-10 text-[#FCF2E7] text-opacity-80"><path
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"></path></svg>
-                            </span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                             viewBox="0 0 24 24"
+                                                             stroke-width="1" stroke="currentColor"
+                                                             class="size-8 sm:size-10 text-[#FCF2E7] text-opacity-80"><path
+                                                            stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"></path></svg>
+                                                </span>
                                     <input v-model="reservationForm.email"
                                            :class="{'border-red-500 border-opacity-75':reservationForm.errors.email}"
-                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           class="text-gray-200 text-sm sm:text-base tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-12 sm:pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
                                            placeholder="Ваш email" type="email" name="name" required/>
                                 </label>
                                 <p v-if="reservationForm.errors.email"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
                                     {{ reservationForm.errors.email }}</p>
                             </div>
 
@@ -757,24 +818,25 @@ const makeReservation = () => {
                                 <label class="relative block">
                                     <span class="sr-only">Phone</span>
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="currentColor"
-                                     class="size-8 text-[#FCF2E7] text-opacity-80">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
-                                </svg>
-                            </span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                         viewBox="0 0 24 24"
+                                                         stroke-width="1.5" stroke="currentColor"
+                                                         class="size-6 sm:size-8 text-[#FCF2E7] text-opacity-80">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/>
+                                                    </svg>
+                                                </span>
                                     <input v-model="reservationForm.phone"
                                            @input="formatPhoneNumber"
                                            :class="{'border-red-500 border-opacity-75':reservationForm.errors.phone}"
-                                           class="text-gray-200 tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
+                                           class="text-gray-200 text-sm sm:text-base tracking-wider placeholder:text-[#757575] placeholder:font-semibold placeholder:tracking-wider block bg-transparent w-full border-2 border-[#939393] py-4 pl-12 sm:pl-16 pr-4 focus:border-gray-300 focus:outline-none focus:ring-offset-0 focus:ring-0"
                                            placeholder="(050) xxx-xxxx"
                                            type="tel"
                                            name="phone"
                                            required/>
                                 </label>
                                 <p v-if="reservationForm.errors.phone"
-                                   class="inline-block text-red-500 text-[13px] opacity-75">
+                                   class="inline-block text-xs text-red-500 sm:text-[13px] opacity-75">
                                     {{ reservationForm.errors.phone }}</p>
                             </div>
                         </template>
@@ -783,13 +845,13 @@ const makeReservation = () => {
                             <button v-if="reservationForm.step!==1"
                                     type="button"
                                     @click="reservationBtnPrev"
-                                    class="px-8 py-2 mt-2 justify-self-start col-start-1 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
+                                    class="px-8 py-2 mt-2 text-xs sm:text-base justify-self-start col-start-1 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
                                 Назад
                             </button>
                             <button v-if="reservationForm.step!==2"
                                     type="button"
                                     @click="reservationBtnNext"
-                                    class="px-8 py-2 mt-2 justify-self-end col-start-2 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
+                                    class="px-8 py-2 mt-2 text-xs sm:text-base justify-self-end col-start-2 uppercase tracking-wider text-gray-text font-bold border border-[#B27536] bg-[#B27536] bg-opacity-15 hover:bg-opacity-35 transition-all duration-100">
                                 Далі
                             </button>
 
@@ -797,7 +859,7 @@ const makeReservation = () => {
                                     type="submit"
                                     @click="reservationBtn"
                                     title="Забронювати зараз"
-                                    class="px-1 py-2 mt-2 col-start-2 uppercase tracking-wider text-[#FAD6BC] font-bold bg-[#BE7B36] hover:text-gray-text hover:bg-[#A76D32] transition-all duration-100">
+                                    class="px-1 py-2 mt-2 text-xs sm:text-base col-start-2 uppercase tracking-wider text-[#FAD6BC] font-bold bg-[#BE7B36] hover:text-gray-text hover:bg-[#A76D32] transition-all duration-100">
                                 Забронювати
                             </button>
                         </div>
@@ -807,26 +869,27 @@ const makeReservation = () => {
         </article>
 
         <article class="mt-10">
-            <hr class="h-0.5 bg-gold-secondary border-0 rounded-full">
-            <div class="w-full h-40 flex py-5 px-2 text-gray-secondary">
-                <div class="basis-1/3 text-[#D09C65]">
-                    <span v-html="pageData?.logo"></span>
+            <hr class="h-[1.2px] sm:h-[1.5px] md:h-0.5 bg-gold-secondary border-0 rounded-full">
+            <div class="w-full h-30 sm:h-40 flex py-5 px-2 text-gray-secondary">
+                <div class="hidden sm:block basis-1/4 md:basis-1/3 text-[#D09C65]">
+                    <span v-html="pageData?.logo" class="max-w-[50px]"></span>
                 </div>
-                <div class="grow mt-2">
-                    <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Графік</h3>
-                    <p class="tracking-wide">{{ scheduleDays }}</p>
-                    <p class="tracking-wide">{{ scheduleTimes }}</p>
+                <div class="max-[350px]:flex-1 grow mt-2">
+                    <h3 class="uppercase mb-2 text-sm md:text-base font-bold tracking-widest text-gray-text">Графік</h3>
+                    <p class="tracking-wide text-xs sm:text-sm lg:text-base">{{ scheduleDays }}</p>
+                    <p class="tracking-wide text-xs sm:text-sm lg:text-base">{{ scheduleTimes }}</p>
                 </div>
-                <div class="grow mt-2">
-                    <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text">Адреса</h3>
-                    <p class="tracking-wide">{{ pageData?.address }}</p>
+                <div class="max-[350px]:flex-1 grow mt-2">
+                    <h3 class="uppercase mb-2 text-sm md:text-base font-bold tracking-widest text-gray-text">Адреса</h3>
+                    <p class="tracking-wide text-xs sm:text-sm lg:text-base">{{ pageData?.address }}</p>
                 </div>
-                <div class="grow mt-2">
-                    <h3 class="uppercase mb-2 font-bold tracking-widest text-gray-text text-center">Соцмережі</h3>
-                    <div class="flex gap-x-3 justify-center">
+                <div class="max-[350px]:flex-1 grow mt-2">
+                    <h3 class="uppercase mb-2 text-xs sm:text-sm md:text-base font-bold tracking-widest text-gray-text text-center">
+                        Соцмережі</h3>
+                    <div class="flex gap-x-2 lg:gap-x-3 justify-center">
                         <a :href="facebook" target="_blank" title="Facebook">
-                            <svg class="hover:opacity-70 transition-all"
-                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all size-5 sm:size-6 lg:size-7" viewBox="0 0 25 25"
+                                 fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M20.5 2H4.5C3.12 2 2 3.12 2 4.5V20.5C2 21.88 3.12 23 4.5 23H20.5C21.88 23 23 21.88 23 20.5V4.5C23 3.12 21.88 2 20.5 2ZM18.5 9.5H17.5C16.43 9.5 16 9.75 16 10.5V12H18.5L18 14.5H16V22H13.5V14.5H11.5V12H13.5V10.5C13.5 8.5 14.5 7 16.5 7C17.95 7 18.5 7.5 18.5 7.5V9.5Z"
@@ -835,8 +898,8 @@ const makeReservation = () => {
                         </a>
 
                         <a :href="instagram" target="_blank" title="Instagram">
-                            <svg class="hover:opacity-70 transition-all"
-                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all size-5 sm:size-6 lg:size-7"
+                                 viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M8 1.5C4.41624 1.5 1.5 4.41624 1.5 8V17C1.5 20.5838 4.41624 23.5 8 23.5H17C20.5838 23.5 23.5 20.5838 23.5 17V8C23.5 4.41624 20.5838 1.5 17 1.5H8ZM8 2.5H17C20.0432 2.5 22.5 4.95676 22.5 8V17C22.5 20.0432 20.0432 22.5 17 22.5H8C4.95676 22.5 2.5 20.0432 2.5 17V8C2.5 4.95676 4.95676 2.5 8 2.5ZM18.5 5.5C17.9477 5.5 17.5 5.94771 17.5 6.5C17.5 7.05229 17.9477 7.5 18.5 7.5C19.0523 7.5 19.5 7.05229 19.5 6.5C19.5 5.94771 19.0523 5.5 18.5 5.5ZM12.5 7C9.46836 7 7 9.46836 7 12.5C7 15.5316 9.46836 18 12.5 18C15.5316 18 18 15.5316 18 12.5C18 9.46836 15.5316 7 12.5 7ZM12.5 8C14.9912 8 17 10.0088 17 12.5C17 14.9912 14.9912 17 12.5 17C10.0088 17 8 14.9912 8 12.5C8 10.0088 10.0088 8 12.5 8Z"
@@ -845,8 +908,8 @@ const makeReservation = () => {
                         </a>
 
                         <a :href="twitter" target="_blank" title="Twitter">
-                            <svg class="hover:opacity-70 transition-all"
-                                 width="25" height="25" viewBox="0 0 25 25" fill="none"
+                            <svg class="hover:opacity-70 transition-all size-5 sm:size-6 lg:size-7"
+                                 viewBox="0 0 25 25" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_58_141)">
                                     <path
@@ -863,11 +926,12 @@ const makeReservation = () => {
                     </div>
                 </div>
             </div>
-
         </article>
     </main>
 
-    <footer class="text-center text-gray-text p-2 bg-gray-light">Copyright © {{ new Date().getFullYear() }}</footer>
+    <footer class="text-center text-xs sm:text-sm lg:text-base text-gray-text p-2 bg-gray-light">Copyright ©
+        {{ new Date().getFullYear() }}
+    </footer>
 </template>
 
 

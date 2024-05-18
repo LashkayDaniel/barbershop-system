@@ -1,16 +1,17 @@
 <template>
-    <form @submit.prevent="update" class="p-2 bg-slate-700">
+    <form @submit.prevent="update" class="p-2 bg-gray-300 dark:bg-slate-700">
 
-        <h2 class="text-2xl font-bold text-sky-500 text-center border-b-2 border-sky-800 mb-2">Edit service</h2>
+        <h2 class="text-xl font-bold text-gold-secondary dark:text-sky-500 text-center border-b border-gold-secondary dark:border-sky-800 mb-2">
+            Редагування</h2>
         <div>
-            <InputLabel for="name" value="Name"/>
+            <InputLabel for="name" value="Назва"/>
 
             <TextInput
                 id="name"
                 type="text"
                 class="w-full"
                 v-model="form.name"
-                placeholder="Введіть назву сервісу"
+                placeholder="Введіть назву послуги"
                 required
                 autofocus
             />
@@ -18,7 +19,7 @@
         </div>
 
         <div>
-            <InputLabel for="description" value="Description"/>
+            <InputLabel for="description" value="Опис"/>
 
             <textarea
                 id="description"
@@ -35,7 +36,7 @@
             <PrimaryButton v-show="form.isDirty"
                            class="ms-4"
                            :class="{ 'opacity-25': form.processing }">
-                Update
+                Змінити
             </PrimaryButton>
         </div>
 

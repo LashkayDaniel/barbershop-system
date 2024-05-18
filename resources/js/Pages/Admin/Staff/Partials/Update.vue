@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent="submit" class="w-1/2 mx-auto bg-gray-600 p-4 rounded-lg">
-        <h1 class="font-bold text-xl text-center text-sky-500">Оновлення даних працівника</h1>
+    <form @submit.prevent="submit" class="w-1/2 mx-auto bg-white dark:bg-gray-600 p-4 rounded-lg">
+        <h1 class="font-bold text-xl text-center text-gold-primary dark:text-sky-500">Оновлення даних працівника</h1>
         <div>
             <InputLabel for="name" value="Name"/>
 

@@ -7,9 +7,9 @@
         </template>
         <div class="mb-12 mt-4 grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-4">
             <div
-                class="border-blue-gray-100 relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                class="dark:border-gray-500 border-blue-gray-100 relative flex flex-col rounded-xl border dark:bg-gray-800 bg-white bg-clip-border dark:text-gray-300 text-gray-700 shadow-sm">
                 <div
-                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
+                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl dark:bg-gray-700 bg-gray-900 bg-clip-border text-white shadow-gray-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                          class="h-6 w-6 text-white">
                         <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"></path>
@@ -28,7 +28,7 @@
                         {{ statistics?.income?.total }}₴
                     </h4>
                 </div>
-                <div class="border-blue-gray-50 border-t p-4">
+                <div class="dark:border-gray-500 border-blue-gray-50 border-t p-4">
                     <p class="text-blue-gray-600 block font-sans leading-relaxed antialiased">
                         <strong class="text-green-500"
                                 :class="{'text-red-500':percentFormat(statistics?.income?.last_month).slice(0,1).toString() === '-'}">
@@ -38,9 +38,9 @@
                 </div>
             </div>
             <div
-                class="border-blue-gray-100 relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                class="dark:border-gray-500 border-blue-gray-100 relative flex flex-col rounded-xl border dark:bg-gray-800 bg-white bg-clip-border dark:text-gray-300 text-gray-700 shadow-sm">
                 <div
-                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
+                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl dark:bg-gray-700 bg-gray-900 bg-clip-border text-white shadow-gray-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                          class="h-6 w-6 text-white">
                         <path
@@ -55,7 +55,7 @@
                         {{ statistics?.reservation.total }}
                     </h4>
                 </div>
-                <div class="border-blue-gray-50 border-t p-4">
+                <div class="dark:border-gray-500 border-blue-gray-50 border-t p-4">
                     <p class="text-blue-gray-600 block font-sans leading-relaxed antialiased">
                         <strong class="text-green-500"
                                 :class="{'text-red-500':percentFormat(statistics?.reservation?.last_week).slice(0,1).toString() === '-'}">
@@ -65,9 +65,9 @@
                 </div>
             </div>
             <div
-                class="border-blue-gray-100 relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                class="dark:border-gray-500 border-blue-gray-100 relative flex flex-col rounded-xl border dark:bg-gray-800 bg-white bg-clip-border dark:text-gray-300 text-gray-700 shadow-sm">
                 <div
-                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
+                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl dark:bg-gray-700 bg-gray-900 bg-clip-border text-white shadow-gray-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
                          class="h-6 w-6 text-white">
                         <path
@@ -82,7 +82,7 @@
                         {{ statistics?.customers.total }}
                     </h4>
                 </div>
-                <div class="border-blue-gray-50 border-t p-4">
+                <div class="dark:border-gray-500 border-blue-gray-50 border-t p-4">
                     <p class="text-blue-gray-600 block font-sans leading-relaxed antialiased">
                         <strong class="text-green-500"
                                 :class="{'text-red-500':percentFormat(statistics?.customers?.last_week).slice(0,1).toString() === '-'}">
@@ -92,9 +92,9 @@
                 </div>
             </div>
             <div
-                class="border-blue-gray-100 relative flex flex-col rounded-xl border bg-white bg-clip-border text-gray-700 shadow-sm">
+                class="dark:border-gray-500 border-blue-gray-100 relative flex flex-col rounded-xl border dark:bg-gray-800 bg-white bg-clip-border dark:text-gray-300 text-gray-700 shadow-sm">
                 <div
-                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl bg-gradient-to-tr from-gray-900 to-gray-800 bg-clip-border text-white shadow-gray-900/20">
+                    class="absolute mx-4 mt-4 grid h-12 w-12 place-items-center overflow-hidden rounded-xl dark:bg-gray-700 bg-gray-900 bg-clip-border text-white shadow-gray-900/20">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          aria-hidden="true" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -109,7 +109,7 @@
                         {{ statistics?.reviews.total }}
                     </h4>
                 </div>
-                <div class="border-blue-gray-50 border-t p-4">
+                <div class="dark:border-gray-500 border-blue-gray-50 border-t p-4">
                     <p class="text-blue-gray-600 block font-sans leading-relaxed antialiased">
                         <strong class="text-green-500"
                                 :class="{'text-red-500':percentFormat(statistics?.reviews?.last_week).slice(0,1).toString() === '-'}">
@@ -120,12 +120,13 @@
             </div>
         </div>
 
-        <div class="bg-slate-200 p-6 flex items-stretch">
-            <div class="flex-1 border rounded-lg border-gray-secondary">
+        <div class="flex items-stretch">
+            <div
+                class="flex-1 dark:bg-slate-500 bg-white border rounded-lg dark:border-gray-secondary">
                 <div class="flex justify-between items-center p-2 mb-2 border-b border-gray-secondary">
-                    <h2 class="font-bold tracking-wide text-xl text-gray-light">Доходи</h2>
+                    <h2 class="dark:text-gray-300 font-bold tracking-wide text-xl text-gray-light">Доходи</h2>
                     <select v-model="incomeConfig.year"
-                            class="bg-transparent font-bold text-gold-secondary border-0 border-b-2 border-gold-primary focus:ring-gold-primary focus:rounded-lg cursor-pointer">
+                            class="bg-transparent font-bold dark:text-sky-300 text-gold-secondary border-0 border-b-2 dark:border-sky-300 border-gold-primary focus:ring-gold-primary dark:focus:ring-sky-500 focus:rounded-lg cursor-pointer">
                         <option v-for="(key,year) in groupedIncomesByYears"
                                 :key="key"
                                 :value="year">{{ year }}
@@ -135,15 +136,15 @@
                 <apexchart ref="incomeChart" type="area" :options="incomeChartOptions"
                            :series="incomeChartSeries"></apexchart>
             </div>
-            <div class="p-4 ml-4 flex-1 border rounded-lg border-gray-secondary">
-                <h2 class="font-bold tracking-wide text-xl text-gray-light">Популярні послуги</h2>
+            <div class="dark:bg-slate-500 bg-white p-4 ml-4 flex-1 border rounded-lg dark:border-gray-secondary">
+                <h2 class="dark:text-gray-300 font-bold tracking-wide text-xl text-gray-light">Популярні послуги</h2>
                 <apexchart type="pie"
                            :options="popularServicesOptions"
                            :series="popularServicesSeries"
                 />
             </div>
         </div>
-        <div class="bg-slate-200 p-6 mt-2">
+        <div class="dark:bg-slate-400 bg-white p-6 mt-2">
             <apexchart type="bar"
                        height="450"
                        :options="employeesDataOptions"

@@ -1,26 +1,29 @@
 <template>
-    <table class="min-w-full divide-y divide-gray-600 dark:divide-gray-400">
+    <table class="min-w-full divide-y divide-gray-400 dark:divide-gray-400">
         <thead>
         <tr>
             <th scope="col"
-                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">#
+                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
+                #
             </th>
             <th scope="col"
-                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">Service
+                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
+                Service
             </th>
             <th scope="col"
-                class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">%
+                class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
+                %
             </th>
             <th scope="col"
-                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                 Start date
             </th>
             <th scope="col"
-                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                 End date
             </th>
             <th scope="col"
-                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
             </th>
         </tr>
         </thead>
@@ -30,8 +33,8 @@
         </tr>
         <template v-else>
             <tr v-for="(discount,i) in discounts" :key="i"
-                class="hover:bg-gray-300 transition-all bg-green-300 bg-opacity-25 hover:cursor-pointer hover:dark:bg-gray-700 hover:bg-opacity-55"
-                :class="[{'bg-red-300': moment().isAfter(discount.end,'day')},{'bg-yellow-300': (moment().isSameOrAfter(discount.start,'day') && moment().isSameOrBefore(discount.end,'day')) }]">
+                class="hover:bg-gray-200 dark:hover:bg-gray-300 transition-all bg-green-300 bg-opacity-25 hover:cursor-pointer hover:dark:bg-gray-700 hover:bg-opacity-55"
+                :class="[{'bg-red-300': moment().isAfter(discount.end,'day')},{'bg-yellow-400': (moment().isSameOrAfter(discount.start,'day') && moment().isSameOrBefore(discount.end,'day')) }]">
                 <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {{ discount.id }}
                 </td>
@@ -66,14 +69,16 @@
             </tr>
             <tr>
                 <td colspan="6">
-                    <p class="flex items-center text-sm text-gray-secondary">
-                        <span class="block size-2 bg-red-300 bg-opacity-45 rounded-full mr-2"></span>
+                    <p class="flex items-center text-sm text-gold-secondary dark:text-gray-secondary">
+                        <span class="block size-2 bg-red-400 dark:bg-red-300 bg-opacity-45 rounded-full mr-2"></span>
                         - знижки в минулому</p>
-                    <p class="flex items-center text-sm text-gray-secondary">
-                        <span class="block size-2 bg-yellow-300 bg-opacity-45 rounded-full mr-2"></span>
+                    <p class="flex items-center text-sm text-gold-secondary dark:text-gray-secondary">
+                        <span
+                            class="block size-2 bg-yellow-500 dark:bg-yellow-300 bg-opacity-45 rounded-full mr-2"></span>
                         - поточні знижки</p>
-                    <p class="flex items-center text-sm text-gray-secondary">
-                        <span class="block size-2 bg-green-300 bg-opacity-45 rounded-full mr-2"></span>
+                    <p class="flex items-center text-sm text-gold-secondary dark:text-gray-secondary">
+                        <span
+                            class="block size-2 bg-green-500 dark:bg-green-300 bg-opacity-45 rounded-full mr-2"></span>
                         - знижки в майбутньму</p>
                 </td>
             </tr>

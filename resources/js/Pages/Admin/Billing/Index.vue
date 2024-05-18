@@ -12,32 +12,32 @@
         </FadeInAnimation>
 
         <div class="">
-            <section class=" border rounded-lg p-2 border-gray-500">
-                <table class="min-w-full divide-y divide-gray-600 dark:divide-gray-400">
+            <section class="border rounded-lg p-2 border-gold-secondary dark:border-gray-500">
+                <table class="min-w-full divide-y divide-gray-400">
                     <thead>
                     <tr>
                         <th scope="col"
-                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                             id
                         </th>
                         <th scope="col"
-                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                             client
                         </th>
                         <th scope="col"
-                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                             email
                         </th>
                         <th scope="col"
-                            class="px-4 py-3 text-end whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-end whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                             profit
                         </th>
                         <th scope="col"
-                            class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                             reservations
                         </th>
                         <th scope="col"
-                            class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                            class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                         </th>
                     </tr>
                     </thead>
@@ -48,7 +48,7 @@
                     <template v-else>
                         <tr v-for="(customer,i) in allCustomers.data" :key="i"
                             @click="showCustomerDetails(customer)"
-                            class="hover:bg-gray-300 transition-all bg-opacity-25 hover:cursor-pointer hover:dark:bg-gray-700 hover:bg-opacity-55">
+                            class="hover:bg-gray-200 dark:hover:bg-gray-500 transition-all bg-opacity-25 hover:cursor-pointer hover:dark:bg-gray-700 hover:bg-opacity-55">
                             <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                 {{ customer.id }}
                             </td>
@@ -64,12 +64,12 @@
                             <td class="px-4 py-3 text-center whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                 {{ customer?.reservations_count }}
                             </td>
-                            <td class="py-3 font-bold text-sky-400 text-center whitespace-nowrap text-sm dark:text-sky-400">
+                            <td class="py-3 font-bold text-gold-secondary dark:text-sky-400 text-center whitespace-nowrap text-sm dark:text-sky-400">
                                 більше
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="font-bold text-sky-300 p-2 text-end">
+                            <td colspan="4" class="font-bold text-gold-primary dark:text-sky-300 p-2 text-end">
                                 Всього: {{ currencyFormat(totalProfitByPage) }}
                             </td>
                         </tr>

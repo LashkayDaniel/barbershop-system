@@ -31,9 +31,9 @@
             </PrimaryButton>
 
             <div class="w-full flex gap-x-2">
-                <div class="flex-1 border border-gray-500 rounded-lg p-2">
-                    <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
-                        Logo
+                <div class="flex-1 bg-white dark:bg-inherit border dark:border-gray-500 rounded-lg p-2">
+                    <h3 class="uppercase font-bold text-gold-secondary dark:text-gray-400 text-center tracking-wide border-b dark:border-gray-600 mb-2">
+                        Логотип
                     </h3>
                     <textarea
                         v-model="form.svgIcon"
@@ -45,23 +45,26 @@
                     </div>
 
                 </div>
-                <div class="border border-gray-500 rounded-lg p-2">
-                    <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
-                        Address</h3>
+                <div class="bg-white dark:bg-inherit border dark:border-gray-500 rounded-lg p-2">
+                    <h3 class="uppercase font-bold text-gold-secondary dark:text-gray-400 text-center tracking-wide border-b dark:border-gray-600 mb-2">
+                        Адреса
+                    </h3>
                     <TextInput v-model="form.address"
                                placeholder="Input address"
                                class="w-full"/>
                 </div>
-                <div class="border border-gray-500 rounded-lg p-2">
-                    <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
-                        Schedule</h3>
+                <div class="bg-white dark:bg-inherit border dark:border-gray-500 rounded-lg p-2">
+                    <h3 class="uppercase font-bold text-gold-secondary dark:text-gray-400 text-center tracking-wide border-b dark:border-gray-600 mb-2">
+                        Графік
+                    </h3>
                     <TextInput v-model="form.schedule"
                                placeholder="Input schedule"
                                class="w-full"/>
                 </div>
-                <div class="flex-1 border border-gray-500 rounded-lg p-2">
-                    <h3 class="uppercase font-bold text-gray-400 text-center tracking-wide border-b border-gray-600 mb-2">
-                        Socials</h3>
+                <div class="flex-1 bg-white dark:bg-inherit border dark:border-gray-500 rounded-lg p-2">
+                    <h3 class="uppercase font-bold text-gold-secondary dark:text-gray-400 text-center tracking-wide border-b dark:border-gray-600 mb-2">
+                        Соц. мережі
+                    </h3>
                     <TextInput v-model="form.socials.instagram"
                                placeholder="Instagram"
                                class="w-full"/>
@@ -74,6 +77,7 @@
                 </div>
             </div>
             <Gallery ref="gallery"
+                     title="Галерея"
                      :gallery-images="galleryImages"
                      @upload-gallery-image="uploadGalleryImage"
                      @delete-image="deleteImage"/>

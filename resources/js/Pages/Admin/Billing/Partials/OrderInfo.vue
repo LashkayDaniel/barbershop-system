@@ -1,11 +1,14 @@
 <template>
-    <section class="border-2 border-sky-300 border-opacity-30 rounded-lg p-2">
-        <h1 class="text-xl font-bold text-center mb-4">Деталі бронювання</h1>
+    <section
+        class="border-2 border-gold-secondary text-gold-secondary dark:text-slate-400 dark:border-sky-300 border-opacity-30 rounded-lg p-2">
+        <h1 class="text-xl font-bold text-gold-primary dark:text-slate-300 text-center mb-4">Деталі бронювання</h1>
         <p><b>Створено: </b>{{ moment(order.created_at).format('LLLL') }}</p>
         <p><b>Послуга: </b>{{ order.service.name }}</p>
         <p><b>Дата: </b>{{ moment(order.worktime.date).format('LL') }}</p>
         <p><b>Час: </b>{{ order.worktime.time }}</p>
-        <p class="border-b border-gray-500"><b>Вартість: </b>{{ currencyFormat(order.service.price) }}</p>
+        <p class="border-b border-gold-primary dark:border-gray-500"><b>Вартість: </b>{{
+                currencyFormat(order.service.price)
+            }}</p>
         <template v-if="order.discount">
             <p><b>Знижка: </b>{{ order?.discount?.percent }}%</p>
             <p><b>Вартість зі

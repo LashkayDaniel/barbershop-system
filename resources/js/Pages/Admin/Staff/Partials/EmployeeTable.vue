@@ -1,34 +1,34 @@
 <template>
-    <div class=" border rounded-lg p-2 border-gray-500">
+    <div class="border rounded-lg p-2 border-gold-secondary dark:border-gray-500">
         <table class="min-w-full divide-y divide-gray-600 dark:divide-gray-400">
             <thead>
             <tr>
                 <th scope="col"
-                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     id
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     employee
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     rank
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-start whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     email
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     phone
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     birth
                 </th>
                 <th scope="col"
-                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-slate-400 uppercase">
+                    class="px-4 py-3 text-center whitespace-nowrap text-sm font-medium text-gold-secondary dark:text-slate-400 uppercase">
                     created_at
                 </th>
                 <th scope="col"
@@ -36,7 +36,7 @@
                 </th>
             </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-600 opacity-70">
+            <tbody class="divide-y divide-gray-400 dark:divide-gray-600 opacity-70">
             <tr v-if="employees.data.length===0">
                 <td class="p-2 text-center text-sm text-gray-secondary tracking-wider">Відсутні працівники</td>
             </tr>
@@ -69,7 +69,7 @@
                     <td class="px-4 py-3 text-center whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         {{ moment(employee?.created_at).format('L, h:m') }}
                     </td>
-                    <td class="py-3 font-bold text-sky-400 text-center whitespace-nowrap text-sm dark:text-sky-400">
+                    <td class="py-3 font-bold text-gold-primary dark:text-sky-400 text-center whitespace-nowrap text-sm dark:text-sky-400">
                         <button type="button"
                                 title="Змінити"
                                 @click="updateHandle(employee)"

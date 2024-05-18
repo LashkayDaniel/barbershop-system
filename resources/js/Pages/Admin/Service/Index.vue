@@ -1,9 +1,9 @@
 <template>
-    <Head title="Services"/>
+    <Head title="Послуги"/>
 
     <AuthenticatedLayout>
         <template #header>
-            Services
+            Послуги
         </template>
 
         <Modal
@@ -18,19 +18,19 @@
 
         <div class="max-w-xl mx-auto">
 
-            <section class="my-2 border border-gray-500 rounded-lg">
+            <section class="my-2 border border-gray-200 dark:border-gray-500 bg-white dark:bg-inherit rounded-lg">
                 <div class="flex justify-between p-4 border-b border-gray-500 items-center">
-                    <h2 class=" font-bold text-2xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-400">
-                        Available services</h2>
+                    <h2 class="font-bold text-2xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r dark:from-emerald-600 dark:to-sky-400 from-gold-secondary to-gold-primary">
+                        Доступні послуги</h2>
                     <button
-                        class="text-sky-200 font-bold bg-sky-500 p-2 px-4 rounded-full hover:bg-sky-600 transition-all"
+                        class="bg-gold-light text-gold-secondary dark:text-sky-200 font-bold dark:bg-sky-500 p-2 px-4 rounded-full hover:bg-opacity-60 dark:hover:bg-sky-600 transition-all"
                         type="button"
                         @click="showModal('create')">
-                        + Create new
+                        + Створити
                     </button>
                 </div>
 
-                <ul class="gap-x-2 mt-2 divide-y divide-gray-600">
+                <ul class="gap-x-2 mt-2 divide-y divide-gray-400 dark:divide-gray-600">
                     <li v-if="allServices.length===0"
                         class="w-full text-center py-2">
                         <span class="text-center text-sm tracking-wide dark:text-gray-400">Empty list</span>
@@ -39,7 +39,7 @@
                         class="px-4 py-2 flex text-gray-400 justify-between"
                         v-for="service in allServices">
                         <div :class="{'opacity-35':!service.is_available}">
-                            <h3 class="font-bold text-gray-300">{{ service.name }}
+                            <h3 class="font-bold text-gray-500 dark:text-gray-300">{{ service.name }}
                                 <span v-show="!service.is_available"
                                       class="font-normal text-sm text-yellow-500">(Disabled)</span>
                             </h3>

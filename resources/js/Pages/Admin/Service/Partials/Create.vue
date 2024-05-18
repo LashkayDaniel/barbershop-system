@@ -1,8 +1,9 @@
 <template>
-    <form @submit.prevent="create" class="p-2 bg-slate-700">
-        <h2 class="text-2xl font-bold text-sky-500 text-center border-b-2 border-sky-800 mb-2">Create new service</h2>
+    <form @submit.prevent="create" class="p-2 bg-gray-300 dark:bg-slate-700">
+        <h2 class="text-xl font-bold text-gold-secondary dark:text-sky-500 text-center border-b border-gold-secondary dark:border-sky-800 mb-2">
+            Створення послуги</h2>
         <div>
-            <InputLabel for="name" value="Input name"/>
+            <InputLabel for="name" value="Назва"/>
 
             <TextInput
                 id="name"
@@ -17,7 +18,7 @@
         </div>
 
         <div>
-            <InputLabel for="description" value="Description"/>
+            <InputLabel for="description" value="Опис"/>
 
             <textarea
                 id="description"
@@ -32,7 +33,7 @@
         <div class="flex justify-end mt-4">
             <PrimaryButton v-show="form.name.length && form.description.length" class="ms-4"
                            :class="{ 'opacity-25': form.processing }">
-                Create
+                Створити
             </PrimaryButton>
         </div>
 

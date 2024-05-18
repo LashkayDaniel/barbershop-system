@@ -31,7 +31,7 @@ const submit = () => {
 </script>
 
 <template>
-    <form @submit.prevent="submit" class="w-1/2 mx-auto bg-gray-600 p-4 rounded-lg">
+    <form @submit.prevent="submit" class="w-1/2 mx-auto bg-white dark:bg-gray-600 p-4 rounded-lg">
         <div>
             <InputLabel for="name" value="Name"/>
 

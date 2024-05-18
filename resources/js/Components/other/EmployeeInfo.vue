@@ -144,9 +144,9 @@
             </div>
             <div class="w-full my-4 h-[300px]">
                 <swiper class="flex w-full h-full gap-x-2"
-                        :slides-per-view="3"
+                        slides-per-view="3"
                         :loop="true"
-                        :space-between="10"
+                        space-between="10"
                         :navigation="{
                                 nextEl: '#gallery-btn-next',
                                 prevEl: '#gallery-btn-prev'
@@ -176,9 +176,9 @@
                 <span class="text-gray-secondary tracking-wider">({{ responses.length }})</span>
             </div>
 
-            <swiper class="w-full py-5 my-5 flex gap-x-2"
-                    :slides-per-view="3"
-                    :space-between="10"
+            <swiper class="w-full py-5 my-5 flex gap-x-2 shadow-inner"
+                    slides-per-view="3"
+                    space-between="10"
                     :modules="[Navigation, Autoplay]"
                     :autoplay="{delay:4000}"
 

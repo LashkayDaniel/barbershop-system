@@ -1,23 +1,34 @@
 <template>
-    <section class="bg-gray-500 bg-opacity-50 p-4 rounded-lg flex items-center">
+    <section class="bg-white dark:bg-gray-500 dark:bg-opacity-50 p-4 rounded-lg flex items-center">
         <div class="flex-1">
-            <div class="pb-4 border-b-2 border-sky-300 border-opacity-30">
-                <p class="text-sky-300">Id: <b class="text-sky-400 underline">{{ customerInfo?.id }}</b></p>
-                <p class="text-sky-300"> Ім'я: <b class="text-sky-400 underline">{{ customerInfo?.name }}</b></p>
-                <p class="text-sky-300"> Пошта: <b class="text-sky-400 underline">{{ customerInfo?.email }}</b></p>
-                <p class="text-sky-300"> Номер телефону: <b class="text-sky-400 underline">{{ customerInfo?.phone }}</b>
+            <div
+                class="pb-4 border-b-2 border-gold-secondary dark:border-sky-300 border-opacity-30 text-gold-secondary dark:text-sky-300">
+                <p class="">Id: <b class="text-gold-secondary dark:text-sky-400 underline">{{ customerInfo?.id }}</b>
                 </p>
-                <p class="text-sky-300"> Створено: <b
-                    class="text-sky-400 underline">{{ moment(customerInfo?.created_at).format('LLL') }}</b></p>
-                <p class="text-sky-300"> Загальний прибуток: <b
-                    class="text-sky-400 underline">{{ currencyFormat(customerInfo?.profit) }}</b></p>
+                <p class=""> Ім'я: <b class="text-gold-secondary dark:text-sky-400 underline">{{
+                        customerInfo?.name
+                    }}</b></p>
+                <p class=""> Пошта: <b class="text-gold-secondary dark:text-sky-400 underline">{{
+                        customerInfo?.email
+                    }}</b></p>
+                <p class=""> Номер телефону: <b
+                    class="text-gold-secondary dark:text-sky-400 underline">{{ customerInfo?.phone }}</b>
+                </p>
+                <p class=""> Створено: <b
+                    class="text-gold-secondary dark:text-sky-400 underline">{{
+                        moment(customerInfo?.created_at).format('LLL')
+                    }}</b></p>
+                <p class=""> Загальний прибуток: <b
+                    class="text-gold-secondary dark:text-sky-400 underline">{{
+                        currencyFormat(customerInfo?.profit)
+                    }}</b></p>
             </div>
             <div class="">
-                <h2 class="font-bold mt-2">Бронювання ({{ customerInfo.reservations_count }}):</h2>
+                <h2 class="font-bold dark:text-slate-200 mt-2">Бронювання ({{ customerInfo.reservations_count }}):</h2>
                 <ul class="">
                     <li v-for="order in customerInfo.orders"
                         @click="selectOrder(order)"
-                        class="text-sky-500 underline cursor-pointer hover:opacity-80"
+                        class="text-slate-400 dark:text-sky-500 underline cursor-pointer hover:opacity-80"
                         :class="{'text-opacity-50':order.id===selectedOrder?.id}">
                         #{{ order.id }}
                         <span class="text-sm">({{ moment(order.created_at).format('L') }})</span>

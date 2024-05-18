@@ -20,20 +20,18 @@
         <div class="max-w-xl mx-auto">
             <section>
                 <div class="flex justify-between py-4 items-center">
-                    <h2 class=" font-bold text-2xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-sky-400">
+                    <h2 class="font-bold text-2xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r dark:from-emerald-600 dark:to-sky-400 from-gold-secondary to-gold-primary">
                         Дійсні знижки</h2>
                     <button
-                        class="text-sky-200 font-bold bg-sky-500 p-2 px-4 rounded-full hover:bg-sky-600 transition-all"
+                        class="bg-gold-light border border-gold-primary dark:border-0 text-gold-secondary dark:text-sky-200 font-bold dark:bg-sky-500 p-2 px-4 rounded-full hover:bg-opacity-60 dark:hover:bg-sky-600 transition-all"
                         type="button"
                         @click="showOptions.createForm = !showOptions.createForm">
                         + Додати
                     </button>
                 </div>
-                <!--                {{ createForm.data() }}-->
-                <!--                <pre>{{ allServices }}</pre>-->
                 <FadeInAnimation>
                     <form @submit.prevent="createDiscount" v-show="showOptions.createForm"
-                          class="bg-gray-500 mb-4 p-2 rounded-lg">
+                          class="bg-white dark:bg-gray-500 mb-4 p-2 rounded-lg">
                         <div class="w-full flex">
                             <select class="flex-1 rounded-lg"
                                     v-model="createForm.serviceId">
@@ -76,7 +74,7 @@
                         </div>
                         <FadeInAnimation>
                             <div class="w-full text-end mt-4" v-if="createFormIsFilled">
-                                <PrimaryButton type="submit">Save</PrimaryButton>
+                                <PrimaryButton type="submit">Додати</PrimaryButton>
                             </div>
                         </FadeInAnimation>
                     </form>
@@ -87,12 +85,13 @@
                         Наразі немає дійсних знижок
                     </li>
                     <template v-else v-for="service in discountServices">
-                        <li v-if="service.discount" class="py-4 px-6 bg-gray-600 rounded-lg">
+                        <li v-if="service.discount"
+                            class="py-4 px-6 bg-gold-light bg-opacity-30 border border-gold-secondary border-opacity-40 dark:border-0 dark:bg-gray-600 rounded-lg">
                             <div class="flex items-center">
-                                <div class="flex-1 text-gray-400">
-                                    <p class="font-semibold text-sky-300 tracking-wide mb-2 flex justify-between">
+                                <div class="flex-1 text-gold-secondary text-opacity-50 dark:text-gray-400">
+                                    <p class="font-semibold text-gold-primary dark:text-sky-300 tracking-wide mb-2 flex justify-between">
                                         <span class="underline">{{ service.name }}</span>
-                                        <b class="px-2 rounded-full font-bold text-sky-400 bg-sky-400 bg-opacity-20">
+                                        <b class="px-2 rounded-full font-bold bg-gold-primary dark:text-sky-400 dark:bg-sky-400 bg-opacity-20">
                                             -{{ service.discount.percent }}%</b>
                                     </p>
                                     <p><b class="font-semibold">Початок (включно):</b>
@@ -118,8 +117,9 @@
             </section>
         </div>
 
-        <section class="max-w-2xl mx-auto border border-gray-500 rounded-lg p-2 my-5">
-            <h3 class="mb-2 font-bold text-xl text-center text-sky-500">Всі знижки</h3>
+        <section
+            class="max-w-2xl mx-auto bg-gold-light bg-opacity-10 bg-opacity-40 dark:bg-inherit border border-gold-secondary dark:border-gray-500 rounded-lg p-2 my-5">
+            <h3 class="mb-2 font-bold text-xl text-center text-gold-secondary dark:text-sky-500">Всі знижки</h3>
             <DiscountTable :all-discounts="allDiscounts"/>
         </section>
     </AuthenticatedLayout>

@@ -25,7 +25,7 @@ class ResponseController extends Controller
 
         return redirect()->back()->with([
             'status' => 'success',
-            'message' => 'Response was successfully added!',
+            'message' => 'Відгук успішно додано!',
         ]);
     }
 }

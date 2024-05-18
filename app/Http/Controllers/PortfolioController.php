@@ -53,7 +53,7 @@ class PortfolioController extends Controller
 
         return redirect()->route('portfolio.index')->with(
             [
-                'message' => 'Image was uploaded successfully',
+                'message' => 'Зображення успішно завантажено!',
                 'type' => 'success',
             ]
         );
@@ -77,7 +77,7 @@ class PortfolioController extends Controller
 
         return redirect()->route('portfolio.index')->with(
             [
-                'message' => 'Avatar was successfully changed!',
+                'message' => 'Аватарку успішно змінено!',
             ]
         );
     }
@@ -94,7 +94,7 @@ class PortfolioController extends Controller
 
         return redirect()->route('portfolio.index')->with(
             [
-                'message' => 'Description was successfully changed!',
+                'message' => 'Опис успішно змінено!',
             ]
         );
     }
@@ -105,7 +105,7 @@ class PortfolioController extends Controller
         if (!Storage::disk('public')->exists($imageUrl)) {
             return redirect()->route('portfolio.index')->with(
                 [
-                    'message' => 'Image was not founded! Try again',
+                    'message' => 'Не вдалося знайти зображення! Спробуйте ще раз',
                     'type' => 'error',
                 ]
             );
@@ -116,7 +116,7 @@ class PortfolioController extends Controller
 
         return redirect()->route('portfolio.index')->with(
             [
-                'message' => 'Image was deleted successfully',
+                'message' => 'Зображення успішно видалено',
                 'type' => 'success',
             ]
         );

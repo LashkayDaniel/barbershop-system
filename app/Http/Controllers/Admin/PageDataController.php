@@ -36,7 +36,7 @@ class PageDataController extends Controller
 
         return redirect()->route('landing.index')->with(
             [
-                'message' => 'Landing info successfully updated!',
+                'message' => 'Інформацію успішно оновлено!',
                 'type' => 'success',
             ]
         );
@@ -68,7 +68,7 @@ class PageDataController extends Controller
 
         return redirect()->route('landing.index')->with(
             [
-                'message' => 'Image was uploaded successfully',
+                'message' => 'Зображення успішно завантажено!',
                 'type' => 'success',
             ]
         );
@@ -85,7 +85,7 @@ class PageDataController extends Controller
         if (!Storage::disk('public')->exists($imagePath)) {
             return redirect()->route('landing.index')->with(
                 [
-                    'message' => 'Image was not founded! Try again',
+                    'message' => 'Не вдалося знайти зображення! Спробуйте ще раз',
                     'type' => 'error',
                 ]
             );
@@ -96,7 +96,7 @@ class PageDataController extends Controller
 
         return redirect()->route('landing.index')->with(
             [
-                'message' => 'Image was deleted successfully',
+                'message' => 'Зображення було успішно видалено!',
                 'type' => 'success',
             ]
         );

@@ -55,7 +55,7 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with(
             [
-                'message' => 'Service was added successfully',
+                'message' => 'Послугу успішно додано',
             ]
         );
     }
@@ -76,7 +76,7 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with(
             [
-                'message' => 'Service was updated successfully',
+                'message' => 'Послугу успішно оновлено',
             ]
         );
     }
@@ -91,7 +91,7 @@ class ServiceController extends Controller
 
         return redirect()->route('services.index')->with(
             [
-                'message' => 'Service was delete successfully',
+                'message' => 'Послугу успішно видалено',
             ]
         );
     }

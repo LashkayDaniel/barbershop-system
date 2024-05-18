@@ -44,7 +44,7 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')->with(
             [
-                'message' => 'Service was created successfully',
+                'message' => 'Послугу успішно створено!',
             ]
         );
     }
@@ -63,7 +63,7 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')->with(
             [
-                'message' => 'Service was updated successfully',
+                'message' => 'Послугу успішно оновлено!',
             ]
         );
     }
@@ -77,7 +77,7 @@ class ServiceController extends Controller
 
         return redirect()->route('admin.services.index')->with(
             [
-                'message' => 'Service was deleted successfully',
+                'message' => 'Послугу успішно видалено!',
             ]
         );
     }

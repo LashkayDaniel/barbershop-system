@@ -39,6 +39,7 @@ Here's why:
 The application was developed using these tools:
 
 * [![Vue][Vue.js]][Vue-url]
+* [![TailwindCSS][Tailwindcss]][Tailwind-url]
 * [![Inertia.js][Inertia.js]][Inertia-url]
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![MySql][MySql.com]][MySql-url]
@@ -133,6 +134,10 @@ Before getting started, make sure your environment meets the following requireme
 [Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
 
 [Vue-url]: https://vuejs.org/
+
+[Tailwindcss]: https://img.shields.io/badge/TailwindCSS-00BCFF?style=for-the-badge&logo=tailwindcss&logoColor=white
+
+[Tailwind-url]: https://tailwindcss.com/
 
 [Inertia.js]: https://img.shields.io/badge/Inertia.js-2D3748?style=for-the-badge&logo=inertia&logoColor=FFFFFF
 
